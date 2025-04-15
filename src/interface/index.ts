@@ -1,6 +1,7 @@
 export interface SvgPropsType {
   size?: number,
   color?: string,
+  fill?: string,
   onPress?: () => void
 }
 
