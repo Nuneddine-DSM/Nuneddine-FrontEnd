@@ -107,6 +107,11 @@ const fonts: { [key: string]: TextStyle } = {
     lineHeight: 46,
     fontWeight: '600'
   },
+  bold28: {
+    fontSize: 28,
+    lineHeight: 46,
+    fontWeight: '700'
+  },
   black28: {
     fontSize: 28,
     lineHeight: 46,
