@@ -18,7 +18,7 @@ export const Arrow = ({
 
   return (
     <Svg width={size} height={size} fill="none" viewBox="0 0 34 34" style={{transform: [{rotate: rotation}]}} onPress={onPress}>
-      <Path stroke={color} stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21.25 9.917 14.167 17l7.083 7.084" />
+      <Path stroke={color} strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M21.25 9.917 14.167 17l7.083 7.084" />
     </Svg>
   )
 }
