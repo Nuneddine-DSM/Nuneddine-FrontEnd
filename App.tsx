@@ -8,7 +8,11 @@
 import React from 'react';
 import { NavigationContainer } from '@react-navigation/native';
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
-import Test from './src/app/test/page';
+import NavBar from './src/components/NavBar';
+import Main from './src/app/Main/page';
+import Guide from './src/app/Guide/page';
+import MyPage from './src/app/MyPage/page';
+import Manage from './src/app/Manage/page';
 
 function App(): React.JSX.Element {
   const Stack = createNativeStackNavigator();
@@ -16,9 +20,13 @@ function App(): React.JSX.Element {
     <NavigationContainer>
       <Stack.Navigator
         screenOptions={{ headerShown: false }}
-        initialRouteName="Test"
+        initialRouteName="Main"
       >
-        <Stack.Screen name="Test" component={Test}></Stack.Screen>
+        <Stack.Screen name="NavBar" component={NavBar} />
+        <Stack.Screen name="Main" component={Main} />
+        <Stack.Screen name="Guide" component={Guide} />
+        <Stack.Screen name="MyPage" component={MyPage} />
+        <Stack.Screen name="Manage" component={Manage} />
       </Stack.Navigator>
     </NavigationContainer>
   );
