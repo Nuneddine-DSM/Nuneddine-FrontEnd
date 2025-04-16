@@ -8,3 +8,8 @@ export interface SvgPropsType {
 export interface ArrowPropsType extends SvgPropsType {
   rotate?: 'top' | 'left' | 'right' | 'bottom';
 }
+
+export interface SignUpPropsType {
+  control: any;
+  onSelectSchool?: any;
+}
