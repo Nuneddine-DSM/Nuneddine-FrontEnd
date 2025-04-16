@@ -13,6 +13,7 @@ import Main from './src/app/Main/page';
 import Guide from './src/app/Guide/page';
 import MyPage from './src/app/MyPage/page';
 import Manage from './src/app/Manage/page';
+import Onboarding from "./src/app/Onboarding/page"
 
 function App(): React.JSX.Element {
   const Stack = createNativeStackNavigator();
@@ -20,12 +21,13 @@ function App(): React.JSX.Element {
     <NavigationContainer>
       <Stack.Navigator
         screenOptions={{ headerShown: false }}
-        initialRouteName="Main">
+        initialRouteName="Onboarding">
         <Stack.Screen name="NavBar" component={NavBar} />
         <Stack.Screen name="Main" component={Main} />
         <Stack.Screen name="Guide" component={Guide} />
         <Stack.Screen name="MyPage" component={MyPage} />
         <Stack.Screen name="Manage" component={Manage} />
+        <Stack.Screen name="Onboarding" component={Onboarding} />
       </Stack.Navigator>
     </NavigationContainer>
   );
