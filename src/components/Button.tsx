@@ -8,7 +8,7 @@ interface ButtonPropsType {
   primaryButton?: boolean;
 }
 
-export function AuthButton({ text, onPress, primaryButton }: ButtonPropsType) {
+export function AuthButton({ text, onPress, primaryButton=true }: ButtonPropsType) {
   return (
     <BasedButton
       primaryButton={primaryButton}
