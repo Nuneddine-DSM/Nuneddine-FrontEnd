@@ -24,8 +24,6 @@ const Onboarding = () => {
 
 const BackgroundImage = styled(ImageBackground)`
   flex: 1;
-  justify-content: center;
-  align-items: center;
   resize-mode: cover;
   padding: 160px 20px 32px;
 `
