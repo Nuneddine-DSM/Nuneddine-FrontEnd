@@ -1,6 +1,7 @@
 import React from "react";
 import styled from "styled-components/native";
 import { Dimensions } from 'react-native';
+import { color, Font } from "../styles"
 
 interface PropsType {
   text?: string;
@@ -19,9 +20,9 @@ const TopBar = ({
 }: PropsType) => {
   return (
     <Container padding={padding} size={screenWidth}>
-      {leftIcon}
-      <Text>{text}</Text>
-      {rightIcon}
+      {leftIcon || <Blank />}
+      <Font text={text} kind="semi20" />
+      {rightIcon || <Blank />}
     </Container>
   )
 }
@@ -38,10 +39,13 @@ const Container = styled.View<{
   left: 0;
   padding: ${({ padding }) => padding}px;
   flex-direction: row;
-  background-color: white;
+  background-color: ${color.white};
   z-index: 1000;
 `
 
-const Text = styled.Text``
+const Blank = styled.View`
+  width: 20px;
+  height: 20px;
+`;
 
 export default TopBar
