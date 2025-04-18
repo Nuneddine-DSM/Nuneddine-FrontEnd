@@ -39,7 +39,7 @@ export const Input = ({
           autoFocus={autoFocus}
           secureTextEntry={password && !press}
           placeholder={placeholder}
-          placeholderTextColor={color.gray600}
+          placeholderTextColor={color.gray400}
           onFocus={() => setIsFocused(true)}
           onBlur={() => setIsFocused(false)}
           onChangeText={onChangeText}
@@ -49,7 +49,10 @@ export const Input = ({
         />
         {password && (
           <PwButton onPress={() => setPress(!press)}>
-            {press ? <Eye /> : <EyeClose />}
+            {press ?
+              <Eye size={36} color={color.gray500} /> :
+              <EyeClose size={36} color={color.gray500} />
+            }
           </PwButton>
         )}
       </InputContainerBox>
@@ -63,15 +66,14 @@ const Container = styled.View`
 `;
 
 const InputBox = styled.TextInput`
-  font-size: 16px;
-  font-weight: 600;
   flex: 1;
   padding: 18px 16px;
+  font-size: 16px;
+  font-weight: 600;
   color: black;
 `;
 
 const InputContainerBox = styled.View<{ focused: boolean }>`
-  height: 55px;
   width: 100%;
   border-radius: 5px;
   align-items: center;
