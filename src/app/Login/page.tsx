@@ -2,10 +2,9 @@ import { useState } from 'react';
 import styled from 'styled-components/native';
 import { TopBar, Input, AuthButton } from '../../components';
 import { color, Font } from '../../styles';
+import { Arrow } from '../../assets/Arrow';
 
-const { Arrow } = require('../../assets/Arrow');
-
-function Login() {
+const Login = () => {
   const [id, setId] = useState('');
   const [password, setPassword] = useState('');
 
@@ -58,7 +57,7 @@ function Login() {
       </LoginBox>
     </Container>
   );
-}
+};
 
 const Space = styled.View<{ height: number }>`
   width: 100%;

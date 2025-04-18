@@ -38,8 +38,8 @@ const fonts: { [key: string]: TextStyle } = {
     fontWeight: '500'
   },
   regular14: {
-    fontSize: 12,
-    lineHeight: 14,
+    fontSize: 14,
+    lineHeight: 18,
     fontWeight: '400'
   },
   medium14: {
