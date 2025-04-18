@@ -32,6 +32,16 @@ export const Font = ({
 
 const fonts: { [key: string]: TextStyle } = {
   '': {},
+  medium12: {
+    fontSize: 12,
+    lineHeight: 14,
+    fontWeight: '500'
+  },
+  regular14: {
+    fontSize: 12,
+    lineHeight: 14,
+    fontWeight: '400'
+  },
   medium14: {
     fontSize: 14,
     lineHeight: 18,
@@ -46,6 +56,11 @@ const fonts: { [key: string]: TextStyle } = {
     fontSize: 14,
     lineHeight: 18,
     fontWeight: '700'
+  },
+  regular16: {
+    fontSize: 16,
+    lineHeight: 20,
+    fontWeight: '400'
   },
   medium16: {
     fontSize: 16,
