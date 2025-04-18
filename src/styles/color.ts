@@ -2,6 +2,7 @@ export const color = {
   transparent: '',
   white: '#FFFFFF',
   black: '#000000',
+  gray50: '#FAFAFA',
   gray100: '#F1F1F1',
   gray200: '#EDEDED',
   gray300: '#DFDFDF',
