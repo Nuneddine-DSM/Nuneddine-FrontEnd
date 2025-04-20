@@ -69,7 +69,7 @@ const SignUp = () => {
         text="회원가입"
         leftIcon={
           <TouchableOpacity onPress={prevPage}>
-            <Arrow size={20} />
+            <Arrow size={34} />
           </TouchableOpacity>
         }
       />
