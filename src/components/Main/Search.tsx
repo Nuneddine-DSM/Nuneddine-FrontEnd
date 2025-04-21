@@ -1,8 +1,10 @@
 import styled from "styled-components/native";
 import { Search as SearchIcon } from "../../assets";
+import { color } from "../../styles"
 
 interface SearchProps {
   value?: string;
+  width?: string;
   onChangeText?: (i: string) => void;
   onKeyPress?: (i: any) => void;
 }
@@ -17,6 +19,7 @@ const Search = ({
       <SearchInput
         value={value}
         placeholder="찾으시는 상품 있으신가요?"
+        placeholderTextColor={color.gray400}
         onChangeText={onChangeText}
         onKeyPress={onKeyPress}
       />
@@ -29,16 +32,18 @@ const Search = ({
 
 const Container = styled.View`
   position: relative;
-  width: 100%;
+  flex: 1;
 `
 
 const SearchInput = styled.TextInput`
   width: 100%;
   padding: 18px 16px;
   border-width: 1px;
-  border-color: red;
+  border-color: ${color.gray300};
   border-radius: 5px;
-  background-color: white;
+  background-color: ${color.white};
+  font-size: 16px;
+  font-weight: 500;
 `
 
 const IconWrapper = styled.View`
