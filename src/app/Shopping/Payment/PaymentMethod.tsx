@@ -3,6 +3,7 @@ import { Font, color } from "../../../styles"
 import { PaymentData } from "./data";
 import { useState } from "react";
 import { Dimensions } from "react-native";
+import { ImageSourcePropType } from "react-native";
 
 const screenWidth = Dimensions.get("window").width;
 const horizontalPadding = 40;
@@ -28,7 +29,7 @@ const PaymentMethod = () => {
               key={id}
               onPress={() => setSelected(id || 1)}
               isSelected={isSelected}
-              style={{ width: sectionWidth, marginRight: id % 2 === 1 ? gap : 0 }}
+              style={{ width: sectionWidth, marginRight: id! % 2 === 1 ? gap : 0 }}
             >
               {title && (
                 <Font
@@ -39,7 +40,7 @@ const PaymentMethod = () => {
               )}
               {image && (
                 <MethodImage
-                  source={typeof image === "string" ? { uri: image } : image}
+                  source={image as ImageSourcePropType}
                   resizeMode="contain"
                   height={height}
                 />
