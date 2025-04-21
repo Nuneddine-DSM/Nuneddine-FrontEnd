@@ -1,10 +1,15 @@
 import styled from "styled-components/native";
-import { color, Font } from "../../styles"
-import Search from "../../components/Main/Search";
-import { AuthButton } from "../../components";
-import StoreLocation from "../../components/Shopping/StoreLocation";
+import { color, Font } from "../../../styles"
+import Search from "../../../components/Main/Search";
+import { AuthButton } from "../../../components";
+import StoreLocation from "../../../components/Shopping/StoreLocation";
+import { useState } from "react";
+
+const items = ["안녕", "히히", "예에", "안녕", "히히", "예에", "안녕", "히히"];
 
 const Map = () => {
+  const [isSelect, setIsSelect] = useState<boolean>(false);
+
   return (
     <>
       <ReservationStoreFinderSection>
@@ -17,12 +22,13 @@ const Map = () => {
           <MapSearchWrapper>
             <MapWrapper></MapWrapper>
             <SearchWrapper>
-              <Search />
+              <Search item={items} />
               <AuthButton text="선택" width="80px" />
             </SearchWrapper>
           </MapSearchWrapper>
 
-          <StoreLocation />
+          {isSelect && <StoreLocation />}
+
         </ReservationMap>
       </ReservationStoreFinderSection>
     </>

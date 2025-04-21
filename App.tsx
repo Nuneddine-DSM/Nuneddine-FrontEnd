@@ -16,7 +16,7 @@ import Manage from './src/app/Manage/page';
 import Onboarding from './src/app/Onboarding/page';
 import Login from './src/app/Login/page';
 import SignUp from "./src/app/SignUp/page"
-import Cart from "./src/app/Shopping/page"
+import Cart from "./src/app/Shopping/Cart/page"
 import Payment from "./src/app/Shopping/Payment/page"
 
 function App(): React.JSX.Element {
@@ -25,7 +25,7 @@ function App(): React.JSX.Element {
     <NavigationContainer>
       <Stack.Navigator
         screenOptions={{ headerShown: false }}
-        initialRouteName="Payment">
+        initialRouteName="Cart">
         <Stack.Screen name="NavBar" component={NavBar} />
         <Stack.Screen name="Main" component={Main} />
         <Stack.Screen name="Guide" component={Guide} />
