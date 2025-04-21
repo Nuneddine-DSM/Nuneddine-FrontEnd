@@ -3,7 +3,7 @@ import { Font, color } from "../../../styles"
 import { Input, TopBar } from "../../../components";
 import CartGlassesItem from "../../../components/Shopping/CartGlassesItem";
 import { AuthButton } from "../../../components";
-import Amount from "../Amount/page";
+import Amount from "../Common/Amount";
 import PaymentMethod from "./PaymentMethod";
 
 const Payment = () => {
