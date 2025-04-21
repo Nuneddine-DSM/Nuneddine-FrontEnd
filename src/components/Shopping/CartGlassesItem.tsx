@@ -1,60 +1,80 @@
 import styled from "styled-components/native";
-import { Minus, Plus, X } from "../../assets"
+import { Minus, Plus, X } from "../../assets";
 import { Font, color } from "../../styles";
 import { useState } from "react";
 import CheckBox from "./CheckBox";
 
-const CartGlassesItem = () => {
-  const [selected, setSelected] = useState<boolean>(false);
-  const [productCount, setProductCount] = useState<number>(1);
+interface CartGlassesItemProps {
+  checkedItems: { [id: string]: boolean };
+  setCheckedItems: React.Dispatch<React.SetStateAction<{ [id: string]: boolean }>>;
+}
+
+const CartGlassesItem = ({ checkedItems, setCheckedItems }: CartGlassesItemProps) => {
+  const [glasses] = useState([
+    { id: 'glasses1', count: 1 },
+    { id: 'glasses2', count: 1 }
+  ]);
+
+  const toggleItem = (id: string) => {
+    setCheckedItems(prev => ({
+      ...prev,
+      [id]: !prev[id]
+    }));
+  };
+
+  const updateCount = (id: string, delta: number) => { };
 
   return (
-    <ItemContainer>
-      <CheckBox
-        onPress={() => setSelected(!selected)}
-        selected={selected}
-      />
+    <>
+      {glasses.map(item => (
+        <ItemContainer key={item.id}>
+          <CheckBox
+            onPress={() => toggleItem(item.id)}
+            selected={checkedItems[item.id] || false}
+          />
 
-      <ItemContent>
-        <ProductInfoSection>
-          <ProductImage />
+          <ItemContent>
+            <ProductInfoSection>
+              <ProductImage />
 
-          <ProductDetails>
-            <TitleAndCounter>
-              <TitleBlock>
-                <Font text="브랜드" kind="bold16" />
-                <Font
-                  text="[안경 이름] 암튼 이름 겁나 김 뭐 mm 까지 나와있음..."
-                  kind="medium16"
-                  style={{ flexWrap: "wrap" }}
-                  numberOfLines={2}
-                  ellipsizeMode="tail"
-                />
-              </TitleBlock>
+              <ProductDetails>
+                <TitleAndCounter>
+                  <TitleBlock>
+                    <Font text="브랜드" kind="bold16" />
+                    <Font
+                      text="[안경 이름] 암튼 이름 겁나 김 뭐 mm 까지 나와있음..."
+                      kind="medium16"
+                      style={{ flexWrap: "wrap" }}
+                      numberOfLines={2}
+                      ellipsizeMode="tail"
+                    />
+                  </TitleBlock>
 
-              <QuantityController>
-                <IconButton onPress={() => setProductCount(prev => (prev > 1 ? prev - 1 : 1))}>
-                  <Minus size={14} color={color.gray600} />
-                </IconButton>
-                <QuantityDisplay>
-                  <Font text={String(productCount)} kind="medium14" />
-                </QuantityDisplay>
-                <IconButton onPress={() => setProductCount(prev => prev + 1)}>
-                  <Plus size={14} color={color.gray600} />
-                </IconButton>
-              </QuantityController>
+                  <QuantityController>
+                    <IconButton onPress={() => updateCount(item.id, -1)}>
+                      <Minus size={14} color={color.gray600} />
+                    </IconButton>
+                    <QuantityDisplay>
+                      <Font text={String(item.count)} kind="medium14" />
+                    </QuantityDisplay>
+                    <IconButton onPress={() => updateCount(item.id, 1)}>
+                      <Plus size={14} color={color.gray600} />
+                    </IconButton>
+                  </QuantityController>
 
-            </TitleAndCounter>
-            <Font text="39,000원" kind="bold16" />
-          </ProductDetails>
-        </ProductInfoSection>
+                </TitleAndCounter>
+                <Font text="39,000원" kind="bold16" />
+              </ProductDetails>
+            </ProductInfoSection>
 
-        <X size={30} />
+            <X size={30} />
+          </ItemContent>
+        </ItemContainer>
+      ))}
+    </>
+  );
+};
 
-      </ItemContent>
-    </ItemContainer>
-  )
-}
 
 const ItemContainer = styled.View`
   display: flex;

@@ -5,45 +5,70 @@ import { useState } from "react";
 import { X } from "../../assets"
 import Tag from "./Tag";
 
-const CartLensItem = () => {
-  const [selected, setSelected] = useState<boolean>(false);
+interface CartLensItemProps {
+  checkedItems: { [id: string]: boolean };
+  setCheckedItems: React.Dispatch<React.SetStateAction<{ [id: string]: boolean }>>;
+}
+
+const CartLensItem = ({ checkedItems, setCheckedItems }: CartLensItemProps) => {
+  const [lens] = useState([
+    { id: 'lens1', count: 1 },
+    { id: 'lens2', count: 1 }
+  ]);
+
+  const toggleItem = (id: string) => {
+    setCheckedItems(prev => ({
+      ...prev,
+      [id]: !prev[id]
+    }));
+  };
 
   return (
-    <ItemContainer>
-      <CheckBox
-        onPress={() => setSelected(!selected)}
-        selected={selected}
-      />
+    <>
+      {lens.map(item => (
+        <ItemContainer key={item.id}>
+          <CheckBox
+            onPress={() => toggleItem(item.id)}
+            selected={checkedItems[item.id] || false}
+          />
 
-      <ItemContent>
-        <ProductInfoSection>
-          <ProductImage />
-          <CartItemDetail>
-            <TitleBlock>
-              <Font text="브랜드" kind="bold16" />
+          <ItemContent>
+            <ProductInfoSection>
+              <ProductImage />
+              <CartItemDetail>
+                <TitleBlock>
+                  <Font text="브랜드" kind="bold16" />
+                  <Font
+                    text="[안경 이름] 암튼 이름 겁나 김 뭐 mm 까지 나와있음..."
+                    kind="medium16"
+                    style={{ flexWrap: "wrap" }}
+                    numberOfLines={2}
+                    ellipsizeMode="tail"
+                  />
+                </TitleBlock>
+
+                <CategoryPriceBlock>
+                  <Tag text="한달용" />
+                  <Font text="12,000원" kind="bold16" />
+                </CategoryPriceBlock>
+              </CartItemDetail>
+              <X />
+            </ProductInfoSection>
+
+            <OptionWrapper>
+              <Font text="옵션 : 1개 / -1.00" color="gray600" kind="regular14" />
               <Font
-                text="[안경 이름] 암튼 이름 겁나 김 뭐 mm 까지 나와있음..."
-                kind="medium16"
-                style={{ flexWrap: "wrap" }}
-                numberOfLines={2}
-                ellipsizeMode="tail"
+                text="옵션변경"
+                color="gray600"
+                kind="regular14"
+                style={{ textDecorationLine: 'underline' }}
               />
-            </TitleBlock>
+            </OptionWrapper>
+          </ItemContent>
+        </ItemContainer>
+      ))}
 
-            <CategoryPriceBlock>
-              <Tag text="한달용" />
-              <Font text="12,000원" kind="bold16" />
-            </CategoryPriceBlock>
-          </CartItemDetail>
-          <X />
-        </ProductInfoSection>
-
-        <OptionWrapper>
-          <Font text="옵션 : 1개 / -1.00" color="gray600" kind="regular14" />
-          <Font text="옵션변경" color="gray600" kind="regular14" />
-        </OptionWrapper>
-      </ItemContent>
-    </ItemContainer>
+    </>
   )
 }
 

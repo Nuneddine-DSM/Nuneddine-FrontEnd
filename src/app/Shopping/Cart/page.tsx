@@ -8,13 +8,36 @@ import CheckBox from "../../../components/Shopping/CheckBox";
 import { useState } from "react";
 import { AuthButton } from "../../../components/Button";
 import Lens from "./Lens";
-import Amount from "../Amount/page";
+import Amount from "../Common/Amount";
 import CartGlassesItem from "../../../components/Shopping/CartGlassesItem";
 import CartLensItem from "../../../components/Shopping/CartLensItem";
 
 const Cart = () => {
-  const [checked, setChecked] = useState<boolean>(true);
+  const [checkedGlassesItems, setCheckedGlassesItems] = useState<{ [id: string]: boolean }>({});
+  const [checkedLensItems, setCheckedLensItems] = useState<{ [id: string]: boolean }>({});
   const [selectedTab, setSelectedTab] = useState<number>(1);
+
+  const currentCheckedItems = selectedTab === 1 ? checkedGlassesItems : checkedLensItems;
+  const setCurrentCheckedItems = selectedTab === 1 ? setCheckedGlassesItems : setCheckedLensItems;
+
+  const allIds = selectedTab === 1 ? ['glasses1', 'glasses2'] : ['lens1', 'lens2'];
+  const isAllChecked = allIds.every(id => currentCheckedItems[id]);
+
+  const toggleAll = () => {
+    if (isAllChecked) {
+      setCurrentCheckedItems(prev => {
+        const newState = { ...prev };
+        allIds.forEach(id => delete newState[id]);
+        return newState;
+      });
+    } else {
+      const newState: { [id: string]: boolean } = {};
+      allIds.forEach(id => {
+        newState[id] = true;
+      });
+      setCurrentCheckedItems(prev => ({ ...prev, ...newState }));
+    }
+  };
 
   return (
     <>
@@ -24,9 +47,27 @@ const Cart = () => {
       />
       <Container>
         <CartTabSection selectedTab={selectedTab} setSelectedTab={setSelectedTab} />
-        <SelectSection checked={checked} />
-        <ProductCountSection count={1} />
-        {selectedTab === 1 ? <CartGlassesItem /> : <CartLensItem />}
+        <SelectSection checked={isAllChecked} toggleAll={toggleAll} />
+        <ProductCountSection
+          count={
+            selectedTab === 1
+              ? Object.keys(checkedGlassesItems).length
+              : Object.keys(checkedLensItems).length
+          }
+        />
+        {selectedTab === 1 && (
+          <CartGlassesItem
+            checkedItems={checkedGlassesItems}
+            setCheckedItems={setCheckedGlassesItems}
+          />
+        )}
+
+        {selectedTab === 2 && (
+          <CartLensItem
+            checkedItems={checkedLensItems}
+            setCheckedItems={setCheckedLensItems}
+          />
+        )}
         {selectedTab === 2 && <Lens />}
         <Amount />
         <PurchaseButton />
@@ -41,10 +82,10 @@ const CartTabSection = ({ selectedTab, setSelectedTab }: { selectedTab: number, 
   </>
 );
 
-const SelectSection = ({ checked }: { checked: boolean }) => (
+const SelectSection = ({ checked, toggleAll }: { checked: boolean, toggleAll: () => void }) => (
   <SelectWrapper>
     <AllSelectWrapper>
-      <CheckBox selected={checked} />
+      <CheckBox selected={checked} onPress={toggleAll} />
       <Font text="전체 선택" kind="medium16" />
     </AllSelectWrapper>
     <Font text="선택 삭제" kind="medium16" />
@@ -69,16 +110,14 @@ const Container = styled.ScrollView.attrs(() => ({
   },
 }))`
   flex: 1;
-  display: flex;
   flex-direction: column;
-  gap: 15px;
   background-color: ${color.gray50};
   padding-top: 62px;
+  gap: 15px;
 `;
 
 const SelectWrapper = styled.View`
   height: 56px;
-  display: flex;
   flex-direction: row;
   justify-content: space-between;
   align-items: center;
@@ -87,13 +126,13 @@ const SelectWrapper = styled.View`
 `;
 
 const AllSelectWrapper = styled.View`
-  display: flex;
   flex-direction: row;
   align-items: center;
   gap: 10px;
 `;
 
 const ProductCountWrapper = styled.View`
+  flex-direction: row;
   padding: 10px 20px 12px;
   background-color: ${color.white};
 `;
