@@ -4,14 +4,15 @@ import { TouchableOpacity } from "react-native";
 import { Arrow } from "../../assets";
 import { Font, color } from "../../styles";
 import GlassesLensTab from "../../components/Shopping/GlassesLensTab";
-import CartGlassesItem from "../../components/Shopping/CartGlassesItem";
 import CheckBox from "../../components/Shopping/CheckBox";
 import { useState } from "react";
 import { AuthButton } from "../../components/Button";
-import { ScrollView } from "react-native";
+import Lens from "./Lens";
+import Glasses from "./Glasses";
 
 const Cart = () => {
-  const [select, setSelect] = useState<boolean>(true)
+  const [checked, setChecked] = useState<boolean>(true)
+  const [selectedTab, setSelectedTab] = useState<number>(1);
 
   return (
     <>
@@ -24,27 +25,26 @@ const Cart = () => {
         }
       />
       <Container>
-        <GlassesLensTab />
+        <>
+          <GlassesLensTab selectedTab={selectedTab} setSelectedTab={setSelectedTab} />
 
-        <SelectWrapper>
-          <AllSelectWrapper>
-            <CheckBox
-              onPress={() => setSelect(!select)}
-              selected={select}
-            />
-            <Font text="전체 선택" kind="medium16" />
-          </AllSelectWrapper>
-          <Font text="선택 선택" kind="medium16" />
-        </SelectWrapper>
+          <SelectWrapper>
+            <AllSelectWrapper>
+              <CheckBox
+                onPress={() => setChecked(!checked)}
+                selected={checked}
+              />
+              <Font text="전체 선택" kind="medium16" />
+            </AllSelectWrapper>
+            <Font text="선택 선택" kind="medium16" />
+          </SelectWrapper>
 
-        <ProductCountWrapper>
-          <Font text="1개의 상품이 있습니다." kind="medium16" />
-        </ProductCountWrapper>
+          <ProductCountWrapper>
+            <Font text="1개의 상품이 있습니다." kind="medium16" />
+          </ProductCountWrapper>
 
-        <ProductListWrapper>
-          <CartGlassesItem />
-          <CartGlassesItem />
-        </ProductListWrapper>
+          {selectedTab === 1 ? <Glasses /> : <Lens />}
+        </>
 
         <TotalAmountWrapper>
           <TotalWrapper>
@@ -79,9 +79,13 @@ const Container = styled.ScrollView.attrs(() => ({
   },
 }))`
   flex: 1;
+  display: flex;
+  flex-direction: column;
+  gap: 15px;
   background-color: ${color.gray50};
   padding-top: 62px;
 `;
+
 const SelectWrapper = styled.View`
   height: 56px;
   display: flex;
@@ -97,7 +101,6 @@ const AllSelectWrapper = styled.View`
   flex-direction: row;
   align-items: center;
   gap: 10px;
-
 `
 
 const ProductCountWrapper = styled.View`
@@ -118,7 +121,6 @@ const TotalAmountWrapper = styled.View`
   border-top-width: 2px;
   border-color: ${color.gray200};
   background-color: ${color.gray50};
-  margin-bottom: 150px;
 `
 
 const TotalWrapper = styled.View`
