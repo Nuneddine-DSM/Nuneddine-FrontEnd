@@ -3,16 +3,20 @@ import { CategoryData } from "../../app/Main/Data"
 import { useState } from "react"
 import { color, Font } from "../../styles"
 
-const GlassesLensTab = () => {
-  const [tabSelected, setTabSelected] = useState<number>(1);
+interface PropsType {
+  selectedTab: number;
+  setSelectedTab: (id: number) => void;
+}
+
+const GlassesLensTab = ({ selectedTab, setSelectedTab }: PropsType) => {
 
   return (
     <CategoryTabContainer>
       {CategoryData.map(({ id, text, icon }) => (
         <CategoryTab
           key={id}
-          onPress={() => setTabSelected(id!)}
-          selected={tabSelected === id}
+          onPress={() => setSelectedTab(id!)}
+          selected={selectedTab === id}
         >
           {icon}
           <Font text={text} kind="semi18" />
@@ -40,7 +44,7 @@ const CategoryTab = styled.TouchableOpacity<{
   padding: 16px;
   gap: 5px;
   border-bottom-width: 3px;
-  border-bottom-color: ${({ selected }) => selected ? color.pink300 : color.gray100 };
+  border-bottom-color: ${({ selected }) => selected ? color.pink300 : color.gray100};
 `
 
 export default GlassesLensTab

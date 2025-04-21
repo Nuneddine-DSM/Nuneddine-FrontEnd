@@ -6,8 +6,10 @@ import { NavigationListData } from "./Data"
 import Shopping from "./Shopping"
 import Footer from "../../components/Main/Footer"
 import GlassesLensTab from "../../components/Shopping/GlassesLensTab"
+import { useState } from "react"
 
 const Main = () => {
+  const [selectedTab, setSelectedTab] = useState<number>(1);
 
   return (
     <>
@@ -29,7 +31,7 @@ const Main = () => {
           ))}
         </NavigationListWrapper>
 
-        <GlassesLensTab />
+        <GlassesLensTab selectedTab={selectedTab} setSelectedTab={setSelectedTab} />
 
         <ShoppingContainer>
           <Shopping />
