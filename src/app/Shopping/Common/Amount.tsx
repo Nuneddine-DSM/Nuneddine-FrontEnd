@@ -1,23 +1,37 @@
 import styled from "styled-components/native";
 import { Font, color } from "../../../styles"
 
-const Amount = () => {
+interface AmountProps {
+  orderAmount?: number,
+  deliveryAmount?: number,
+  last?: boolean
+}
+
+const Amount = ({
+  orderAmount = 0,
+  deliveryAmount = 0,
+  last = false
+}: AmountProps) => {
   return (
     <TotalAmountWrapper>
       <TotalWrapper>
         <Font text="총 주문 금액" color="gray600" kind="semi18" />
-        <Font text="78,000원" kind="medium18" />
+        <Font text={`${orderAmount}원`} kind="medium18" />
       </TotalWrapper>
       <TotalWrapper>
         <Font text="총 배송비" color="gray600" kind="semi18" />
-        <Font text="무료배송" color="pink200" kind="medium18" />
+        <Font
+          text={deliveryAmount === 0 ? `무료배송` : `${deliveryAmount}원`}
+          kind="medium18"
+          color="pink200"
+        />
       </TotalWrapper>
 
       <Line></Line>
 
       <TotalWrapper>
-        <Font text="총 결제 금액" color="gray600" kind="semi18" />
-        <Font text="78,000원" kind="medium20" />
+        <Font text="총 결제 금액" color={last ? "pink300" : "gray600"} kind="semi18" />
+        <Font text={`${orderAmount + deliveryAmount}원`} kind="medium20" color={last ? "pink300" : "black"} />
       </TotalWrapper>
     </TotalAmountWrapper>
   )
