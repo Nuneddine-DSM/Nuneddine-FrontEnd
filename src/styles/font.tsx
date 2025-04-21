@@ -102,6 +102,11 @@ const fonts: { [key: string]: TextStyle } = {
     lineHeight: 24,
     fontWeight: '600'
   },
+  bold20: {
+    fontSize: 20,
+    lineHeight: 24,
+    fontWeight: '700'
+  },
   medium24: {
     fontSize: 24,
     lineHeight: 36,
