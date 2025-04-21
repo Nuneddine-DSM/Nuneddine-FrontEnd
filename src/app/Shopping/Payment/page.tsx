@@ -1,15 +1,23 @@
 import styled from "styled-components/native";
 import { Font, color } from "../../../styles"
-import { Input, TopBar } from "../../../components";
-import CartGlassesItem from "../../../components/Shopping/CartGlassesItem";
-import { AuthButton } from "../../../components";
+import { Input, TopBar, AuthButton } from "../../../components";
 import Amount from "../Common/Amount";
 import PaymentMethod from "./PaymentMethod";
+import OrderGlassesItem from "../../../components/Shopping/OrderGlassesItem";
+import { TouchableOpacity } from "react-native"
+import { Arrow } from "../../../assets";
 
 const Payment = () => {
   return (
     <>
-      <TopBar text="장바구니/결제" />
+      <TopBar
+        text="장바구니/결제"
+        leftIcon={
+          <TouchableOpacity onPress={() => { }}>
+            <Arrow size={34} />
+          </TouchableOpacity>
+        }
+      />
 
       <Container>
         <DeliveryInfo>
@@ -18,19 +26,29 @@ const Payment = () => {
               <Font text="배송지 정보" kind="bold20" />
               <Font text="*" kind="bold20" color="pink300" />
             </RequiredTitle>
-            <Font text="배송지 변경" kind="medium16" color="pink300" />
+            <Font
+              text="배송지 변경"
+              kind="medium16"
+              color="pink300"
+              style={{
+                textDecorationLine: "underline",
+                textDecorationColor: color.pink300,
+              }}
+            />
           </DeliveryHeader>
 
           <DeliverySection>
-            <Tag>
-              <Font text="기숙사" kind="semi14" />
-            </Tag>
+            <Font text="기숙사" kind="bold20" />
             <NamePhoneNumber>
               <Font text="박예빈" kind="medium18" />
               <Font text="･" kind="medium18" />
               <Font text="010-1234-5678" kind="medium18" />
             </NamePhoneNumber>
-            <Font text="대전광역시 유성구 가정북로 76 (장동, 대덕소프트웨어마이스터고등학교), 우정관 택배함(기숙사)" kind="regular16" color="gray600" />
+            <Font
+              text="대전광역시 유성구 가정북로 76 (장동, 대덕소프트웨어마이스터고등학교), 우정관 택배함(기숙사)"
+              kind="regular16"
+              color="gray600"
+            />
             <Input placeholder="배송시 요청사항을 입력해주세요" />
           </DeliverySection>
         </DeliveryInfo>
@@ -40,14 +58,14 @@ const Payment = () => {
             <Font text="주문 상품" kind="bold20" />
           </ItemHeader>
           <>
-            <CartGlassesItem />
-            <CartGlassesItem />
+            <OrderGlassesItem />
+            <OrderGlassesItem />
           </>
         </OrderItemList>
 
         <PaymentMethod />
 
-        <Amount />
+        <Amount last={true} />
 
         <ButtonWrapper>
           <AuthButton text="상품 구매하기" />

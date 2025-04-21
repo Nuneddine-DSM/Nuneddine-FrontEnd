@@ -8,7 +8,7 @@ import { ImageSourcePropType } from "react-native";
 const screenWidth = Dimensions.get("window").width;
 const horizontalPadding = 40;
 const gap = 10;
-const sectionWidth = (screenWidth - horizontalPadding - gap) / 2;
+const sectionWidth = Math.floor((screenWidth - horizontalPadding - gap) / 2);
 
 const PaymentMethod = () => {
   const [selected, setSelected] = useState<number>(1);
@@ -27,9 +27,8 @@ const PaymentMethod = () => {
           return (
             <PaymentSection
               key={id}
-              onPress={() => setSelected(id || 1)}
+              onPress={() => setSelected(id)}
               isSelected={isSelected}
-              style={{ width: sectionWidth, marginRight: id! % 2 === 1 ? gap : 0 }}
             >
               {title && (
                 <Font
@@ -66,19 +65,23 @@ const PaymentMethodWrapper = styled.View`
   flex-direction: row;
   flex-wrap: wrap;
   padding: 10px 20px;
+  justify-content: space-between;
 `
 
 const PaymentSection = styled.TouchableOpacity<{ isSelected?: boolean }>`
+  width: ${sectionWidth}px;
   height: 70px;
   justify-content: center;
   align-items: center;
   border-radius: 10px;
   border-width: 1.5px;
   margin-bottom: 10px;
-  border-color: ${({ isSelected }) => isSelected ? color.pink300 : color.gray300};
+  border-color: ${({ isSelected }) => isSelected ? color.pink300 : color.gray200};
+  background-color: ${color.white};
 `
 
 const MethodImage = styled.Image<{ height?: number }>`
+  width: 100%;
   height: ${({ height }) => `${height}px`};
 `
 

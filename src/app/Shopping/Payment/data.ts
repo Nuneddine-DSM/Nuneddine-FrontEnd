@@ -6,7 +6,7 @@ import Samsung from "../../../assets/Samsung.png"
 import { ReactNode } from "react"
 
 export interface PaymentDataType {
-  id?: number,
+  id: number,
   title?: string,
   image?: ReactNode,
   height?: number
