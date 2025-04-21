@@ -9,6 +9,7 @@ import { useState } from "react";
 import { AuthButton } from "../../components/Button";
 import Lens from "./Lens";
 import Glasses from "./Glasses";
+import Amount from "./Amount/page";
 
 const Cart = () => {
   const [checked, setChecked] = useState<boolean>(true)
@@ -46,23 +47,7 @@ const Cart = () => {
           {selectedTab === 1 ? <Glasses /> : <Lens />}
         </>
 
-        <TotalAmountWrapper>
-          <TotalWrapper>
-            <Font text="총 주문 금액" color="gray600" kind="semi18" />
-            <Font text="78,000원" kind="medium18" />
-          </TotalWrapper>
-          <TotalWrapper>
-            <Font text="총 배송비" color="gray600" kind="semi18" />
-            <Font text="무료배송" color="pink200" kind="medium18" />
-          </TotalWrapper>
-
-          <Line></Line>
-
-          <TotalWrapper>
-            <Font text="총 결제 금액" color="gray600" kind="semi18" />
-            <Font text="78,000원" kind="medium20" />
-          </TotalWrapper>
-        </TotalAmountWrapper>
+        <Amount />
 
         <ButtonWrapper>
           <AuthButton text="상품 구매하기" />
@@ -113,27 +98,7 @@ const ProductListWrapper = styled.View`
   flex-direction: column;
 `
 
-const TotalAmountWrapper = styled.View`
-  display: flex;
-  flex-direction: column;
-  gap: 26px;
-  padding: 40px 20px;
-  border-top-width: 2px;
-  border-color: ${color.gray200};
-  background-color: ${color.gray50};
-`
 
-const TotalWrapper = styled.View`
-  display: flex;
-  flex-direction: row;
-  justify-content: space-between;
-`
-
-const Line = styled.View`
-  width: 100%;
-  height: 1px;
-  background-color: ${color.gray300};
-`
 
 const ButtonWrapper = styled.View`
   padding: 7px 20px;
