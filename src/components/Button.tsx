@@ -31,6 +31,7 @@ const BasedButton = styled.TouchableOpacity<{
   paddingValue?: number;
 }>`
   width: ${({ width }) => width};
+  max-height: 55px;
   border-radius: 5px;
   background-color: ${({ primaryButton }) =>
     primaryButton ? color.pink300 : color.white};
