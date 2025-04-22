@@ -1,7 +1,7 @@
 import styled from "styled-components/native";
 import { Font, color } from "../../../styles";
 import { Input } from "../../../components";
-import Map from "./Map";
+import Map from "./StoreMap";
 
 const Lens = () => {
   return (

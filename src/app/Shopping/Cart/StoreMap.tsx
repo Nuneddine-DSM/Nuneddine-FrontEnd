@@ -7,7 +7,7 @@ import { useState } from "react";
 
 const items = ["안녕", "히히", "예에", "안녕", "히히", "예에", "안녕", "히히"];
 
-const Map = () => {
+const StoreMap = () => {
   const [isSelect, setIsSelect] = useState<boolean>(false);
 
   return (
@@ -27,7 +27,13 @@ const Map = () => {
             </SearchWrapper>
           </MapSearchWrapper>
 
-          {isSelect && <StoreLocation />}
+          {isSelect &&
+            <StoreLocation
+              name="히히"
+              address="주소입니다"
+              contact="010-1234-1234"
+            />
+          }
 
         </ReservationMap>
       </ReservationStoreFinderSection>
@@ -78,4 +84,4 @@ const SearchWrapper = styled.View`
   gap: 8px;
 `
 
-export default Map
+export default StoreMap
