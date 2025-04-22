@@ -12,18 +12,25 @@ interface SignupData {
 
 export const signUpHandler = async (data: SignupData) => {
   const deviceToken = await getDeviceToken();
-  return await instance
-    .post(`${auth}/signup`, {
+  try {
+    const response = await instance.post(`${auth}/signup`, {
       name: data.name,
       account_id: data.id,
       password: data.password,
       device_token: deviceToken,
     })
-    .then()
-    .catch(err => {
-      console.log(err);
-      throw err
-    });
+
+    const { accessToken } = response.data;
+
+    if (accessToken) {
+      await storeData('accessToken', accessToken);
+    }
+    
+    return response
+  } catch (error) {
+    console.log(error);
+    throw error;
+  }
 };
 
 export async function getDeviceToken() {
