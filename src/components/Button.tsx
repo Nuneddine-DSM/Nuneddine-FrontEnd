@@ -8,7 +8,11 @@ interface ButtonPropsType {
   primaryButton?: boolean;
 }
 
-export function AuthButton({ text, onPress, primaryButton=true }: ButtonPropsType) {
+export function AuthButton({
+  text,
+  onPress,
+  primaryButton = true
+}: ButtonPropsType) {
   return (
     <BasedButton
       primaryButton={primaryButton}
@@ -28,7 +32,7 @@ const BasedButton = styled.TouchableOpacity<{
   paddingValue?: number;
 }>`
   width: 100%;
-  border-radius: 5px;
+  border-radius: 10px;
   background-color: ${({ primaryButton }) =>
     primaryButton ? color.pink300 : color.white};
   padding-top: ${({ paddingValue }) => paddingValue};
