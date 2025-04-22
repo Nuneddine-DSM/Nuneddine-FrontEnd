@@ -4,13 +4,15 @@ import { color, Font } from '../styles';
 
 interface ButtonPropsType {
   text?: string;
+  width?: string;
   onPress?: () => void;
   primaryButton?: boolean;
 }
 
-export function AuthButton({ text, onPress, primaryButton=true }: ButtonPropsType) {
+export function AuthButton({ text, width='100%', onPress, primaryButton=true }: ButtonPropsType) {
   return (
     <BasedButton
+      width={width}
       primaryButton={primaryButton}
       paddingValue={14}
       onPress={onPress}>
@@ -24,10 +26,12 @@ export function AuthButton({ text, onPress, primaryButton=true }: ButtonPropsTyp
 }
 
 const BasedButton = styled.TouchableOpacity<{
+  width?: string;
   primaryButton?: boolean;
   paddingValue?: number;
 }>`
-  width: 100%;
+  width: ${({ width }) => width};
+  max-height: 55px;
   border-radius: 5px;
   background-color: ${({ primaryButton }) =>
     primaryButton ? color.pink300 : color.white};

@@ -1,14 +1,15 @@
 import styled from "styled-components/native"
-import Header from "../../components/Shopping/Header"
-import Search from "../../components/Shopping/Search"
+import Header from "../../components/Main/Header"
+import Search from "../../components/Main/Search"
 import Banner from "./Banner"
-import { CategoryData, NavigationListData } from "./Data"
-import { useState } from "react"
+import { NavigationListData } from "./Data"
 import Shopping from "./Shopping"
-import Footer from "../../components/Shopping/Footer"
+import Footer from "../../components/Main/Footer"
+import GlassesLensTab from "../../components/Shopping/GlassesLensTab"
+import { useState } from "react"
 
 const Main = () => {
-  const [tabSelected, setTabSelected] = useState<number>(1)
+  const [selectedTab, setSelectedTab] = useState<number>(1);
 
   return (
     <>
@@ -30,18 +31,7 @@ const Main = () => {
           ))}
         </NavigationListWrapper>
 
-        <CategoryTabContainer>
-          {CategoryData.map(({ id, text, icon }) => (
-            <CategoryTab
-              key={id}
-              onPress={() => setTabSelected(id!)}
-              selected={tabSelected === id}
-            >
-              {icon}
-              <CategoryLabel>{text}</CategoryLabel>
-            </CategoryTab>
-          ))}
-        </CategoryTabContainer>
+        <GlassesLensTab selectedTab={selectedTab} setSelectedTab={setSelectedTab} />
 
         <ShoppingContainer>
           <Shopping />
@@ -92,32 +82,6 @@ const TabIconWrapper = styled.View`
 const TabLabel = styled.Text`
   font-size: 16px;
   font-weight: 500;
-`
-
-const CategoryTabContainer = styled.View`
-  display: flex;
-  flex-direction: row;
-  justify-content: space-between;
-  padding: 20px;
-`
-
-const CategoryTab = styled.TouchableOpacity<{
-  selected?: boolean
-}>`
-  width: 50%;
-  display: flex;
-  flex-direction: row;
-  justify-content: center;
-  align-items: center;
-  padding: 16px;
-  gap: 5px;
-  border-bottom-width: 3px;
-  border-bottom-color: ${({ selected }) => selected ? `red` : `white`};
-`
-
-const CategoryLabel = styled.Text`
-  font-size: 18px;
-  font-weight: 600;
 `
 
 const ShoppingContainer = styled.View`

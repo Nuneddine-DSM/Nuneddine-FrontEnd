@@ -13,6 +13,9 @@ interface InputProps {
   readonly?: boolean;
   onChangeText?: (input: string) => void;
   onKeyPress?: (input: any) => void;
+  width?: string;
+  borderRadius?: number;
+  padding?: string;
 }
 
 export const Input = ({
@@ -23,16 +26,19 @@ export const Input = ({
   value,
   multiline,
   readonly,
+  width = '100%',
+  borderRadius = 10,
+  padding = '18px 16px',
   onChangeText,
-  onKeyPress
+  onKeyPress,
 }: InputProps) => {
   const [press, setPress] = useState<boolean>(false);
   const [isFocused, setIsFocused] = useState<boolean>(false);
 
   return (
-    <Container>
+    <Container width={width}>
       {label && <Font kind="semi16" text={label} />}
-      <InputContainerBox focused={isFocused}>
+      <InputContainerBox focused={isFocused} borderRadius={borderRadius}>
         <InputBox
           readOnly={readonly}
           value={value}
@@ -40,6 +46,7 @@ export const Input = ({
           secureTextEntry={password && !press}
           placeholder={placeholder}
           placeholderTextColor={color.gray400}
+          padding={padding}
           onFocus={() => setIsFocused(true)}
           onBlur={() => setIsFocused(false)}
           onChangeText={onChangeText}
@@ -60,22 +67,22 @@ export const Input = ({
   );
 };
 
-const Container = styled.View`
-  width: 100%;
+const Container = styled.View<{ width: string}>`
+  width: ${({ width }) => width};
   gap: 6px;
 `;
 
-const InputBox = styled.TextInput`
+const InputBox = styled.TextInput<{ padding: string }>`
   flex: 1;
-  padding: 18px 16px;
+  padding: ${({ padding }) => padding}; 
   font-size: 16px;
   font-weight: 600;
   color: black;
 `;
 
-const InputContainerBox = styled.View<{ focused: boolean }>`
+const InputContainerBox = styled.View<{ focused: boolean, borderRadius: number }>`
   width: 100%;
-  border-radius: 5px;
+  border-radius: ${({ borderRadius }) => borderRadius}px;
   align-items: center;
   flex-direction: row;
   background-color: ${color.white};

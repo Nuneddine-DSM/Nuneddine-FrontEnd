@@ -3,7 +3,7 @@ import { Text, TextStyle } from 'react-native';
 import { color } from './color';
 
 interface FontPropsType {
-  text?: string;
+  text?: string | number;
   kind?: keyof typeof fonts;
   color?: keyof typeof color;
   style?: TextStyle;
@@ -101,6 +101,11 @@ const fonts: { [key: string]: TextStyle } = {
     fontSize: 20,
     lineHeight: 24,
     fontWeight: '600'
+  },
+  bold20: {
+    fontSize: 20,
+    lineHeight: 24,
+    fontWeight: '700'
   },
   medium24: {
     fontSize: 24,
