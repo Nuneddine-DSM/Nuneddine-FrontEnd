@@ -1,10 +1,10 @@
 import { useState, useRef, useMemo, useCallback } from "react";
 import styled from "styled-components/native";
 import { TouchableOpacity, View } from "react-native";
-import TopBar from "../../../components/TopBar";
+import { TopBar, Dropdown } from "../../../components";
 import { Arrow } from "../../../assets";
 import { Font, color } from "../../../styles";
-import { GlassesLensTab, CheckBox, CartGlassesItem, CartLensItem } from "../../../components/Shopping/index"
+import { GlassesLensTab, CheckBox, CartGlassesItem, CartLensItem, QuantitySelector } from "../../../components/Shopping/index"
 import { BottomSheetModal, BottomSheetModalProvider, BottomSheetBackdrop } from '@gorhom/bottom-sheet';
 import { AuthButton } from "../../../components/Button";
 import Lens from "./Lens";
@@ -14,9 +14,10 @@ const Cart = () => {
   const [checkedGlassesItems, setCheckedGlassesItems] = useState<{ [id: string]: boolean }>({});
   const [checkedLensItems, setCheckedLensItems] = useState<{ [id: string]: boolean }>({});
   const [selectedTab, setSelectedTab] = useState<number>(1);
+  const [selectedOption, setSelectedOption] = useState("히히")
 
   const bottomSheetModalRef = useRef<BottomSheetModal>(null);
-  const snapPoints = useMemo(() => ['65%'], []);
+  const snapPoints = useMemo(() => ['60%'], []);
 
   const handlePresentModalPress = useCallback(() => {
     bottomSheetModalRef.current?.present();
@@ -91,9 +92,20 @@ const Cart = () => {
             backdropComponent={renderBackdrop}
             onChange={handleSheetChanges}
           >
-            <View style={{ padding: 20 }}>
-              <Font text="옵션 변경 내용" kind="bold16" />
-            </View>
+            <OptionWrapper>
+              <Font text="옵션 변경 / 모디쉬 1p 브라운" kind="medium16" color="gray600" />
+              <InputWrapper>
+                <CountInputWrapper>
+                  <Font text="수량" kind="medium16" />
+                  <QuantitySelector count={0} />
+                </CountInputWrapper>
+                <Dropdown
+                  value={selectedOption}
+                  setValue={setSelectedOption}
+                  items={["0.00", "-2.25", "-5.00", "-7.25", "-10.00"]}
+                />
+              </InputWrapper>
+            </OptionWrapper>
           </BottomSheetModal>
         </View>
 
@@ -172,5 +184,27 @@ const ButtonWrapper = styled.View`
   border-color: ${color.gray100};
   background-color: ${color.white};
 `;
+
+const OptionWrapper = styled.View`
+  flex-direction: column;
+  padding: 47px 26px;
+  gap: 26px;
+`
+
+const InputWrapper = styled.View`
+  flex-direction: column;
+  gap: 12px;
+`
+
+const CountInputWrapper = styled.View`
+  flex-direction: row;
+  justify-content: space-between;
+  align-items: center;
+  padding: 14px 16px;
+  border-width: 1px;
+  border-radius: 10px;
+  border-color: ${color.gray300};
+  background-color: ${color.white};
+`
 
 export default Cart;
