@@ -1,12 +1,18 @@
 import styled from "styled-components/native";
 import { Font, color } from "../../styles"
 
-const StoreLocation = () => {
+interface StoreLocationProps {
+  name?: string,
+  address?: string,
+  contact?: string
+}
+
+const StoreLocation = ({ name, address, contact}: StoreLocationProps) => {
   return (
     <StoreContainer>
-      <Font text="아이뷰 안경" kind="bold20" />
-      <Font text="대전광역시 유성구 가정북로 76" kind="medium16" color="gray600" />
-      <Font text="연락처 ) 042-866-8822" kind="medium16" color="gray600" />
+      <Font text={name} kind="bold20" />
+      <Font text={address} kind="medium16" color="gray600" />
+      <Font text={`연락처 ) ${contact}`} kind="medium16" color="gray600" />
     </StoreContainer>
   )
 }
