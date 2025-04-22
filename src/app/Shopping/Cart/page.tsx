@@ -1,21 +1,35 @@
+import { useState, useRef, useMemo, useCallback } from "react";
 import styled from "styled-components/native";
+import { TouchableOpacity, View } from "react-native";
 import TopBar from "../../../components/TopBar";
-import { TouchableOpacity } from "react-native";
 import { Arrow } from "../../../assets";
 import { Font, color } from "../../../styles";
-import GlassesLensTab from "../../../components/Shopping/GlassesLensTab";
-import CheckBox from "../../../components/Shopping/CheckBox";
-import { useState } from "react";
+import { GlassesLensTab, CheckBox, CartGlassesItem, CartLensItem } from "../../../components/Shopping/index"
+import { BottomSheetModal, BottomSheetModalProvider, BottomSheetBackdrop } from '@gorhom/bottom-sheet';
 import { AuthButton } from "../../../components/Button";
 import Lens from "./Lens";
 import Amount from "../Common/Amount";
-import CartGlassesItem from "../../../components/Shopping/CartGlassesItem";
-import CartLensItem from "../../../components/Shopping/CartLensItem";
 
 const Cart = () => {
   const [checkedGlassesItems, setCheckedGlassesItems] = useState<{ [id: string]: boolean }>({});
   const [checkedLensItems, setCheckedLensItems] = useState<{ [id: string]: boolean }>({});
   const [selectedTab, setSelectedTab] = useState<number>(1);
+
+  const bottomSheetModalRef = useRef<BottomSheetModal>(null);
+  const snapPoints = useMemo(() => ['65%'], []);
+
+  const handlePresentModalPress = useCallback(() => {
+    bottomSheetModalRef.current?.present();
+  }, []);
+
+  const handleSheetChanges = useCallback((index: number) => {
+    console.log('handleSheetChanges', index);
+  }, []);
+
+  const renderBackdrop = useCallback(
+    (props: any) => <BottomSheetBackdrop {...props} pressBehavior="close" disappearsOnIndex={-1} appearsOnIndex={0} />,
+    [],
+  );
 
   const currentCheckedItems = selectedTab === 1 ? checkedGlassesItems : checkedLensItems;
   const setCurrentCheckedItems = selectedTab === 1 ? setCheckedGlassesItems : setCheckedLensItems;
@@ -40,7 +54,7 @@ const Cart = () => {
   };
 
   return (
-    <>
+    <BottomSheetModalProvider>
       <TopBar
         text="장바구니"
         leftIcon={<TouchableOpacity onPress={() => { }}><Arrow size={34} /></TouchableOpacity>}
@@ -62,17 +76,32 @@ const Cart = () => {
           />
         )}
 
-        {selectedTab === 2 && (
-          <CartLensItem
-            checkedItems={checkedLensItems}
-            setCheckedItems={setCheckedLensItems}
-          />
-        )}
+        <View>
+          {selectedTab === 2 && (
+            <CartLensItem
+              checkedItems={checkedLensItems}
+              setCheckedItems={setCheckedLensItems}
+              onPressOption={handlePresentModalPress}
+            />
+          )}
+          <BottomSheetModal
+            ref={bottomSheetModalRef}
+            index={0}
+            snapPoints={snapPoints}
+            backdropComponent={renderBackdrop}
+            onChange={handleSheetChanges}
+          >
+            <View style={{ padding: 20 }}>
+              <Font text="옵션 변경 내용" kind="bold16" />
+            </View>
+          </BottomSheetModal>
+        </View>
+
         {selectedTab === 2 && <Lens />}
         <Amount />
         <PurchaseButton />
       </Container>
-    </>
+    </BottomSheetModalProvider>
   );
 };
 
