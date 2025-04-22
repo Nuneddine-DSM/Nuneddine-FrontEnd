@@ -1,7 +1,7 @@
 import styled from "styled-components/native";
 import { Font, color } from "../../../styles"
 import { Input, TopBar, AuthButton } from "../../../components";
-import Amount from "../Common/Amount";
+import Amount from "../../../components/Shopping/Amount";
 import PaymentMethod from "./PaymentMethod";
 import OrderGlassesItem from "../../../components/Shopping/OrderGlassesItem";
 import { TouchableOpacity } from "react-native"

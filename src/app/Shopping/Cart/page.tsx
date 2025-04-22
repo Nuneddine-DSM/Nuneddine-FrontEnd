@@ -8,7 +8,7 @@ import { GlassesLensTab, CheckBox, CartGlassesItem, CartLensItem, QuantitySelect
 import { BottomSheetModal, BottomSheetModalProvider, BottomSheetBackdrop } from '@gorhom/bottom-sheet';
 import { AuthButton } from "../../../components/Button";
 import Lens from "./Lens";
-import Amount from "../Common/Amount";
+import Amount from "../../../components/Shopping/Amount";
 
 const Cart = () => {
   const [checkedGlassesItems, setCheckedGlassesItems] = useState<{ [id: string]: boolean }>({});
