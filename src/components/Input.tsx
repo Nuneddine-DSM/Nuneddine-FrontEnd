@@ -49,10 +49,11 @@ export const Input = ({
         />
         {password && (
           <PwButton onPress={() => setPress(!press)}>
-            {press ?
-              <Eye size={36} color={color.gray500} /> :
+            {press ? (
+              <Eye size={36} color={color.gray500} />
+            ) : (
               <EyeClose size={36} color={color.gray500} />
-            }
+            )}
           </PwButton>
         )}
       </InputContainerBox>
@@ -75,7 +76,7 @@ const InputBox = styled.TextInput`
 
 const InputContainerBox = styled.View<{ focused: boolean }>`
   width: 100%;
-  border-radius: 5px;
+  border-radius: 10px;
   align-items: center;
   flex-direction: row;
   background-color: ${color.white};
