@@ -1,12 +1,56 @@
 import { useState } from 'react';
+import { useNavigation } from '@react-navigation/native';
 import styled from 'styled-components/native';
 import { TopBar, Input, AuthButton } from '../../components';
 import { color, Font } from '../../styles';
 import { Arrow } from '../../assets/Arrow';
+import { loginHandler, LoginRequest } from '../../apis/auth';
+import { Alert } from 'react-native';
+import { StackNavigationProp } from '@react-navigation/stack';
+import { getDeviceToken } from '../../utils/firebase';
+import { setItem } from '../../utils/asyncStorage';
+import axios from 'axios';
 
 const Login = () => {
+  const navigation = useNavigation<StackNavigationProp<any>>();
+
   const [id, setId] = useState('');
   const [password, setPassword] = useState('');
+  const [loading, setLoading] = useState(false);
+
+  const login = async () => {
+    try {
+      setLoading(true);
+      const deviceToken = await getDeviceToken();
+      const requestData: LoginRequest = {
+        account_id: id,
+        password: password,
+        device_token: deviceToken
+      };
+      const response = await loginHandler(requestData);
+      setLoading(false);
+
+      if (response.status === 200) {
+        await setItem('accessToken', response.data.access_token);
+        navigation.replace('NavBar');
+      } else {
+        Alert.alert('아이디 또는 비밀번호를 잘못입력하였습니다.');
+      }
+    } catch (err) {
+      setLoading(false);
+      if (axios.isAxiosError(err)) {
+        console.error('AxiosError', err);
+        if (err.status === 401) {
+          Alert.alert('아이디 또는 비밀번호를 잘못입력하였습니다');
+        } else {
+          Alert.alert('로그인 중 오류가 발생하였습니다');
+        }
+      } else {
+        console.error('else', err);
+        Alert.alert('로그인 중 오류가 발생하였습니다');
+      }
+    }
+  };
 
   return (
     <Container>
@@ -29,7 +73,7 @@ const Login = () => {
             label="아이디"
             placeholder="아이디를 입력해주세요"
             password={false}
-            autoFocus={true}
+            autoFocus={false}
             value={id}
             multiline={false}
             readonly={false}
@@ -50,7 +94,10 @@ const Login = () => {
           <AuthButton
             text="로그인"
             onPress={() => {
-              console.log('로그인');
+              console.log('버튼 클릭');
+              if (!loading) {
+                login();
+              }
             }}
           />
         </ButtonBox>

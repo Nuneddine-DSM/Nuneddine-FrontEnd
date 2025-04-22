@@ -56,10 +56,11 @@ export const Input = ({
         />
         {password && (
           <PwButton onPress={() => setPress(!press)}>
-            {press ?
-              <Eye size={36} color={color.gray500} /> :
+            {press ? (
+              <Eye size={36} color={color.gray500} />
+            ) : (
               <EyeClose size={36} color={color.gray500} />
-            }
+            )}
           </PwButton>
         )}
       </InputContainerBox>
