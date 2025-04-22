@@ -7,8 +7,11 @@ import { GlassesLensTab } from "../../components/Shopping";
 import { useState } from "react";
 import ProductCard from "../../components/Shopping/ProductCard";
 import { ScrollView } from "react-native-gesture-handler";
+import { useNavigation } from "@react-navigation/native";
 
 const Like = () => {
+  const navigation = useNavigation();
+
   const [selectedTab, setSelectedTab] = useState<number>(1)
   const [counter, setCounter] = useState<number>(1)
 
@@ -17,7 +20,7 @@ const Like = () => {
       <TopBar
         text="좋아요"
         leftIcon={
-          <TouchableOpacity onPress={() => { }}>
+          <TouchableOpacity onPress={() => navigation.goBack()}>
             <Arrow size={34} />
           </TouchableOpacity>
         }

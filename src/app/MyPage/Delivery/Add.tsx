@@ -3,14 +3,17 @@ import { color, Font } from "../../../styles"
 import { AuthButton, Input, TopBar } from "../../../components";
 import { TouchableOpacity } from "react-native";
 import { Arrow } from "../../../assets";
+import { useNavigation } from "@react-navigation/native";
 
 const Add = () => {
+  const navigation = useNavigation();
+
   return (
     <AddAddressContainer>
       <TopBar
         text="배송지 관리"
         leftIcon={
-          <TouchableOpacity onPress={() => { }}>
+          <TouchableOpacity onPress={() => navigation.goBack()}>
             <Arrow size={34} />
           </TouchableOpacity>
         }

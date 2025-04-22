@@ -5,14 +5,17 @@ import { TouchableOpacity } from "react-native";
 import { Arrow } from "../../../assets";
 import DeliveryDetail from "../../../components/Shopping/Delivery"
 import { ScrollView } from "react-native-gesture-handler";
+import { useNavigation } from "@react-navigation/native";
 
 const Delivery = () => {
+  const navigation = useNavigation();
+
   return (
     <Container>
       <TopBar
         text="배송지 관리"
         leftIcon={
-          <TouchableOpacity onPress={() => { }}>
+          <TouchableOpacity onPress={() => navigation.goBack()}>
             <Arrow size={34} />
           </TouchableOpacity>
         }

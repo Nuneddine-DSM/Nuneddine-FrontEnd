@@ -3,14 +3,17 @@ import { Font, color } from "../../styles"
 import { Input, TopBar, AuthButton } from "../../components";
 import { TouchableOpacity } from "react-native";
 import { Arrow } from "../../assets";
+import { useNavigation } from "@react-navigation/native";
 
 const EditProfile = () => {
+  const navigation = useNavigation();
+
   return (
     <Container>
       <TopBar
         text="주문내역"
         leftIcon={
-          <TouchableOpacity onPress={() => { }}>
+          <TouchableOpacity onPress={() => navigation.goBack()}>
             <Arrow size={34} />
           </TouchableOpacity>
         }

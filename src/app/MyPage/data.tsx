@@ -14,19 +14,19 @@ const NavigationData: NavigationItemType[] = [
     id: 1,
     name: "주문내역",
     icon: <Cart size={24} />,
-    href: ""
+    href: "OrderDetails"
   },
   {
     id: 2,
     name: "좋아요",
     icon: <Heart size={24} />,
-    href: ""
+    href: "Like"
   },
   {
     id: 3,
     name: "배송지 관리",
     icon: <Delivery size={24} />,
-    href: ""
+    href: "DeliveryDetail"
   },
   {
     id: 4,
@@ -38,7 +38,7 @@ const NavigationData: NavigationItemType[] = [
     id: 5,
     name: "사용자 정보 수정",
     icon: <Arrow size={24} color={color.gray400} rotate="right" />,
-    href: ""
+    href: "EditProfile"
   },
 ]
 

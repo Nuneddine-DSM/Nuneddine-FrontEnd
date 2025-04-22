@@ -4,14 +4,17 @@ import { TopBar } from "../../components";
 import { TouchableOpacity } from "react-native";
 import { Arrow } from "../../assets";
 import OrderGlassesItem from "../../components/Shopping/OrderGlassesItem";
+import { useNavigation } from "@react-navigation/native";
 
 const OrderDetails = () => {
+  const navigation = useNavigation();
+
   return (
     <Container>
       <TopBar
         text="주문내역"
         leftIcon={
-          <TouchableOpacity onPress={() => { }}>
+          <TouchableOpacity onPress={() => navigation.goBack()}>
             <Arrow size={34} />
           </TouchableOpacity>
         }
