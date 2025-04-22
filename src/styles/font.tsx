@@ -68,7 +68,7 @@ const fonts: { [key: string]: TextStyle } = {
     fontWeight: '500'
   },
   semi16: {
-    fontSize: 14,
+    fontSize: 16,
     lineHeight: 20,
     fontWeight: '600'
   },
