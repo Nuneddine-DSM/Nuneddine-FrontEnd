@@ -7,7 +7,6 @@ import { Arrow } from '../../assets/Arrow';
 import { loginHandler, LoginRequest } from '../../apis/auth';
 import { Alert } from 'react-native';
 import { StackNavigationProp } from '@react-navigation/stack';
-import { getDeviceToken } from '../../utils/firebase';
 import { setItem } from '../../utils/asyncStorage';
 import axios from 'axios';
 
@@ -21,11 +20,10 @@ const Login = () => {
   const login = async () => {
     try {
       setLoading(true);
-      const deviceToken = await getDeviceToken();
       const requestData: LoginRequest = {
         account_id: id,
         password: password,
-        device_token: deviceToken
+        device_token: ''
       };
       const response = await loginHandler(requestData);
       setLoading(false);
@@ -94,8 +92,9 @@ const Login = () => {
           <AuthButton
             text="로그인"
             onPress={() => {
-              console.log('버튼 클릭');
-              if (!loading) {
+              if (id.length || password.length) {
+                Alert.alert('아이디나 비밀번호를 입력해주세요');
+              } else if (!loading) {
                 login();
               }
             }}
@@ -127,6 +126,7 @@ const TopBarDivider = styled.View`
   width: 100%;
   height: 3px;
   background-color: ${color.pink300};
+  padding-top: 64px;
 `;
 
 const LoginBox = styled.View`
