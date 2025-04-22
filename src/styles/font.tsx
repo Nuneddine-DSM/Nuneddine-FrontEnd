@@ -3,7 +3,7 @@ import { Text, TextStyle } from 'react-native';
 import { color } from './color';
 
 interface FontPropsType {
-  text?: string;
+  text?: string | number;
   kind?: keyof typeof fonts;
   color?: keyof typeof color;
   style?: TextStyle;
