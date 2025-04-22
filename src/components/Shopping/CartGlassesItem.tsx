@@ -1,8 +1,9 @@
 import styled from "styled-components/native";
-import { Minus, Plus, X } from "../../assets";
+import { X } from "../../assets";
 import { Font, color } from "../../styles";
 import { useState } from "react";
 import CheckBox from "./CheckBox";
+import QuantitySelector from "./QuantitySelector";
 
 interface CartGlassesItemProps {
   checkedItems: { [id: string]: boolean };
@@ -21,8 +22,6 @@ const CartGlassesItem = ({ checkedItems, setCheckedItems }: CartGlassesItemProps
       [id]: !prev[id]
     }));
   };
-
-  const updateCount = (id: string, delta: number) => { };
 
   return (
     <>
@@ -50,17 +49,7 @@ const CartGlassesItem = ({ checkedItems, setCheckedItems }: CartGlassesItemProps
                     />
                   </TitleBlock>
 
-                  <QuantityController>
-                    <IconButton onPress={() => updateCount(item.id, -1)}>
-                      <Minus size={14} color={color.gray600} />
-                    </IconButton>
-                    <QuantityDisplay>
-                      <Font text={String(item.count)} kind="medium14" />
-                    </QuantityDisplay>
-                    <IconButton onPress={() => updateCount(item.id, 1)}>
-                      <Plus size={14} color={color.gray600} />
-                    </IconButton>
-                  </QuantityController>
+                  <QuantitySelector count={item.count} />
 
                 </TitleAndCounter>
                 <Font text="39,000원" kind="bold16" />
@@ -124,26 +113,5 @@ const TitleBlock = styled.View`
   flex-direction: column;
   gap: 4px;
 `;
-
-const QuantityController = styled.View`
-  display: flex;
-  flex-direction: row;
-`;
-
-const IconButton = styled.TouchableOpacity`
-  width: 24px;
-  height: 24px;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  background-color: ${color.gray200};
-`;
-
-const QuantityDisplay = styled.View`
-  padding: 2px 17px;
-  border-top-width: 1px;
-  border-bottom-width: 1px;
-  border-color: ${color.gray200};
-`
 
 export default CartGlassesItem

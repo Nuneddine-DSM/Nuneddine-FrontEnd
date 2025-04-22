@@ -1,7 +1,7 @@
 import styled from "styled-components/native";
-import { Minus, Plus } from "../../assets";
 import { Font, color } from "../../styles";
 import { OrderItemsType } from "../../app/Shopping/Payment/data";
+import QuantitySelector from "./QuantitySelector";
 
 interface Props {
   item: OrderItemsType;
@@ -26,17 +26,7 @@ const OrderGlassesItem = ({ item }: Props) => {
             />
           </TitleBlock>
 
-          <QuantityController>
-            <IconButton onPress={() => { }}>
-              <Minus size={14} color={color.gray600} />
-            </IconButton>
-            <QuantityDisplay>
-              <Font text={item.count} kind="medium14" />
-            </QuantityDisplay>
-            <IconButton onPress={() => { }}>
-              <Plus size={14} color={color.gray600} />
-            </IconButton>
-          </QuantityController>
+          <QuantitySelector count={item.count}/>
 
         </TitleAndCounter>
         
@@ -81,26 +71,5 @@ const TitleBlock = styled.View`
   flex-direction: column;
   gap: 4px;
 `;
-
-const QuantityController = styled.View`
-  display: flex;
-  flex-direction: row;
-`;
-
-const IconButton = styled.TouchableOpacity`
-  width: 24px;
-  height: 24px;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  background-color: ${color.gray200};
-`;
-
-const QuantityDisplay = styled.View`
-  padding: 2px 17px;
-  border-top-width: 1px;
-  border-bottom-width: 1px;
-  border-color: ${color.gray200};
-`
 
 export default OrderGlassesItem
