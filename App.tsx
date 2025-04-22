@@ -18,6 +18,7 @@ import Login from './src/app/Login/page';
 import SignUp from "./src/app/SignUp/page"
 import Cart from "./src/app/Shopping/Cart/page"
 import Payment from "./src/app/Shopping/Payment/page"
+import Delivery from "./src/app/Shopping/Delivery/page"
 import { GestureHandlerRootView } from 'react-native-gesture-handler';
 import { BottomSheetModalProvider } from '@gorhom/bottom-sheet';
 
@@ -29,7 +30,7 @@ function App(): React.JSX.Element {
         <NavigationContainer>
           <Stack.Navigator
             screenOptions={{ headerShown: false }}
-            initialRouteName="Cart">
+            initialRouteName="Delivery">
             <Stack.Screen name="NavBar" component={NavBar} />
             <Stack.Screen name="Main" component={Main} />
             <Stack.Screen name="Guide" component={Guide} />
@@ -40,6 +41,7 @@ function App(): React.JSX.Element {
             <Stack.Screen name="SignUp" component={SignUp} />
             <Stack.Screen name="Cart" component={Cart} />
             <Stack.Screen name="Payment" component={Payment} />
+            <Stack.Screen name="Delivery" component={Delivery} />
           </Stack.Navigator>
         </NavigationContainer>
       </BottomSheetModalProvider>
