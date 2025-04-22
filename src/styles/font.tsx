@@ -59,7 +59,7 @@ const fonts: { [key: string]: TextStyle } = {
   },
   regular16: {
     fontSize: 16,
-    lineHeight: 20,
+    lineHeight: 24,
     fontWeight: '400'
   },
   medium16: {
@@ -76,6 +76,11 @@ const fonts: { [key: string]: TextStyle } = {
     fontSize: 16,
     lineHeight: 20,
     fontWeight: '700'
+  },
+  regular18: {
+    fontSize: 18,
+    lineHeight: 22,
+    fontWeight: '400'
   },
   medium18: {
     fontSize: 18,
