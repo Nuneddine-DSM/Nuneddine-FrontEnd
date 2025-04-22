@@ -2,7 +2,7 @@ import styled from "styled-components/native"
 import { SignUpPropsType } from "../../interface"
 import { Controller } from 'react-hook-form';
 import { Input } from "../../components";
-import { Font, color } from "../../styles";
+import { Font } from "../../styles";
 import { Text, View } from "react-native";
 
 const NickName = ({ control }: SignUpPropsType) => {
