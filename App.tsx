@@ -15,7 +15,7 @@ import MyPage from './src/app/MyPage/page';
 import Manage from './src/app/Manage/page';
 import Onboarding from './src/app/Onboarding/page';
 import Login from './src/app/Login/page';
-import SignUp from "./src/app/SignUp/page"
+import SignUp from './src/app/SignUp/page';
 
 function App(): React.JSX.Element {
   const Stack = createNativeStackNavigator();
@@ -23,7 +23,7 @@ function App(): React.JSX.Element {
     <NavigationContainer>
       <Stack.Navigator
         screenOptions={{ headerShown: false }}
-        initialRouteName="SignUp">
+        initialRouteName="Onboarding">
         <Stack.Screen name="NavBar" component={NavBar} />
         <Stack.Screen name="Main" component={Main} />
         <Stack.Screen name="Guide" component={Guide} />
