@@ -1,19 +1,24 @@
 import styled from "styled-components/native";
 import { Minus, Plus } from "../../assets";
 import { Font, color } from "../../styles";
+import { OrderItemsType } from "../../app/Shopping/Payment/data";
 
-const OrderGlassesItem = () => {
+interface Props {
+  item: OrderItemsType;
+}
+
+const OrderGlassesItem = ({ item }: Props) => {
   return (
     <ItemContainer>
-      <ProductImage />
+      <ProductImage source={{ uri: item.image }} resizeMode="cover" />
 
       <ProductInfoSection>
         <TitleAndCounter>
 
           <TitleBlock>
-            <Font text="브랜드" kind="bold16" />
+            <Font text={item.name} kind="bold16" />
             <Font
-              text="[안경 이름] 암튼 이름 겁나 김 뭐 mm 까지 나와있음..."
+              text={item.description}
               kind="medium16"
               style={{ flexWrap: "wrap" }}
               numberOfLines={2}
@@ -26,7 +31,7 @@ const OrderGlassesItem = () => {
               <Minus size={14} color={color.gray600} />
             </IconButton>
             <QuantityDisplay>
-              <Font text="1" kind="medium14" />
+              <Font text={item.count} kind="medium14" />
             </QuantityDisplay>
             <IconButton onPress={() => { }}>
               <Plus size={14} color={color.gray600} />
@@ -34,7 +39,8 @@ const OrderGlassesItem = () => {
           </QuantityController>
 
         </TitleAndCounter>
-        <Font text="39,000원" kind="bold16" />
+        
+        <Font text={`${item.price}원`} kind="bold16" />
       </ProductInfoSection>
     </ItemContainer>
   );

@@ -6,6 +6,7 @@ import PaymentMethod from "./PaymentMethod";
 import OrderGlassesItem from "../../../components/Shopping/OrderGlassesItem";
 import { TouchableOpacity } from "react-native"
 import { Arrow } from "../../../assets";
+import { OrderGlassesItems } from "./data"
 
 const Payment = () => {
   return (
@@ -57,10 +58,12 @@ const Payment = () => {
           <ItemHeader>
             <Font text="주문 상품" kind="bold20" />
           </ItemHeader>
-          <>
-            <OrderGlassesItem />
-            <OrderGlassesItem />
-          </>
+          {OrderGlassesItems.map((item) => (
+            <OrderGlassesItem
+              key={item.id}
+              item={item}
+            />
+          ))}
         </OrderItemList>
 
         <PaymentMethod />
