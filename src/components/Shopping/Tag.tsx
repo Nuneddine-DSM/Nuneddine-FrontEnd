@@ -1,24 +1,24 @@
 import styled from "styled-components/native"
+import { Font, color } from "../../styles"
 
 interface PropsType {
   text?: string
 }
 
-const Tag = ({ text } : PropsType) => {
+const Tag = ({ text }: PropsType) => {
   return (
     <Container>
-      {text}
+      <Font text={text} kind="medium14" color="pink300" />
     </Container>
   )
 }
 
 const Container = styled.Text`
-  padding: 4px 12px;
+  padding: 4px 16px;
   border-width: 1px;
-  border-color: red;
   border-radius: 20px;
+  border-color: ${color.pink300};
   align-self: flex-start;
-  color: red;
 `
 
 export default Tag

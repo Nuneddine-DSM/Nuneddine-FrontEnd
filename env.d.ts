@@ -1,3 +1,6 @@
-declare module '@env' {
-  export const BASE_URL: string;
+declare module 'process' {
+  export const env: {
+    BASE_URL: string;
+    API_KEY: string;
+  };
 }

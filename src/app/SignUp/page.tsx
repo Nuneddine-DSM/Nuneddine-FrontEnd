@@ -11,6 +11,7 @@ import { useForm } from 'react-hook-form';
 import NickName from "./NickName";
 import Password from "./Password";
 import UserId from "./UserId";
+import { getDeviceToken, signUpHandler } from "../../apis/user";
 
 const SignUp = () => {
   const {
@@ -52,14 +53,26 @@ const SignUp = () => {
     }
   };
 
-  const nextPage = handleSubmit(data => {
+  const nextPage = handleSubmit(async data => {
     Keyboard.dismiss();
+
     if (page < signUpPage.length - 1) {
       setPage(page + 1);
     } else {
-      reset();
-      setPage(0);
-      navigation.push('Login');
+      try {
+        await signUpHandler({
+          name: data.nickname,
+          id: data.userId,
+          password: data.password,
+        });
+
+        reset();
+        setPage(0);
+        navigation.push('Login');
+        console.log('회원가입 성공')
+      } catch (error: any) {
+        console.error('회원가입 실패', error);
+      }
     }
   });
 
@@ -69,11 +82,11 @@ const SignUp = () => {
         text="회원가입"
         leftIcon={
           <TouchableOpacity onPress={prevPage}>
-            <Arrow size={20} />
+            <Arrow size={34} />
           </TouchableOpacity>
         }
       />
-      
+
       <ProgressBar>
         <AnimatedProgress
           style={{
@@ -87,7 +100,6 @@ const SignUp = () => {
 
       <Content>
         {signUpPage[page]}
-
         <AuthButton text="다음" onPress={nextPage} />
       </Content>
     </Container>
