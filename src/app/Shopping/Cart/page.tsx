@@ -1,21 +1,36 @@
+import { useState, useRef, useMemo, useCallback } from "react";
 import styled from "styled-components/native";
-import TopBar from "../../../components/TopBar";
-import { TouchableOpacity } from "react-native";
+import { TouchableOpacity, View } from "react-native";
+import { TopBar, Dropdown } from "../../../components";
 import { Arrow } from "../../../assets";
 import { Font, color } from "../../../styles";
-import GlassesLensTab from "../../../components/Shopping/GlassesLensTab";
-import CheckBox from "../../../components/Shopping/CheckBox";
-import { useState } from "react";
+import { GlassesLensTab, CheckBox, CartGlassesItem, CartLensItem, QuantitySelector } from "../../../components/Shopping/index"
+import { BottomSheetModal, BottomSheetModalProvider, BottomSheetBackdrop } from '@gorhom/bottom-sheet';
 import { AuthButton } from "../../../components/Button";
 import Lens from "./Lens";
 import Amount from "../Common/Amount";
-import CartGlassesItem from "../../../components/Shopping/CartGlassesItem";
-import CartLensItem from "../../../components/Shopping/CartLensItem";
 
 const Cart = () => {
   const [checkedGlassesItems, setCheckedGlassesItems] = useState<{ [id: string]: boolean }>({});
   const [checkedLensItems, setCheckedLensItems] = useState<{ [id: string]: boolean }>({});
   const [selectedTab, setSelectedTab] = useState<number>(1);
+  const [selectedOption, setSelectedOption] = useState("히히")
+
+  const bottomSheetModalRef = useRef<BottomSheetModal>(null);
+  const snapPoints = useMemo(() => ['60%'], []);
+
+  const handlePresentModalPress = useCallback(() => {
+    bottomSheetModalRef.current?.present();
+  }, []);
+
+  const handleSheetChanges = useCallback((index: number) => {
+    console.log('handleSheetChanges', index);
+  }, []);
+
+  const renderBackdrop = useCallback(
+    (props: any) => <BottomSheetBackdrop {...props} pressBehavior="close" disappearsOnIndex={-1} appearsOnIndex={0} />,
+    [],
+  );
 
   const currentCheckedItems = selectedTab === 1 ? checkedGlassesItems : checkedLensItems;
   const setCurrentCheckedItems = selectedTab === 1 ? setCheckedGlassesItems : setCheckedLensItems;
@@ -40,7 +55,7 @@ const Cart = () => {
   };
 
   return (
-    <>
+    <BottomSheetModalProvider>
       <TopBar
         text="장바구니"
         leftIcon={<TouchableOpacity onPress={() => { }}><Arrow size={34} /></TouchableOpacity>}
@@ -62,17 +77,43 @@ const Cart = () => {
           />
         )}
 
-        {selectedTab === 2 && (
-          <CartLensItem
-            checkedItems={checkedLensItems}
-            setCheckedItems={setCheckedLensItems}
-          />
-        )}
+        <View>
+          {selectedTab === 2 && (
+            <CartLensItem
+              checkedItems={checkedLensItems}
+              setCheckedItems={setCheckedLensItems}
+              onPressOption={handlePresentModalPress}
+            />
+          )}
+          <BottomSheetModal
+            ref={bottomSheetModalRef}
+            index={0}
+            snapPoints={snapPoints}
+            backdropComponent={renderBackdrop}
+            onChange={handleSheetChanges}
+          >
+            <OptionWrapper>
+              <Font text="옵션 변경 / 모디쉬 1p 브라운" kind="medium16" color="gray600" />
+              <InputWrapper>
+                <CountInputWrapper>
+                  <Font text="수량" kind="medium16" />
+                  <QuantitySelector count={0} />
+                </CountInputWrapper>
+                <Dropdown
+                  value={selectedOption}
+                  setValue={setSelectedOption}
+                  items={["0.00", "-2.25", "-5.00", "-7.25", "-10.00"]}
+                />
+              </InputWrapper>
+            </OptionWrapper>
+          </BottomSheetModal>
+        </View>
+
         {selectedTab === 2 && <Lens />}
         <Amount />
         <PurchaseButton />
       </Container>
-    </>
+    </BottomSheetModalProvider>
   );
 };
 
@@ -143,5 +184,27 @@ const ButtonWrapper = styled.View`
   border-color: ${color.gray100};
   background-color: ${color.white};
 `;
+
+const OptionWrapper = styled.View`
+  flex-direction: column;
+  padding: 47px 26px;
+  gap: 26px;
+`
+
+const InputWrapper = styled.View`
+  flex-direction: column;
+  gap: 12px;
+`
+
+const CountInputWrapper = styled.View`
+  flex-direction: row;
+  justify-content: space-between;
+  align-items: center;
+  padding: 14px 16px;
+  border-width: 1px;
+  border-radius: 10px;
+  border-color: ${color.gray300};
+  background-color: ${color.white};
+`
 
 export default Cart;

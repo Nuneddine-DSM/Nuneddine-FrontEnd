@@ -18,26 +18,32 @@ import Login from './src/app/Login/page';
 import SignUp from "./src/app/SignUp/page"
 import Cart from "./src/app/Shopping/Cart/page"
 import Payment from "./src/app/Shopping/Payment/page"
+import { GestureHandlerRootView } from 'react-native-gesture-handler';
+import { BottomSheetModalProvider } from '@gorhom/bottom-sheet';
 
 function App(): React.JSX.Element {
   const Stack = createNativeStackNavigator();
   return (
-    <NavigationContainer>
-      <Stack.Navigator
-        screenOptions={{ headerShown: false }}
-        initialRouteName="Cart">
-        <Stack.Screen name="NavBar" component={NavBar} />
-        <Stack.Screen name="Main" component={Main} />
-        <Stack.Screen name="Guide" component={Guide} />
-        <Stack.Screen name="MyPage" component={MyPage} />
-        <Stack.Screen name="Manage" component={Manage} />
-        <Stack.Screen name="Onboarding" component={Onboarding} />
-        <Stack.Screen name="Login" component={Login} />
-        <Stack.Screen name="SignUp" component={SignUp} />
-        <Stack.Screen name="Cart" component={Cart} />
-        <Stack.Screen name="Payment" component={Payment} />
-      </Stack.Navigator>
-    </NavigationContainer>
+    <GestureHandlerRootView style={{ flex: 1 }}>
+      <BottomSheetModalProvider>
+        <NavigationContainer>
+          <Stack.Navigator
+            screenOptions={{ headerShown: false }}
+            initialRouteName="Cart">
+            <Stack.Screen name="NavBar" component={NavBar} />
+            <Stack.Screen name="Main" component={Main} />
+            <Stack.Screen name="Guide" component={Guide} />
+            <Stack.Screen name="MyPage" component={MyPage} />
+            <Stack.Screen name="Manage" component={Manage} />
+            <Stack.Screen name="Onboarding" component={Onboarding} />
+            <Stack.Screen name="Login" component={Login} />
+            <Stack.Screen name="SignUp" component={SignUp} />
+            <Stack.Screen name="Cart" component={Cart} />
+            <Stack.Screen name="Payment" component={Payment} />
+          </Stack.Navigator>
+        </NavigationContainer>
+      </BottomSheetModalProvider>
+    </GestureHandlerRootView>
   );
 }
 

@@ -4,13 +4,15 @@ import CheckBox from "./CheckBox";
 import { useState } from "react";
 import { X } from "../../assets"
 import Tag from "./Tag";
+import { TouchableOpacity } from "react-native";
 
 interface CartLensItemProps {
   checkedItems: { [id: string]: boolean };
   setCheckedItems: React.Dispatch<React.SetStateAction<{ [id: string]: boolean }>>;
+  onPressOption: () => void;
 }
 
-const CartLensItem = ({ checkedItems, setCheckedItems }: CartLensItemProps) => {
+const CartLensItem = ({ checkedItems, setCheckedItems, onPressOption }: CartLensItemProps) => {
   const [lens] = useState([
     { id: 'lens1', count: 1 },
     { id: 'lens2', count: 1 }
@@ -57,12 +59,14 @@ const CartLensItem = ({ checkedItems, setCheckedItems }: CartLensItemProps) => {
 
             <OptionWrapper>
               <Font text="옵션 : 1개 / -1.00" color="gray600" kind="regular14" />
-              <Font
-                text="옵션변경"
-                color="gray600"
-                kind="regular14"
-                style={{ textDecorationLine: 'underline' }}
-              />
+              <TouchableOpacity onPress={onPressOption}>
+                <Font
+                  text="옵션변경"
+                  color="gray600"
+                  kind="regular14"
+                  style={{ textDecorationLine: 'underline' }}
+                />
+              </TouchableOpacity>
             </OptionWrapper>
           </ItemContent>
         </ItemContainer>
