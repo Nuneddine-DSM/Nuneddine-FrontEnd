@@ -1,9 +1,9 @@
 import styled from "styled-components/native";
-import { color } from "../../styles"
-import { AuthButton, TopBar } from "../../components";
+import { color } from "../../../styles"
+import { AuthButton, TopBar } from "../../../components";
 import { TouchableOpacity } from "react-native";
-import { Arrow } from "../../assets";
-import DeliveryDetail from "../../components/Shopping/Delivery"
+import { Arrow } from "../../../assets";
+import DeliveryDetail from "../../../components/Shopping/Delivery"
 import { ScrollView } from "react-native-gesture-handler";
 
 const Delivery = () => {
@@ -51,8 +51,6 @@ const ButtonWrapper = styled.View`
   left: 0;
   right: 0;
   padding: 12px 20px;
-  border-top-width: 1px;
-  border-color: ${color.gray100};
   background-color: ${color.white};
 `
 
