@@ -3,14 +3,15 @@ import { Font, color } from "../../../styles"
 import { TopBar } from "../../../components";
 import { TouchableOpacity } from "react-native";
 import { Arrow } from "../../../assets";
-import DeliveryList from "../../../components/Shopping/DeliveryList";
+import DeliveryList from "../../../components/Shopping/Delivery";
 
 export interface DeliveryType {
   selected?: boolean,
   nickName?: string,
   name?: string,
   phone?: string,
-  address?: string
+  address?: string,
+  check?: boolean
 }
 
 const DeliveryData: DeliveryType[] = [

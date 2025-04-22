@@ -7,7 +7,7 @@ interface PropsType {
   item?: DeliveryType
 }
 
-const DeliveryList = ({ item }: PropsType) => {
+const Delivery = ({ item }: PropsType) => {
   return (
     <Wrapper selected={item?.selected}>
       <HeaderSection>
@@ -23,7 +23,12 @@ const DeliveryList = ({ item }: PropsType) => {
 
           </InfoWrapper>
           <CheckIconWrapper selected={item?.selected}>
-            <Check size={19} color="white" />
+            {item?.check ?
+              <Check size={19} color="white" /> :
+              <Tag>
+                <Font text="삭제" kind="medium16" color="pink300" />
+              </Tag>
+            }
           </CheckIconWrapper>
         </UserDetails>
 
@@ -76,4 +81,11 @@ const CheckIconWrapper = styled.View<{ selected?: boolean }>`
   background-color: ${({ selected }) => selected ? color.pink300 : color.white};
 `
 
-export default DeliveryList
+const Tag = styled.TouchableOpacity`
+  padding: 8px 18px;
+  border-radius: 20px;
+  border-width: 1px;
+  border-color: ${color.pink300};
+`
+
+export default Delivery
