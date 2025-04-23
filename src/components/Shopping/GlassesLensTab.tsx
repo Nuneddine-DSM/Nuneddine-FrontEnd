@@ -1,6 +1,5 @@
 import styled from "styled-components/native";
 import { CategoryData } from "../../app/Main/Data"
-import { useState } from "react"
 import { color, Font } from "../../styles"
 
 interface PropsType {

@@ -121,6 +121,20 @@ export const MainShoppingData: MainShoppingDataType[] = [
         describe: "베리스 레쥬렉션 선글라스 RESUR...",
         tag: "굵은태",
         price: 99000
+      },
+      {
+        image: "https://m.hangle-eyewear.com/web/product/big/202411/aba216981789a6aba89faa4b7ffaff4c.jpg",
+        title: "브랜드",
+        describe: "베리스 레쥬렉션 선글라스 RESUR...",
+        tag: "굵은태",
+        price: 99000
+      },
+      {
+        image: "https://m.hangle-eyewear.com/web/product/big/202411/aba216981789a6aba89faa4b7ffaff4c.jpg",
+        title: "브랜드",
+        describe: "베리스 레쥬렉션 선글라스 RESUR...",
+        tag: "굵은태",
+        price: 99000
       }
     ],
   },

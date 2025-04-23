@@ -14,11 +14,11 @@ const Tag = ({ text }: PropsType) => {
 }
 
 const Container = styled.Text`
-  padding: 4px 16px;
-  border-width: 1px;
-  border-radius: 20px;
-  border-color: ${color.pink300};
+  padding: 6px 14px;
   align-self: flex-start;
+  border-width: 1px;
+  border-radius: 24px;
+  border-color: ${color.pink300};
 `
 
 export default Tag
