@@ -1,6 +1,6 @@
 import styled from "styled-components/native";
 import Logo from "../../assets/Logo.png"
-import { Bell, Basket } from "../../assets";
+import { Bell, Basket, Search } from "../../assets";
 import { color } from "../../styles"
 
 const Header = () => {
@@ -8,6 +8,7 @@ const Header = () => {
     <Container>
       <LogoImage source={Logo} />
       <IconWrapper>
+        <Search size={34} color={color.gray500} onPress={() => { }} />
         <Bell size={34} color={color.gray500} onPress={() => { }} />
         <Basket size={34} color={color.gray500} onPress={() => { }} />
       </IconWrapper>
