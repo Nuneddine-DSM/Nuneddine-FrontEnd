@@ -54,8 +54,8 @@ const CardContainer = styled.View`
 
 const ImageWrapper = styled.View`
   position: relative;
-  width: 125px;
-  height: 125px;
+  width: 100%;
+  aspect-ratio: 1;
   background-color: ${color.gray200};
 `
 

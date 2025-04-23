@@ -79,16 +79,17 @@ const ProductCardLarge = ({
 };
 
 const CardContainer = styled.View<{ background: string }>`
-  width: 187.5px;
+  width: 48%;
   flex-direction: column;
   gap: 12px;
+  margin-bottom: 40px;
   background-color: ${({ background }) => background};
 `
 
 const ImageWrapper = styled.View`
   position: relative;
-  width: 187.5px;
-  height: 187.5px;
+  width: 100%;
+  aspect-ratio: 1;
   background-color: ${color.gray200};
 `
 
