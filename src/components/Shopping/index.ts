@@ -5,6 +5,6 @@ export { default as GlassesLensTab } from "./GlassesLensTab";
 export { default as OrderGlassesItem } from "./OrderGlassesItem"
 export { default as StoreLocation } from "./StoreLocation"
 export { default as Tag } from "./Tag"
-export { default as ShopCard } from "./ShopCard"
-export { default as ProductCard } from "./ProductCard"
+export { default as ProductCardSmall } from "./ProductCardSmall"
+export { default as ProductCardLarge } from "./ProductCardLarge"
 export { default as QuantitySelector } from "./QuantitySelector"
