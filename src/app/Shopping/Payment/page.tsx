@@ -6,7 +6,7 @@ import PaymentMethod from "./PaymentMethod";
 import OrderGlassesItem from "../../../components/Shopping/OrderGlassesItem";
 import { TouchableOpacity } from "react-native"
 import { Arrow } from "../../../assets";
-import { OrderGlassesItems } from "./data"
+import { OrderGlassesItems } from "./Data"
 
 const Payment = () => {
   return (

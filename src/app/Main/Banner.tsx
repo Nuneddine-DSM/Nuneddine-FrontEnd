@@ -1,9 +1,9 @@
 import styled from "styled-components/native";
 import { useState, useRef, useEffect, useCallback } from "react";
-import { BannerData } from "../Data";
+import { BannerData } from "./Data";
 import { FlatList, Dimensions, NativeSyntheticEvent, NativeScrollEvent } from "react-native";
-import { BannerDataType } from "../interface";
-import { Font } from "../../../styles"
+import { BannerDataType } from "./interface";
+import { Font } from "../../styles"
 
 const { width } = Dimensions.get('window');
 

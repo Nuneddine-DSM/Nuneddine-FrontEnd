@@ -1,6 +1,6 @@
 import styled from "styled-components/native";
 import { Font, color } from "../../styles";
-import { OrderItemsType } from "../../app/Shopping/Payment/data";
+import { OrderItemsType } from "../../app/Shopping/Payment/Data";
 import QuantitySelector from "./QuantitySelector";
 
 interface Props {
@@ -26,10 +26,10 @@ const OrderGlassesItem = ({ item }: Props) => {
             />
           </TitleBlock>
 
-          <QuantitySelector count={item.count}/>
+          <QuantitySelector count={item.count} />
 
         </TitleAndCounter>
-        
+
         <Font text={`${item.price}원`} kind="bold16" />
       </ProductInfoSection>
     </ItemContainer>
