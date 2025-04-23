@@ -1,6 +1,6 @@
 import styled from "styled-components/native";
-import { Search as SearchIcon } from "../../assets";
-import { color, Font } from "../../styles"
+import { Search as SearchIcon } from "../assets";
+import { color, Font } from "../styles"
 import { useState } from "react";
 
 interface SearchProps {

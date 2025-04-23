@@ -1,6 +1,6 @@
 import styled from "styled-components/native";
 import { Font, color } from "../../../styles"
-import { PaymentData } from "./data";
+import { PaymentData } from "./Data";
 import { useState } from "react";
 import { Dimensions } from "react-native";
 import { ImageSourcePropType } from "react-native";

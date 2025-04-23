@@ -1,6 +1,6 @@
 import styled from "styled-components/native";
 import { color, Font } from "../../../styles"
-import Search from "../../../components/Main/Search";
+import Search from "../../../components/Search";
 import { AuthButton } from "../../../components";
 import StoreLocation from "../../../components/Shopping/StoreLocation";
 import { useState } from "react";

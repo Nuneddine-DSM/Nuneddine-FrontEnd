@@ -2,39 +2,44 @@ import styled from "styled-components/native";
 import { Heart } from "../../assets";
 import Tag from "./Tag";
 import { useState } from "react";
+import { ShoppingContentType } from "../../app/Main/interface";
+import { Font, color } from "../../styles";
 
-const ShopCard = () => {
+/**
+ * 메인페이지 상품 카드
+ */
+
+const ShopCard = ({ image, title, describe, tag, price }: ShoppingContentType) => {
   const [selected, setSelected] = useState<boolean>(false);
 
   return (
     <CardContainer>
       <ImageWrapper>
-        <ProductImage />
+        <ProductImage source={{ uri: image }} resizeMode="cover" />
         <IconWrapper>
           <Heart
             size={20}
-            color="black"
-            fill={selected ? 'pink' : 'none'}
-            onPress={() => setSelected(!selected)}
+            color={color.gray500}
+            fill={selected ? color.pink300 : 'none'}
+            onPress={() => setSelected(prev => !prev)}
           />
         </IconWrapper>
       </ImageWrapper>
 
       <InfoWrapper>
         <TitleBox>
-          <BoldText>브랜드</BoldText>
-          <ProductTitle
+          <Font text={title} kind="bold16" />
+          <Font
+            text={describe}
+            kind="regular16"
             numberOfLines={2}
             ellipsizeMode="tail"
-          >
-            베리스 레쥬렉션 선글라스 RESUR 베리스 레쥬렉션 선글라스 RESUR
-          </ProductTitle>
+          />
         </TitleBox>
 
+        <Tag text={tag} />
 
-        <Tag text="굵은태" />
-
-        <BoldText>99,000원</BoldText>
+        <Font text={`${price.toLocaleString()}원`} kind="bold16" />
       </InfoWrapper>
     </CardContainer>
   )
@@ -42,18 +47,16 @@ const ShopCard = () => {
 
 const CardContainer = styled.View`
   width: 125px;
-  display: flex;
   flex-direction: column;
   gap: 8px;
-  background-color: white;
+  background-color: ${color.white};
 `
 
 const ImageWrapper = styled.View`
   position: relative;
   width: 125px;
   height: 125px;
-  padding: 8px;
-  background-color: gray;
+  background-color: ${color.gray200};
 `
 
 const ProductImage = styled.Image`
@@ -68,25 +71,13 @@ const IconWrapper = styled.View`
 `
 
 const InfoWrapper = styled.View`
-  display: flex;
   flex-direction: column;
   gap: 12px;
 `
 
 const TitleBox = styled.View`
-  display: flex;
   flex-direction: column;
   gap: 6px;
-`
-
-const BoldText = styled.Text`
-  font-size: 16px;
-  font-weight: 600;
-`
-
-const ProductTitle = styled.Text`
-  font-size: 14px;
-  font-weight: 400;
 `
 
 export default ShopCard
