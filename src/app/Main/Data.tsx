@@ -2,7 +2,8 @@ import {
   NavigationListDataType,
   BannerDataType,
   CategoryDataType,
-  FooterDataType
+  FooterDataType,
+  MainShoppingDataType
 } from "./interface"
 import { Glasses, Lens } from "../../assets"
 import Banner1 from "../../assets/Banner1.png"
@@ -91,4 +92,163 @@ export const FooterData: FooterDataType[] = [
     title: "사업자정보제공",
     info: "(주)소프트웨어공학",
   }
+]
+
+export const MainShoppingData: MainShoppingDataType[] = [
+  {
+    id: 1,
+    name: "Popular",
+    title: "유행템, 나도 찰떡 가능?",
+    subTitle: "요즘 인기템 총정리! 고르기 전에 참고해요",
+    content: [
+      {
+        image: "https://m.hangle-eyewear.com/web/product/big/202411/aba216981789a6aba89faa4b7ffaff4c.jpg",
+        title: "브랜드",
+        describe: "베리스 레쥬렉션 선글라스 RESUR...",
+        tag: "굵은태",
+        price: 99000
+      },
+      {
+        image: "https://sitem.ssgcdn.com/28/73/68/item/1000534687328_i1_750.jpg",
+        title: "브랜드",
+        describe: "베리스 레쥬렉션 선글라스 RESUR...",
+        tag: "굵은태",
+        price: 99000
+      },
+      {
+        image: "https://image.rounz.com/_data/product/STYLEWORK/SLEEK-BACK-C2(47)_RZ/SLEEK-BACK-C2(47)_03_RZ.jpg",
+        title: "브랜드",
+        describe: "베리스 레쥬렉션 선글라스 RESUR...",
+        tag: "굵은태",
+        price: 99000
+      }
+    ],
+  },
+  {
+    id: 2,
+    name: "Frames",
+    title: "태만 봐도 느낌 온다",
+    subTitle: "각진 태부터 둥근 태까지, 내 얼굴에 맞는 스타일 찾기",
+    content: [
+      {
+        image: "https://m.hangle-eyewear.com/web/product/big/202411/aba216981789a6aba89faa4b7ffaff4c.jpg",
+        title: "브랜드",
+        describe: "베리스 레쥬렉션 선글라스 RESUR...",
+        tag: "굵은태",
+        price: 99000
+      },
+      {
+        image: "https://sitem.ssgcdn.com/28/73/68/item/1000534687328_i1_750.jpg",
+        title: "브랜드",
+        describe: "베리스 레쥬렉션 선글라스 RESUR...",
+        tag: "굵은태",
+        price: 99000
+      },
+      {
+        image: "https://image.rounz.com/_data/product/STYLEWORK/SLEEK-BACK-C2(47)_RZ/SLEEK-BACK-C2(47)_03_RZ.jpg",
+        title: "브랜드",
+        describe: "베리스 레쥬렉션 선글라스 RESUR...",
+        tag: "굵은태",
+        price: 99000
+      }
+    ],
+  },
+  {
+    id: 3,
+    name: "Hipster",
+    title: "힙스터's Pick",
+    subTitle: "스타일에 진심인 사람들의 추천템!",
+    content: [
+      {
+        image: "https://m.hangle-eyewear.com/web/product/big/202411/aba216981789a6aba89faa4b7ffaff4c.jpg",
+        title: "브랜드",
+        describe: "베리스 레쥬렉션 선글라스 RESUR...",
+        tag: "굵은태",
+        price: 99000
+      },
+      {
+        image: "https://sitem.ssgcdn.com/28/73/68/item/1000534687328_i1_750.jpg",
+        title: "브랜드",
+        describe: "베리스 레쥬렉션 선글라스 RESUR...",
+        tag: "굵은태",
+        price: 99000
+      },
+      {
+        image: "https://image.rounz.com/_data/product/STYLEWORK/SLEEK-BACK-C2(47)_RZ/SLEEK-BACK-C2(47)_03_RZ.jpg",
+        title: "브랜드",
+        describe: "베리스 레쥬렉션 선글라스 RESUR...",
+        tag: "굵은태",
+        price: 99000
+      }
+    ],
+  },
+  {
+    id: 4,
+    name: "Hot",
+    title: "지금 가장 핫한 브랜드",
+    subTitle: "놓치면 아쉬운, 지금 제일 잘나가는 브랜드만!",
+    content: [
+      {
+        image: "https://m.hangle-eyewear.com/web/product/big/202411/aba216981789a6aba89faa4b7ffaff4c.jpg",
+        title: "브랜드",
+        describe: "베리스 레쥬렉션 선글라스 RESUR...",
+        tag: "굵은태",
+        price: 99000
+      },
+      {
+        image: "https://sitem.ssgcdn.com/28/73/68/item/1000534687328_i1_750.jpg",
+        title: "브랜드",
+        describe: "베리스 레쥬렉션 선글라스 RESUR...",
+        tag: "굵은태",
+        price: 99000
+      },
+      {
+        image: "https://image.rounz.com/_data/product/STYLEWORK/SLEEK-BACK-C2(47)_RZ/SLEEK-BACK-C2(47)_03_RZ.jpg",
+        title: "브랜드",
+        describe: "베리스 레쥬렉션 선글라스 RESUR...",
+        tag: "굵은태",
+        price: 99000
+      }
+    ],
+  },
+  {
+    id: 5,
+    name: "Retro",
+    title: "Classic in Retro Mood",
+    subTitle: "빈티지 감성 좋아하는 당신을 위한 셀렉션",
+    content: [
+      {
+        image: "https://m.hangle-eyewear.com/web/product/big/202411/aba216981789a6aba89faa4b7ffaff4c.jpg",
+        title: "브랜드",
+        describe: "베리스 레쥬렉션 선글라스 RESUR...",
+        tag: "굵은태",
+        price: 99000
+      },
+      {
+        image: "https://sitem.ssgcdn.com/28/73/68/item/1000534687328_i1_750.jpg",
+        title: "브랜드",
+        describe: "베리스 레쥬렉션 선글라스 RESUR...",
+        tag: "굵은태",
+        price: 99000
+      },
+      {
+        image: "https://image.rounz.com/_data/product/STYLEWORK/SLEEK-BACK-C2(47)_RZ/SLEEK-BACK-C2(47)_03_RZ.jpg",
+        title: "브랜드",
+        describe: "베리스 레쥬렉션 선글라스 RESUR...",
+        tag: "굵은태",
+        price: 99000
+      }
+    ],
+  },
+]
+
+export const FramesTag = [
+  "둥근테",
+  "각진테",
+  "무테",
+  "반무테",
+  "굵은테",
+  "얇은테",
+  "투명테",
+  "안단테"
 ]

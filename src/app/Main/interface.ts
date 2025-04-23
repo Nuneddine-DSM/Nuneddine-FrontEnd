@@ -26,3 +26,19 @@ export interface FooterDataType {
   title?: string,
   info?: string
 }
+
+export interface MainShoppingDataType {
+  id: number,
+  name: string,
+  title: string,
+  subTitle: string,
+  content: ShoppingContentType[]
+}
+
+export interface ShoppingContentType {
+  image: string,
+  title: string,
+  describe: string,
+  tag: string,
+  price: number
+}
