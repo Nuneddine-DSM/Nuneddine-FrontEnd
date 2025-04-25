@@ -18,6 +18,13 @@ export const loginHandler = async (data: LoginRequest) => {
       password: data.password,
       device_token: deviceToken
     });
+
+    const { accessToken } = response.data;
+
+    if (accessToken) {
+      await storeData('accessToken', accessToken);
+    }
+    
     return response;
   } catch (err) {
     throw err;
