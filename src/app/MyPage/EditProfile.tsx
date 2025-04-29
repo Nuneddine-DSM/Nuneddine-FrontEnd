@@ -1,9 +1,9 @@
-import styled from "styled-components/native";
-import { Font, color } from "../../styles"
-import { Input, TopBar, AuthButton } from "../../components";
-import { TouchableOpacity } from "react-native";
-import { Arrow } from "../../assets";
-import { useNavigation } from "@react-navigation/native";
+import styled from 'styled-components/native';
+import { Font, color } from '../../styles';
+import { Input, TopBar, Button } from '../../components';
+import { TouchableOpacity } from 'react-native';
+import { Arrow } from '../../assets';
+import { useNavigation } from '@react-navigation/native';
 
 const EditProfile = () => {
   const navigation = useNavigation();
@@ -34,13 +34,13 @@ const EditProfile = () => {
       </EditSection>
 
       <ButtonWrapper>
-        <AuthButton text="수정하기" />
+        <Button text="수정하기" />
       </ButtonWrapper>
     </Container>
-  )
-}
+  );
+};
 
-export default EditProfile
+export default EditProfile;
 
 const Container = styled.View`
   flex: 1;
@@ -48,17 +48,17 @@ const Container = styled.View`
   gap: 15px;
   padding-top: 62px;
   background-color: ${color.white};
-`
+`;
 const EditSection = styled.View`
   flex-direction: column;
   padding: 50px 20px;
   gap: 24px;
-`
+`;
 
 const InputWrapper = styled.View`
   flex-direction: column;
   gap: 8px;
-`
+`;
 
 const ButtonWrapper = styled.View`
   position: absolute;
@@ -67,4 +67,4 @@ const ButtonWrapper = styled.View`
   right: 0;
   padding: 12px 20px;
   background-color: ${color.white};
-`
+`;

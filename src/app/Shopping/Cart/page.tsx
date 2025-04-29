@@ -1,20 +1,34 @@
-import { useState, useRef, useMemo, useCallback } from "react";
-import styled from "styled-components/native";
-import { TouchableOpacity, View } from "react-native";
-import { TopBar, Dropdown } from "../../../components";
-import { Arrow } from "../../../assets";
-import { Font, color } from "../../../styles";
-import { GlassesLensTab, CheckBox, CartGlassesItem, CartLensItem, QuantitySelector } from "../../../components/Shopping/index"
-import { BottomSheetModal, BottomSheetModalProvider, BottomSheetBackdrop } from '@gorhom/bottom-sheet';
-import { AuthButton } from "../../../components/Button";
-import Lens from "./Lens";
-import Amount from "../../../components/Shopping/Amount";
+import { useState, useRef, useMemo, useCallback } from 'react';
+import styled from 'styled-components/native';
+import { TouchableOpacity, View } from 'react-native';
+import { TopBar, Dropdown } from '../../../components';
+import { Arrow } from '../../../assets';
+import { Font, color } from '../../../styles';
+import {
+  GlassesLensTab,
+  CheckBox,
+  CartGlassesItem,
+  CartLensItem,
+  QuantitySelector
+} from '../../../components/Shopping/index';
+import {
+  BottomSheetModal,
+  BottomSheetModalProvider,
+  BottomSheetBackdrop
+} from '@gorhom/bottom-sheet';
+import { Button } from '../../../components/Button';
+import Lens from './Lens';
+import Amount from '../../../components/Shopping/Amount';
 
 const Cart = () => {
-  const [checkedGlassesItems, setCheckedGlassesItems] = useState<{ [id: string]: boolean }>({});
-  const [checkedLensItems, setCheckedLensItems] = useState<{ [id: string]: boolean }>({});
+  const [checkedGlassesItems, setCheckedGlassesItems] = useState<{
+    [id: string]: boolean;
+  }>({});
+  const [checkedLensItems, setCheckedLensItems] = useState<{
+    [id: string]: boolean;
+  }>({});
   const [selectedTab, setSelectedTab] = useState<number>(1);
-  const [selectedOption, setSelectedOption] = useState("히히")
+  const [selectedOption, setSelectedOption] = useState('히히');
 
   const bottomSheetModalRef = useRef<BottomSheetModal>(null);
   const snapPoints = useMemo(() => ['60%'], []);
@@ -28,14 +42,24 @@ const Cart = () => {
   }, []);
 
   const renderBackdrop = useCallback(
-    (props: any) => <BottomSheetBackdrop {...props} pressBehavior="close" disappearsOnIndex={-1} appearsOnIndex={0} />,
-    [],
+    (props: any) => (
+      <BottomSheetBackdrop
+        {...props}
+        pressBehavior="close"
+        disappearsOnIndex={-1}
+        appearsOnIndex={0}
+      />
+    ),
+    []
   );
 
-  const currentCheckedItems = selectedTab === 1 ? checkedGlassesItems : checkedLensItems;
-  const setCurrentCheckedItems = selectedTab === 1 ? setCheckedGlassesItems : setCheckedLensItems;
+  const currentCheckedItems =
+    selectedTab === 1 ? checkedGlassesItems : checkedLensItems;
+  const setCurrentCheckedItems =
+    selectedTab === 1 ? setCheckedGlassesItems : setCheckedLensItems;
 
-  const allIds = selectedTab === 1 ? ['glasses1', 'glasses2'] : ['lens1', 'lens2'];
+  const allIds =
+    selectedTab === 1 ? ['glasses1', 'glasses2'] : ['lens1', 'lens2'];
   const isAllChecked = allIds.every(id => currentCheckedItems[id]);
 
   const toggleAll = () => {
@@ -58,10 +82,17 @@ const Cart = () => {
     <BottomSheetModalProvider>
       <TopBar
         text="장바구니"
-        leftIcon={<TouchableOpacity onPress={() => { }}><Arrow size={34} /></TouchableOpacity>}
+        leftIcon={
+          <TouchableOpacity onPress={() => {}}>
+            <Arrow size={34} />
+          </TouchableOpacity>
+        }
       />
       <Container>
-        <CartTabSection selectedTab={selectedTab} setSelectedTab={setSelectedTab} />
+        <CartTabSection
+          selectedTab={selectedTab}
+          setSelectedTab={setSelectedTab}
+        />
         <SelectSection checked={isAllChecked} toggleAll={toggleAll} />
         <ProductCountSection
           count={
@@ -90,10 +121,13 @@ const Cart = () => {
             index={0}
             snapPoints={snapPoints}
             backdropComponent={renderBackdrop}
-            onChange={handleSheetChanges}
-          >
+            onChange={handleSheetChanges}>
             <OptionWrapper>
-              <Font text="옵션 변경 / 모디쉬 1p 브라운" kind="medium16" color="gray600" />
+              <Font
+                text="옵션 변경 / 모디쉬 1p 브라운"
+                kind="medium16"
+                color="gray600"
+              />
               <InputWrapper>
                 <CountInputWrapper>
                   <Font text="수량" kind="medium16" />
@@ -102,7 +136,7 @@ const Cart = () => {
                 <Dropdown
                   value={selectedOption}
                   setValue={setSelectedOption}
-                  items={["0.00", "-2.25", "-5.00", "-7.25", "-10.00"]}
+                  items={['0.00', '-2.25', '-5.00', '-7.25', '-10.00']}
                 />
               </InputWrapper>
             </OptionWrapper>
@@ -117,13 +151,25 @@ const Cart = () => {
   );
 };
 
-const CartTabSection = ({ selectedTab, setSelectedTab }: { selectedTab: number, setSelectedTab: (tab: number) => void }) => (
+const CartTabSection = ({
+  selectedTab,
+  setSelectedTab
+}: {
+  selectedTab: number;
+  setSelectedTab: (tab: number) => void;
+}) => (
   <>
     <GlassesLensTab selectedTab={selectedTab} setSelectedTab={setSelectedTab} />
   </>
 );
 
-const SelectSection = ({ checked, toggleAll }: { checked: boolean, toggleAll: () => void }) => (
+const SelectSection = ({
+  checked,
+  toggleAll
+}: {
+  checked: boolean;
+  toggleAll: () => void;
+}) => (
   <SelectWrapper>
     <AllSelectWrapper>
       <CheckBox selected={checked} onPress={toggleAll} />
@@ -141,14 +187,14 @@ const ProductCountSection = ({ count }: { count: number }) => (
 
 const PurchaseButton = () => (
   <ButtonWrapper>
-    <AuthButton text="상품 구매하기" />
+    <Button text="상품 구매하기" />
   </ButtonWrapper>
 );
 
 const Container = styled.ScrollView.attrs(() => ({
   contentContainerStyle: {
-    paddingBottom: 64,
-  },
+    paddingBottom: 64
+  }
 }))`
   flex: 1;
   flex-direction: column;
@@ -189,12 +235,12 @@ const OptionWrapper = styled.View`
   flex-direction: column;
   padding: 47px 26px;
   gap: 26px;
-`
+`;
 
 const InputWrapper = styled.View`
   flex-direction: column;
   gap: 12px;
-`
+`;
 
 const CountInputWrapper = styled.View`
   flex-direction: row;
@@ -205,6 +251,6 @@ const CountInputWrapper = styled.View`
   border-radius: 10px;
   border-color: ${color.gray300};
   background-color: ${color.white};
-`
+`;
 
 export default Cart;

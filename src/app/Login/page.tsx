@@ -1,11 +1,11 @@
 import { useState } from 'react';
 import { useNavigation } from '@react-navigation/native';
 import styled from 'styled-components/native';
-import { TopBar, Input, AuthButton } from '../../components';
+import { TopBar, Input, Button } from '../../components';
 import { color, Font } from '../../styles';
 import { Arrow } from '../../assets/Arrow';
 import { loginHandler, LoginRequest } from '../../apis/auth';
-import { Alert } from 'react-native';
+import { Alert, TouchableOpacity } from 'react-native';
 import { StackNavigationProp } from '@react-navigation/stack';
 import { setItem } from '../../utils/asyncStorage';
 import axios from 'axios';
@@ -16,6 +16,10 @@ const Login = () => {
   const [id, setId] = useState('');
   const [password, setPassword] = useState('');
   const [loading, setLoading] = useState(false);
+
+  const prevPage = () => {
+    navigation.goBack();
+  };
 
   const login = async () => {
     try {
@@ -52,10 +56,15 @@ const Login = () => {
 
   return (
     <Container>
-      <TopBarWrapper>
-        <TopBar text="로그인" leftIcon={<Arrow />} />
-        <TopBarDivider />
-      </TopBarWrapper>
+      <TopBar
+        text="로그인"
+        leftIcon={
+          <TouchableOpacity onPress={prevPage}>
+            <Arrow size={34} />
+          </TouchableOpacity>
+        }
+      />
+      <TopBarDivider />
       <LoginBox>
         <TextBox>
           <Space height={46} />
@@ -89,7 +98,7 @@ const Login = () => {
           />
         </InputBox>
         <ButtonBox>
-          <AuthButton
+          <Button
             text="로그인"
             onPress={() => {
               if (id.length || password.length) {
@@ -115,11 +124,6 @@ const Container = styled.View`
   padding: 0px;
   flex-direction: column;
   background-color: ${color.white};
-`;
-
-const TopBarWrapper = styled.View`
-  width: 100%;
-  flex-direction: column;
 `;
 
 const TopBarDivider = styled.View`

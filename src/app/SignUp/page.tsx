@@ -1,6 +1,6 @@
 import styled from 'styled-components/native';
 import TopBar from '../../components/TopBar';
-import { AuthButton } from '../../components';
+import { Button } from '../../components';
 import { color } from '../../styles';
 import { Animated, Dimensions, Keyboard, TouchableOpacity } from 'react-native';
 import { Arrow } from '../../assets';
@@ -96,7 +96,7 @@ const SignUp = () => {
 
       <Content>
         {signUpPage[page]}
-        <AuthButton text="다음" onPress={nextPage} />
+        <Button text="다음" onPress={nextPage} />
       </Content>
     </Container>
   );

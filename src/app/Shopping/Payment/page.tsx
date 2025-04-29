@@ -1,12 +1,12 @@
-import styled from "styled-components/native";
-import { Font, color } from "../../../styles"
-import { Input, TopBar, AuthButton } from "../../../components";
-import Amount from "../../../components/Shopping/Amount";
-import PaymentMethod from "./PaymentMethod";
-import OrderGlassesItem from "../../../components/Shopping/OrderGlassesItem";
-import { TouchableOpacity } from "react-native"
-import { Arrow } from "../../../assets";
-import { OrderGlassesItems } from "./Data"
+import styled from 'styled-components/native';
+import { Font, color } from '../../../styles';
+import { Input, TopBar, Button } from '../../../components';
+import Amount from '../../../components/Shopping/Amount';
+import PaymentMethod from './PaymentMethod';
+import OrderGlassesItem from '../../../components/Shopping/OrderGlassesItem';
+import { TouchableOpacity } from 'react-native';
+import { Arrow } from '../../../assets';
+import { OrderGlassesItems } from './Data';
 
 const Payment = () => {
   return (
@@ -14,7 +14,7 @@ const Payment = () => {
       <TopBar
         text="장바구니/결제"
         leftIcon={
-          <TouchableOpacity onPress={() => { }}>
+          <TouchableOpacity onPress={() => {}}>
             <Arrow size={34} />
           </TouchableOpacity>
         }
@@ -32,8 +32,8 @@ const Payment = () => {
               kind="medium16"
               color="pink300"
               style={{
-                textDecorationLine: "underline",
-                textDecorationColor: color.pink300,
+                textDecorationLine: 'underline',
+                textDecorationColor: color.pink300
               }}
             />
           </DeliveryHeader>
@@ -58,11 +58,8 @@ const Payment = () => {
           <ItemHeader>
             <Font text="주문 상품" kind="bold20" />
           </ItemHeader>
-          {OrderGlassesItems.map((item) => (
-            <OrderGlassesItem
-              key={item.id}
-              item={item}
-            />
+          {OrderGlassesItems.map(item => (
+            <OrderGlassesItem key={item.id} item={item} />
           ))}
         </OrderItemList>
 
@@ -71,12 +68,12 @@ const Payment = () => {
         <Amount last={true} />
 
         <ButtonWrapper>
-          <AuthButton text="상품 구매하기" />
-        </ButtonWrapper >
-      </Container >
+          <Button text="상품 구매하기" />
+        </ButtonWrapper>
+      </Container>
     </>
-  )
-}
+  );
+};
 
 const Container = styled.ScrollView.attrs(() => ({
   contentContainerStyle: {
@@ -89,13 +86,13 @@ const Container = styled.ScrollView.attrs(() => ({
   gap: 15px;
   padding-top: 62px;
   background-color: ${color.gray50};
-`
+`;
 
 const DeliveryInfo = styled.View`
   display: flex;
   flex-direction: column;
   background-color: ${color.white};
-`
+`;
 
 const DeliveryHeader = styled.View`
   display: flex;
@@ -103,51 +100,51 @@ const DeliveryHeader = styled.View`
   justify-content: space-between;
   align-items: center;
   padding: 18px 20px;
-`
+`;
 
 const RequiredTitle = styled.View`
   display: flex;
   flex-direction: row;
-`
+`;
 
 const DeliverySection = styled.View`
   display: flex;
   flex-direction: column;
   gap: 16px;
   padding: 8px 20px;
-`
+`;
 
 const Tag = styled.Text`
   padding: 4px 15px;
   border-width: 1px;
   border-radius: 30px;
   align-self: flex-start;
-`
+`;
 
 const NamePhoneNumber = styled.View`
   display: flex;
   flex-direction: row;
   align-items: center;
   gap: 6px;
-`
+`;
 
 const OrderItemList = styled.View`
   display: flex;
   flex-direction: column;
   background-color: ${color.white};
-`
+`;
 
 const ItemHeader = styled.View`
   display: flex;
   flex-direction: row;
   padding: 18px 20px;
-`
+`;
 
 const ButtonWrapper = styled.View`
   padding: 7px 20px;
   border-top-width: 1px;
   border-color: ${color.gray100};
   background-color: ${color.white};
-`
+`;
 
-export default Payment
+export default Payment;
