@@ -16,6 +16,15 @@ export interface FaceDataType {
   title: string
 }
 
+export interface FaceCardType {
+  id: number,
+  name: string,
+  subTitle: string,
+  title: string,
+  tag: Array<string>,
+  describe: string
+}
+
 export const RecommendData: RecommendDataType[] = [
   {
     category: "추천",
@@ -173,5 +182,56 @@ export const FaceData: FaceDataType[] = [
   {
     id: 6,
     title: "둥근"
+  },
+]
+
+export const FaceCardData: FaceCardType[] = [
+  {
+    id: 1,
+    name: "round",
+    subTitle: "부드러운 곡선이 매력적인",
+    title: "둥근(Round) 얼굴형",
+    tag: ["둥근매력", "부드러운 무드"],
+    describe: "둥근 얼굴형은 전체적으로 부드럽고 귀여운 인상을 주고, 가로와 세로의 길이가 비슷하며, 턱선이 둥근 것이 특징이에요."
+  },
+  {
+    id: 2,
+    name: "round",
+    subTitle: "부드러운 곡선이 매력적인",
+    title: "둥근(Round) 얼굴형",
+    tag: ["둥근매력", "부드러운 무드"],
+    describe: "둥근 얼굴형은 전체적으로 부드럽고 귀여운 인상을 주고, 가로와 세로의 길이가 비슷하며, 턱선이 둥근 것이 특징이에요."
+  },
+  {
+    id: 3,
+    name: "round",
+    subTitle: "부드러운 곡선이 매력적인",
+    title: "둥근(Round) 얼굴형",
+    tag: ["둥근매력", "부드러운 무드"],
+    describe: "둥근 얼굴형은 전체적으로 부드럽고 귀여운 인상을 주고, 가로와 세로의 길이가 비슷하며, 턱선이 둥근 것이 특징이에요."
+  },
+  {
+    id: 4,
+    name: "round",
+    subTitle: "부드러운 곡선이 매력적인",
+    title: "둥근(Round) 얼굴형",
+    tag: ["둥근매력", "부드러운 무드"],
+    describe: "둥근 얼굴형은 전체적으로 부드럽고 귀여운 인상을 주고, 가로와 세로의 길이가 비슷하며, 턱선이 둥근 것이 특징이에요."
+  },
+  {
+    id: 5,
+    name: "round",
+    subTitle: "부드러운 곡선이 매력적인",
+    title: "둥근(Round) 얼굴형",
+    tag: ["둥근매력", "부드러운 무드"],
+    describe: "둥근 얼굴형은 전체적으로 부드럽고 귀여운 인상을 주고, 가로와 세로의 길이가 비슷하며, 턱선이 둥근 것이 특징이에요."
+  },
+  {
+    id: 6,
+    name: "round",
+    subTitle: "부드러운 곡선이 매력적인",
+    title: "둥근(Round) 얼굴형",
+    tag: ["둥근매력", "부드러운 무드"],
+    describe: "둥근 얼굴형은 전체적으로 부드럽고 귀여운 인상을 주고, 가로와 세로의 길이가 비슷하며, 턱선이 둥근 것이 특징이에요."
   },
 ]
