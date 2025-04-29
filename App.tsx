@@ -25,6 +25,7 @@ import DeliveryDetail from "./src/app/MyPage/Delivery/page"
 import DeliverAdd from "./src/app/MyPage/Delivery/Add"
 import EditProfile from "./src/app/MyPage/EditProfile"
 import FaceFit from "./src/app/FaceFit/page"
+import Recommend from "./src/app/FaceFit/Recommend"
 import { GestureHandlerRootView } from 'react-native-gesture-handler';
 import { BottomSheetModalProvider } from '@gorhom/bottom-sheet';
 
@@ -54,6 +55,7 @@ function App(): React.JSX.Element {
             <Stack.Screen name="DeliverAdd" component={DeliverAdd} />
             <Stack.Screen name="EditProfile" component={EditProfile} />
             <Stack.Screen name="FaceFit" component={FaceFit} />
+            <Stack.Screen name="Recommend" component={Recommend} />
           </Stack.Navigator>
         </NavigationContainer>
       </BottomSheetModalProvider>

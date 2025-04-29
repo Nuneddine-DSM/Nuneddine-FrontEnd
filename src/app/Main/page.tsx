@@ -5,7 +5,7 @@ import Banner from "./Banner"
 import { Arrow } from "../../assets"
 import { Header, Footer } from "../../components/Main"
 import { NavigationListData, MainShoppingData, FramesTag } from "./Data"
-import { GlassesLensTab, ProductCardSmall } from "../../components/Shopping"
+import { ProductCardSmall, GlassesLensTab } from "../../components/Shopping"
 import { ScrollView } from "react-native-gesture-handler"
 
 const Main = () => {
