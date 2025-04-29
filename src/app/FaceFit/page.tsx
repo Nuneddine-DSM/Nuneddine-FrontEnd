@@ -18,7 +18,7 @@ const FaceFit = () => {
 
   useEffect(() => {
     if (selectFaceFit !== null) {
-      Animated.sequence([
+      const seq = Animated.sequence([
         Animated.timing(opacityAnim, {
           toValue: 1,
           duration: 1000,
@@ -38,9 +38,11 @@ const FaceFit = () => {
             }),
           ])
         ),
-      ]).start();
+      ])
+      seq.start();
+      return () => seq.stop();
     }
-  }, [selectFaceFit]);
+  }, [selectFaceFit, bounceAnim, opacityAnim]);
 
   return (
     <Container>
@@ -94,7 +96,11 @@ const FaceFit = () => {
         <ButtonWrapper>
           <AuthButton
             text="확인하러가기"
-            onPress={() => navigation.navigate('Recommend')}
+            onPress={() => {
+              if (selectFaceFit !== null) {
+                navigation.navigate('Recommend', { faceId: selectFaceFit });
+              }
+            }}
           />
         </ButtonWrapper>
       </BottomSection>
