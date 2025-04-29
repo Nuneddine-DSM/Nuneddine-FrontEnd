@@ -6,7 +6,7 @@ import { Arrow } from "../../assets"
 import { useState } from "react";
 import { ProductCardLarge } from "../../components/Shopping";
 import { RecommendData } from "./Data";
-import { ScrollView } from "react-native-gesture-handler";
+import { FlatList, ScrollView } from "react-native-gesture-handler";
 import { useNavigation } from "@react-navigation/native";
 import { StackNavigationProp } from '@react-navigation/stack';
 import MyFaceCard from "./MyFaceCard";
@@ -21,6 +21,8 @@ const Recommend = () => {
   const [isSelected, setIsSelected] = useState<string>("추천");
 
   const filteredProducts = RecommendData.find(data => data.category === isSelected)?.content || [];
+
+  const loadMoreProducts = () => { }
 
   return (
     <Container>
@@ -106,15 +108,19 @@ const Recommend = () => {
             </CategoryTabList>
           </ScrollView>
 
-          <ProductListContainer>
-            {filteredProducts.map((product, index) => (
+          <FlatList
+            data={filteredProducts}
+            keyExtractor={(item, idx) => `${item.title}-${idx}`}
+            renderItem={({ item }) => (
               <ProductCardLarge
-                key={index}
                 isDarkMode={true}
-                {...product}
+                {...item}
               />
-            ))}
-          </ProductListContainer>
+            )}
+            contentContainerStyle={{ paddingHorizontal: 16 }}
+            onEndReached={loadMoreProducts}
+            onEndReachedThreshold={0.5}
+          />
         </RecommendationSection>
       </ScrollView>
     </Container >
@@ -164,7 +170,7 @@ const StyleTitleWrapper = styled.View`
 
 const FaceShapeDetails = styled.View`
   width: 100%;
-  height: 651px;
+  padding: 88px 0 200px;
   flex-direction: row;
   justify-content: center;
   align-items: center;
