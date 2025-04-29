@@ -145,7 +145,7 @@ const fonts: { [key: string]: TextStyle } = {
   extraBold28: {
     fontSize: 28,
     lineHeight: 46,
-    fontWeight: '800'
+    fontWeight: '900'
   },
   black28: {
     fontSize: 28,

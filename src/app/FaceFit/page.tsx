@@ -1,11 +1,11 @@
 import styled from "styled-components/native";
 import { color, Font } from "../../styles";
 import { TopBar } from "../../components";
-import { TouchableOpacity, Animated } from "react-native"
-import { Arrow, Check } from "../../assets"
-import { AuthButton } from "../../components/Button"
+import { TouchableOpacity, Animated } from "react-native";
+import { Arrow, Check } from "../../assets";
+import { AuthButton } from "../../components/Button";
 import { FaceData } from "./Data";
-import { useState, useEffect } from "react"
+import { useState, useEffect } from "react";
 import { useNavigation } from "@react-navigation/native";
 import { StackNavigationProp } from '@react-navigation/stack';
 
@@ -66,7 +66,6 @@ const FaceFit = () => {
         <FaceOptionsContainer>
           {FaceData.map(({ id }) => (
             <SelectedFaceBox
-              key={id}
               onPress={() => setSelectFaceFit(id)}
               selected={id === selectFaceFit}
             >
@@ -86,7 +85,7 @@ const FaceFit = () => {
             <Font
               text="어울리는 안경테를 추천받으세요"
               kind="medium14"
-              color="yellow"
+              color="yellow100"
             />
           </SpeechBubble>
           <SpeechBubbleTail></SpeechBubbleTail>
@@ -188,4 +187,4 @@ const CheckBox = styled.View`
   background-color: ${color.pink300};
 `
 
-export default FaceFit
+export default FaceFit;
