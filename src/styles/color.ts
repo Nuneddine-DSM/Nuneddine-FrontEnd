@@ -12,5 +12,7 @@ export const color = {
   gray700: '#2F2F2F',
   pink100: '#FFF0FC',
   pink200: '#F85AB6',
-  pink300: '#F03E8F'
+  pink300: '#F03E8F',
+  yellow: '#FFD64E',
+  brown: '#201717'
 };
