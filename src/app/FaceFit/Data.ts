@@ -11,6 +11,11 @@ export interface ShoppingContentType {
   price: number
 }
 
+export interface FaceDataType {
+  id: number,
+  title: string
+}
+
 export const RecommendData: RecommendDataType[] = [
   {
     category: "추천",
@@ -142,4 +147,31 @@ export const RecommendData: RecommendDataType[] = [
       }
     ],
   }
+]
+
+export const FaceData: FaceDataType[] = [
+  {
+    id: 1,
+    title: "둥근"
+  },
+  {
+    id: 2,
+    title: "둥근"
+  },
+  {
+    id: 3,
+    title: "둥근"
+  },
+  {
+    id: 4,
+    title: "둥근"
+  },
+  {
+    id: 5,
+    title: "둥근"
+  },
+  {
+    id: 6,
+    title: "둥근"
+  },
 ]
