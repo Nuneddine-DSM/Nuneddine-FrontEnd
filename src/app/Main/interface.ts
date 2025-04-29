@@ -36,6 +36,7 @@ export interface MainShoppingDataType {
 }
 
 export interface ShoppingContentType {
+  shopId: number,
   image: string,
   title: string,
   describe: string,
