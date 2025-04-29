@@ -4,13 +4,23 @@ import Tag from "./Tag";
 import { useState } from "react";
 import { ShoppingContentType } from "../../app/Main/interface";
 import { Font, color } from "../../styles";
+import { likeHandler } from "../../apis/heart";
 
 /**
  * 상품 카드 작은 버전
  */
 
-const ProductCardSmall = ({ image, title, describe, tag, price }: ShoppingContentType) => {
+const ProductCardSmall = ({ shopId, image, title, describe, tag, price }: ShoppingContentType) => {
   const [selected, setSelected] = useState<boolean>(false);
+
+  const heartHandler = async () => {
+    try {
+      await likeHandler(shopId);
+      setSelected(prev => !prev);
+    } catch (error) {
+      console.log(error);
+    }
+  }
 
   return (
     <CardContainer>
@@ -18,10 +28,10 @@ const ProductCardSmall = ({ image, title, describe, tag, price }: ShoppingConten
         <ProductImage source={{ uri: image }} resizeMode="cover" />
         <IconWrapper>
           <Heart
+            onPress={heartHandler}
             size={20}
-            color={color.gray500}
+            color={selected ? color.pink300 : color.gray500}
             fill={selected ? color.pink300 : 'none'}
-            onPress={() => setSelected(prev => !prev)}
           />
         </IconWrapper>
       </ImageWrapper>
