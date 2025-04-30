@@ -114,10 +114,13 @@ const Recommend = () => {
             renderItem={({ item }) => (
               <ProductCardLarge
                 isDarkMode={true}
+                shopId={1}
                 {...item}
               />
             )}
-            contentContainerStyle={{ paddingHorizontal: 16 }}
+            numColumns={2}
+            columnWrapperStyle={{ justifyContent: 'space-between' }}
+            contentContainerStyle={{ paddingHorizontal: 20, paddingTop: 32, paddingBottom: 48 }}
             onEndReached={loadMoreProducts}
             onEndReachedThreshold={0.5}
           />
