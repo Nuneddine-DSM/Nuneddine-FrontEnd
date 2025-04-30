@@ -9,6 +9,7 @@ import { Alert, TouchableOpacity } from 'react-native';
 import { StackNavigationProp } from '@react-navigation/stack';
 import { setItem } from '../../utils/asyncStorage';
 import axios from 'axios';
+import { Text, View } from 'react-native';
 
 const Login = () => {
   const navigation = useNavigation<StackNavigationProp<any>>();
@@ -67,13 +68,14 @@ const Login = () => {
       <TopBarDivider />
       <LoginBox>
         <TextBox>
-          <Space height={46} />
-          <Font text="눈에띠네를 시작해요!" kind="semi24" />
-          <HighlightTextBox>
-            <Font text="아이디와 비밀번호" kind="bold24" color="pink300" />
-            <Font text="를" kind="semi24" />
-          </HighlightTextBox>
-          <Font text="입력해주세요." kind="semi24" />
+          <View>
+            <Font text="눈에띠네를 시작해요!" kind="semi24" />
+            <Text>
+              <Font text="아이디와 비밀번호" kind="bold24" color="pink300" />
+              <Font text="를" kind="semi24" />
+            </Text>
+            <Font text="입력해주세요." kind="semi24" />
+          </View>
         </TextBox>
         <InputBox>
           <Input
@@ -101,7 +103,7 @@ const Login = () => {
           <Button
             text="로그인"
             onPress={() => {
-              if (id.length || password.length) {
+              if (!id.length || !password.length) {
                 Alert.alert('아이디나 비밀번호를 입력해주세요');
               } else if (!loading) {
                 login();
@@ -156,11 +158,6 @@ const ButtonBox = styled.View`
 const TextBox = styled.View`
   width: 100%;
   padding: 59px 25px 0px 25px;
-`;
-
-const HighlightTextBox = styled.View`
-  width: 100%;
-  flex-direction: row;
 `;
 
 export default Login;
