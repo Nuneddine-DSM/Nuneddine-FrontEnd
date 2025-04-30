@@ -5,8 +5,8 @@ export const Heart = ({ size = 24, color = 'black', fill = 'none', onPress }: Sv
   return (
     <Svg width={size} height={size} fill="none" viewBox="0 0 20 20" onPress={onPress}>
       <Path
-        fill={fill !== 'none' ? fill : 'none'}
-        stroke={fill === 'none' ? color : 'none'}
+        fill={fill}
+        stroke={color}
         strokeLinecap="round"
         strokeLinejoin="round"
         strokeWidth="1.5"

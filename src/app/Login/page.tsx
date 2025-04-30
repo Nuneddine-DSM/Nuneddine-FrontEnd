@@ -31,7 +31,6 @@ const Login = () => {
         device_token: ''
       };
       const response = await loginHandler(requestData);
-      setLoading(false);
 
       if (response.status === 200) {
         await setItem('accessToken', response.data.access_token);
@@ -43,7 +42,7 @@ const Login = () => {
       setLoading(false);
       if (axios.isAxiosError(err)) {
         console.error('AxiosError', err);
-        if (err.status === 401) {
+        if (err.response?.status === 401) {
           Alert.alert('아이디 또는 비밀번호를 잘못입력하였습니다');
         } else {
           Alert.alert('로그인 중 오류가 발생하였습니다');
@@ -52,6 +51,8 @@ const Login = () => {
         console.error('else', err);
         Alert.alert('로그인 중 오류가 발생하였습니다');
       }
+    } finally {
+      setLoading(false);
     }
   };
 
@@ -103,7 +104,7 @@ const Login = () => {
           <Button
             text="로그인"
             onPress={() => {
-              if (!id.length || !password.length) {
+              if (!id || !password) {
                 Alert.alert('아이디나 비밀번호를 입력해주세요');
               } else if (!loading) {
                 login();

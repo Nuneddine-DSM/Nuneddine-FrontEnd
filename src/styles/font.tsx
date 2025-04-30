@@ -112,6 +112,11 @@ const fonts: { [key: string]: TextStyle } = {
     lineHeight: 24,
     fontWeight: '700'
   },
+  light24: {
+    fontSize: 24,
+    lineHeight: 24,
+    fontWeight: '400'
+  },
   medium24: {
     fontSize: 24,
     lineHeight: 36,
@@ -136,6 +141,11 @@ const fonts: { [key: string]: TextStyle } = {
     fontSize: 28,
     lineHeight: 46,
     fontWeight: '700'
+  },
+  extraBold28: {
+    fontSize: 28,
+    lineHeight: 46,
+    fontWeight: '900'
   },
   black28: {
     fontSize: 28,

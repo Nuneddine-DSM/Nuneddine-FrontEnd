@@ -10,6 +10,9 @@ import Banner1 from "../../assets/Banner1.png"
 import Banner2 from "../../assets/Banner2.png"
 import Banner3 from "../../assets/Banner3.png"
 import Banner4 from "../../assets/Banner4.png"
+import Banner5 from "../../assets/Banner5.png"
+import Banner6 from "../../assets/Banner6.png"
+import Banner7 from "../../assets/Banner7.png"
 
 export const NavigationListData: NavigationListDataType[] = [
   {
@@ -59,6 +62,24 @@ export const BannerData: BannerDataType[] = [
     title: "오늘의 무드, 맑음",
     subTitle: "꾸밈 없이도 완성되는 데일리 무드"
   },
+  {
+    id: 5,
+    image: Banner5,
+    title: "눈빛부터 달라지는 순간",
+    subTitle: "당신의 본연을 더 빛나게 하는 데일리 렌즈"
+  },
+  {
+    id: 6,
+    image: Banner6,
+    title: "나만의 컬러를 입다",
+    subTitle: "예술적인 디테일, 렌즈 하나로 완성되는 무드"
+  },
+  {
+    id: 7,
+    image: Banner7,
+    title: "차가운 듯 따뜻한 눈빛",
+    subTitle: "그레이 톤의 깊이, 도회적인 무드의 완성"
+  },
 ]
 
 export const CategoryData: CategoryDataType[] = [
@@ -102,6 +123,7 @@ export const MainShoppingData: MainShoppingDataType[] = [
     subTitle: "요즘 인기템 총정리! 고르기 전에 참고해요",
     content: [
       {
+        shopId: 1,
         image: "https://m.hangle-eyewear.com/web/product/big/202411/aba216981789a6aba89faa4b7ffaff4c.jpg",
         title: "브랜드",
         describe: "베리스 레쥬렉션 선글라스 RESUR...",
@@ -109,6 +131,7 @@ export const MainShoppingData: MainShoppingDataType[] = [
         price: 99000
       },
       {
+        shopId: 2,
         image: "https://sitem.ssgcdn.com/28/73/68/item/1000534687328_i1_750.jpg",
         title: "브랜드",
         describe: "베리스 레쥬렉션 선글라스 RESUR...",
@@ -116,6 +139,7 @@ export const MainShoppingData: MainShoppingDataType[] = [
         price: 99000
       },
       {
+        shopId: 3,
         image: "https://image.rounz.com/_data/product/STYLEWORK/SLEEK-BACK-C2(47)_RZ/SLEEK-BACK-C2(47)_03_RZ.jpg",
         title: "브랜드",
         describe: "베리스 레쥬렉션 선글라스 RESUR...",
@@ -123,6 +147,7 @@ export const MainShoppingData: MainShoppingDataType[] = [
         price: 99000
       },
       {
+        shopId: 4,
         image: "https://m.hangle-eyewear.com/web/product/big/202411/aba216981789a6aba89faa4b7ffaff4c.jpg",
         title: "브랜드",
         describe: "베리스 레쥬렉션 선글라스 RESUR...",
@@ -130,6 +155,7 @@ export const MainShoppingData: MainShoppingDataType[] = [
         price: 99000
       },
       {
+        shopId: 5,
         image: "https://m.hangle-eyewear.com/web/product/big/202411/aba216981789a6aba89faa4b7ffaff4c.jpg",
         title: "브랜드",
         describe: "베리스 레쥬렉션 선글라스 RESUR...",
@@ -145,6 +171,7 @@ export const MainShoppingData: MainShoppingDataType[] = [
     subTitle: "각진 태부터 둥근 태까지, 내 얼굴에 맞는 스타일 찾기",
     content: [
       {
+        shopId: 1,
         image: "https://m.hangle-eyewear.com/web/product/big/202411/aba216981789a6aba89faa4b7ffaff4c.jpg",
         title: "브랜드",
         describe: "베리스 레쥬렉션 선글라스 RESUR...",
@@ -152,6 +179,7 @@ export const MainShoppingData: MainShoppingDataType[] = [
         price: 99000
       },
       {
+        shopId: 2,
         image: "https://sitem.ssgcdn.com/28/73/68/item/1000534687328_i1_750.jpg",
         title: "브랜드",
         describe: "베리스 레쥬렉션 선글라스 RESUR...",
@@ -159,7 +187,24 @@ export const MainShoppingData: MainShoppingDataType[] = [
         price: 99000
       },
       {
+        shopId: 3,
         image: "https://image.rounz.com/_data/product/STYLEWORK/SLEEK-BACK-C2(47)_RZ/SLEEK-BACK-C2(47)_03_RZ.jpg",
+        title: "브랜드",
+        describe: "베리스 레쥬렉션 선글라스 RESUR...",
+        tag: "굵은태",
+        price: 99000
+      },
+      {
+        shopId: 4,
+        image: "https://m.hangle-eyewear.com/web/product/big/202411/aba216981789a6aba89faa4b7ffaff4c.jpg",
+        title: "브랜드",
+        describe: "베리스 레쥬렉션 선글라스 RESUR...",
+        tag: "굵은태",
+        price: 99000
+      },
+      {
+        shopId: 5,
+        image: "https://m.hangle-eyewear.com/web/product/big/202411/aba216981789a6aba89faa4b7ffaff4c.jpg",
         title: "브랜드",
         describe: "베리스 레쥬렉션 선글라스 RESUR...",
         tag: "굵은태",
@@ -174,6 +219,7 @@ export const MainShoppingData: MainShoppingDataType[] = [
     subTitle: "스타일에 진심인 사람들의 추천템!",
     content: [
       {
+        shopId: 1,
         image: "https://m.hangle-eyewear.com/web/product/big/202411/aba216981789a6aba89faa4b7ffaff4c.jpg",
         title: "브랜드",
         describe: "베리스 레쥬렉션 선글라스 RESUR...",
@@ -181,6 +227,7 @@ export const MainShoppingData: MainShoppingDataType[] = [
         price: 99000
       },
       {
+        shopId: 2,
         image: "https://sitem.ssgcdn.com/28/73/68/item/1000534687328_i1_750.jpg",
         title: "브랜드",
         describe: "베리스 레쥬렉션 선글라스 RESUR...",
@@ -188,7 +235,24 @@ export const MainShoppingData: MainShoppingDataType[] = [
         price: 99000
       },
       {
+        shopId: 3,
         image: "https://image.rounz.com/_data/product/STYLEWORK/SLEEK-BACK-C2(47)_RZ/SLEEK-BACK-C2(47)_03_RZ.jpg",
+        title: "브랜드",
+        describe: "베리스 레쥬렉션 선글라스 RESUR...",
+        tag: "굵은태",
+        price: 99000
+      },
+      {
+        shopId: 4,
+        image: "https://m.hangle-eyewear.com/web/product/big/202411/aba216981789a6aba89faa4b7ffaff4c.jpg",
+        title: "브랜드",
+        describe: "베리스 레쥬렉션 선글라스 RESUR...",
+        tag: "굵은태",
+        price: 99000
+      },
+      {
+        shopId: 5,
+        image: "https://m.hangle-eyewear.com/web/product/big/202411/aba216981789a6aba89faa4b7ffaff4c.jpg",
         title: "브랜드",
         describe: "베리스 레쥬렉션 선글라스 RESUR...",
         tag: "굵은태",
@@ -203,6 +267,7 @@ export const MainShoppingData: MainShoppingDataType[] = [
     subTitle: "놓치면 아쉬운, 지금 제일 잘나가는 브랜드만!",
     content: [
       {
+        shopId: 1,
         image: "https://m.hangle-eyewear.com/web/product/big/202411/aba216981789a6aba89faa4b7ffaff4c.jpg",
         title: "브랜드",
         describe: "베리스 레쥬렉션 선글라스 RESUR...",
@@ -210,6 +275,7 @@ export const MainShoppingData: MainShoppingDataType[] = [
         price: 99000
       },
       {
+        shopId: 2,
         image: "https://sitem.ssgcdn.com/28/73/68/item/1000534687328_i1_750.jpg",
         title: "브랜드",
         describe: "베리스 레쥬렉션 선글라스 RESUR...",
@@ -217,7 +283,24 @@ export const MainShoppingData: MainShoppingDataType[] = [
         price: 99000
       },
       {
+        shopId: 3,
         image: "https://image.rounz.com/_data/product/STYLEWORK/SLEEK-BACK-C2(47)_RZ/SLEEK-BACK-C2(47)_03_RZ.jpg",
+        title: "브랜드",
+        describe: "베리스 레쥬렉션 선글라스 RESUR...",
+        tag: "굵은태",
+        price: 99000
+      },
+      {
+        shopId: 4,
+        image: "https://m.hangle-eyewear.com/web/product/big/202411/aba216981789a6aba89faa4b7ffaff4c.jpg",
+        title: "브랜드",
+        describe: "베리스 레쥬렉션 선글라스 RESUR...",
+        tag: "굵은태",
+        price: 99000
+      },
+      {
+        shopId: 5,
+        image: "https://m.hangle-eyewear.com/web/product/big/202411/aba216981789a6aba89faa4b7ffaff4c.jpg",
         title: "브랜드",
         describe: "베리스 레쥬렉션 선글라스 RESUR...",
         tag: "굵은태",
@@ -232,6 +315,7 @@ export const MainShoppingData: MainShoppingDataType[] = [
     subTitle: "빈티지 감성 좋아하는 당신을 위한 셀렉션",
     content: [
       {
+        shopId: 1,
         image: "https://m.hangle-eyewear.com/web/product/big/202411/aba216981789a6aba89faa4b7ffaff4c.jpg",
         title: "브랜드",
         describe: "베리스 레쥬렉션 선글라스 RESUR...",
@@ -239,6 +323,7 @@ export const MainShoppingData: MainShoppingDataType[] = [
         price: 99000
       },
       {
+        shopId: 2,
         image: "https://sitem.ssgcdn.com/28/73/68/item/1000534687328_i1_750.jpg",
         title: "브랜드",
         describe: "베리스 레쥬렉션 선글라스 RESUR...",
@@ -246,7 +331,24 @@ export const MainShoppingData: MainShoppingDataType[] = [
         price: 99000
       },
       {
+        shopId: 3,
         image: "https://image.rounz.com/_data/product/STYLEWORK/SLEEK-BACK-C2(47)_RZ/SLEEK-BACK-C2(47)_03_RZ.jpg",
+        title: "브랜드",
+        describe: "베리스 레쥬렉션 선글라스 RESUR...",
+        tag: "굵은태",
+        price: 99000
+      },
+      {
+        shopId: 4,
+        image: "https://m.hangle-eyewear.com/web/product/big/202411/aba216981789a6aba89faa4b7ffaff4c.jpg",
+        title: "브랜드",
+        describe: "베리스 레쥬렉션 선글라스 RESUR...",
+        tag: "굵은태",
+        price: 99000
+      },
+      {
+        shopId: 5,
+        image: "https://m.hangle-eyewear.com/web/product/big/202411/aba216981789a6aba89faa4b7ffaff4c.jpg",
         title: "브랜드",
         describe: "베리스 레쥬렉션 선글라스 RESUR...",
         tag: "굵은태",

@@ -5,7 +5,7 @@ import { TouchableOpacity } from "react-native";
 import { Arrow } from "../../assets";
 import { GlassesLensTab } from "../../components/Shopping";
 import { useState } from "react";
-import ProductCard from "../../components/Shopping/ProductCard";
+import ProductCard from "../../components/Shopping/ProductCardLarge";
 import { ScrollView } from "react-native-gesture-handler";
 import { useNavigation } from "@react-navigation/native";
 

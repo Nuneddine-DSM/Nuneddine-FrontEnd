@@ -27,7 +27,7 @@ const Banner = () => {
       });
       setCurrentIndex(nextIndex);
       indexRef.current = nextIndex;
-    }, 10000);
+    }, 5000);
 
     return () => clearInterval(interval);
   }, []);

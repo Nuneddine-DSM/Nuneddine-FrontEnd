@@ -4,13 +4,23 @@ import Tag from "./Tag";
 import { useState } from "react";
 import { ShoppingContentType } from "../../app/Main/interface";
 import { Font, color } from "../../styles";
+import { likeHandler } from "../../apis/heart";
 
 /**
- * 메인페이지 상품 카드
+ * 상품 카드 작은 버전
  */
 
-const ShopCard = ({ image, title, describe, tag, price }: ShoppingContentType) => {
+const ProductCardSmall = ({ shopId, image, title, describe, tag, price }: ShoppingContentType) => {
   const [selected, setSelected] = useState<boolean>(false);
+
+  const heartHandler = async () => {
+    try {
+      await likeHandler(shopId);
+      setSelected(prev => !prev);
+    } catch (error) {
+      console.log(error);
+    }
+  }
 
   return (
     <CardContainer>
@@ -18,10 +28,10 @@ const ShopCard = ({ image, title, describe, tag, price }: ShoppingContentType) =
         <ProductImage source={{ uri: image }} resizeMode="cover" />
         <IconWrapper>
           <Heart
+            onPress={heartHandler}
             size={20}
-            color={color.gray500}
+            color={selected ? color.pink300 : color.gray500}
             fill={selected ? color.pink300 : 'none'}
-            onPress={() => setSelected(prev => !prev)}
           />
         </IconWrapper>
       </ImageWrapper>
@@ -54,8 +64,8 @@ const CardContainer = styled.View`
 
 const ImageWrapper = styled.View`
   position: relative;
-  width: 125px;
-  height: 125px;
+  width: 100%;
+  aspect-ratio: 1;
   background-color: ${color.gray200};
 `
 
@@ -80,4 +90,4 @@ const TitleBox = styled.View`
   gap: 6px;
 `
 
-export default ShopCard
+export default ProductCardSmall
