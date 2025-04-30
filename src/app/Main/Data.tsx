@@ -10,6 +10,9 @@ import Banner1 from "../../assets/Banner1.png"
 import Banner2 from "../../assets/Banner2.png"
 import Banner3 from "../../assets/Banner3.png"
 import Banner4 from "../../assets/Banner4.png"
+import Banner5 from "../../assets/Banner5.png"
+import Banner6 from "../../assets/Banner6.png"
+import Banner7 from "../../assets/Banner7.png"
 
 export const NavigationListData: NavigationListDataType[] = [
   {
@@ -58,6 +61,24 @@ export const BannerData: BannerDataType[] = [
     image: Banner4,
     title: "오늘의 무드, 맑음",
     subTitle: "꾸밈 없이도 완성되는 데일리 무드"
+  },
+  {
+    id: 5,
+    image: Banner5,
+    title: "눈빛부터 달라지는 순간",
+    subTitle: "당신의 본연을 더 빛나게 하는 데일리 렌즈"
+  },
+  {
+    id: 6,
+    image: Banner6,
+    title: "나만의 컬러를 입다",
+    subTitle: "예술적인 디테일, 렌즈 하나로 완성되는 무드"
+  },
+  {
+    id: 7,
+    image: Banner7,
+    title: "차가운 듯 따뜻한 눈빛",
+    subTitle: "그레이 톤의 깊이, 도회적인 무드의 완성"
   },
 ]
 
