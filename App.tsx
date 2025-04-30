@@ -15,17 +15,18 @@ import MyPage from './src/app/MyPage/page';
 import Manage from './src/app/Manage/page';
 import Onboarding from './src/app/Onboarding/page';
 import Login from './src/app/Login/page';
-import SignUp from "./src/app/SignUp/page"
-import Cart from "./src/app/Shopping/Cart/page"
-import Payment from "./src/app/Shopping/Payment/page"
-import Delivery from "./src/app/Shopping/Delivery/page"
-import OrderDetails from "./src/app/MyPage/OrderDetails"
-import Like from "./src/app/MyPage/Like"
-import DeliveryDetail from "./src/app/MyPage/Delivery/page"
-import DeliverAdd from "./src/app/MyPage/Delivery/Add"
-import EditProfile from "./src/app/MyPage/EditProfile"
-import FaceFit from "./src/app/FaceFit/page"
-import Recommend from "./src/app/FaceFit/Recommend"
+import SignUp from './src/app/SignUp/page';
+import Cart from './src/app/Shopping/Cart/page';
+import Payment from './src/app/Shopping/Payment/page';
+import Delivery from './src/app/Shopping/Delivery/page';
+import OrderDetails from './src/app/MyPage/OrderDetails';
+import Like from './src/app/MyPage/Like';
+import DeliveryDetail from './src/app/MyPage/Delivery/page';
+import DeliverAdd from './src/app/MyPage/Delivery/Add';
+import EditProfile from './src/app/MyPage/EditProfile';
+import Frequency from './src/app/MyPage/Frequency';
+import FaceFit from './src/app/FaceFit/page'
+import Recommend from './src/app/FaceFit/Recommend'
 import { GestureHandlerRootView } from 'react-native-gesture-handler';
 import { BottomSheetModalProvider } from '@gorhom/bottom-sheet';
 
@@ -37,7 +38,7 @@ function App(): React.JSX.Element {
         <NavigationContainer>
           <Stack.Navigator
             screenOptions={{ headerShown: false }}
-            initialRouteName="FaceFit">
+            initialRouteName="Onboarding">
             <Stack.Screen name="NavBar" component={NavBar} />
             <Stack.Screen name="Main" component={Main} />
             <Stack.Screen name="Guide" component={Guide} />
@@ -54,6 +55,7 @@ function App(): React.JSX.Element {
             <Stack.Screen name="DeliveryDetail" component={DeliveryDetail} />
             <Stack.Screen name="DeliverAdd" component={DeliverAdd} />
             <Stack.Screen name="EditProfile" component={EditProfile} />
+            <Stack.Screen name="Frequency" component={Frequency} />
             <Stack.Screen name="FaceFit" component={FaceFit} />
             <Stack.Screen name="Recommend" component={Recommend} />
           </Stack.Navigator>

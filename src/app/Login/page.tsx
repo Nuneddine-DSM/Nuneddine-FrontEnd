@@ -1,14 +1,15 @@
 import { useState } from 'react';
 import { useNavigation } from '@react-navigation/native';
 import styled from 'styled-components/native';
-import { TopBar, Input, AuthButton } from '../../components';
+import { TopBar, Input, Button } from '../../components';
 import { color, Font } from '../../styles';
 import { Arrow } from '../../assets/Arrow';
 import { loginHandler, LoginRequest } from '../../apis/auth';
-import { Alert } from 'react-native';
+import { Alert, TouchableOpacity } from 'react-native';
 import { StackNavigationProp } from '@react-navigation/stack';
 import { setItem } from '../../utils/asyncStorage';
 import axios from 'axios';
+import { Text, View } from 'react-native';
 
 const Login = () => {
   const navigation = useNavigation<StackNavigationProp<any>>();
@@ -16,6 +17,10 @@ const Login = () => {
   const [id, setId] = useState('');
   const [password, setPassword] = useState('');
   const [loading, setLoading] = useState(false);
+
+  const prevPage = () => {
+    navigation.goBack();
+  };
 
   const login = async () => {
     try {
@@ -53,19 +58,25 @@ const Login = () => {
 
   return (
     <Container>
-      <TopBarWrapper>
-        <TopBar text="로그인" leftIcon={<Arrow />} />
-        <TopBarDivider />
-      </TopBarWrapper>
+      <TopBar
+        text="로그인"
+        leftIcon={
+          <TouchableOpacity onPress={prevPage}>
+            <Arrow size={34} />
+          </TouchableOpacity>
+        }
+      />
+      <TopBarDivider />
       <LoginBox>
         <TextBox>
-          <Space height={46} />
-          <Font text="눈에띠네를 시작해요!" kind="semi24" />
-          <HighlightTextBox>
-            <Font text="아이디와 비밀번호" kind="bold24" color="pink300" />
-            <Font text="를" kind="semi24" />
-          </HighlightTextBox>
-          <Font text="입력해주세요." kind="semi24" />
+          <View>
+            <Font text="눈에띠네를 시작해요!" kind="semi24" />
+            <Text>
+              <Font text="아이디와 비밀번호" kind="bold24" color="pink300" />
+              <Font text="를" kind="semi24" />
+            </Text>
+            <Font text="입력해주세요." kind="semi24" />
+          </View>
         </TextBox>
         <InputBox>
           <Input
@@ -90,7 +101,7 @@ const Login = () => {
           />
         </InputBox>
         <ButtonBox>
-          <AuthButton
+          <Button
             text="로그인"
             onPress={() => {
               if (!id || !password) {
@@ -116,11 +127,6 @@ const Container = styled.View`
   padding: 0px;
   flex-direction: column;
   background-color: ${color.white};
-`;
-
-const TopBarWrapper = styled.View`
-  width: 100%;
-  flex-direction: column;
 `;
 
 const TopBarDivider = styled.View`
@@ -153,11 +159,6 @@ const ButtonBox = styled.View`
 const TextBox = styled.View`
   width: 100%;
   padding: 59px 25px 0px 25px;
-`;
-
-const HighlightTextBox = styled.View`
-  width: 100%;
-  flex-direction: row;
 `;
 
 export default Login;

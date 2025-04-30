@@ -9,7 +9,12 @@ interface ButtonPropsType {
   primaryButton?: boolean;
 }
 
-export function AuthButton({ text, width='100%', onPress, primaryButton=true }: ButtonPropsType) {
+export function Button({
+  text,
+  width = '100%',
+  onPress,
+  primaryButton = true
+}: ButtonPropsType) {
   return (
     <BasedButton
       width={width}
