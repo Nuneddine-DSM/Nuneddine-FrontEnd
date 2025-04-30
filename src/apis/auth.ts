@@ -1,5 +1,4 @@
 import { instance, storeData } from './axios';
-import messaging from '@react-native-firebase/messaging';
 import { getDeviceToken } from '../utils/firebase';
 
 const auth = '/auth';
