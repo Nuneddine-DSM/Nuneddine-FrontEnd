@@ -3,6 +3,19 @@ import { instance } from './axios';
 
 const user = '/user';
 
+export const myPage = async () => {
+  try {
+    const response = await instance.get(`${user}/my-page`, {
+      headers: {
+        Authorization: `Bearer ${await getItem('accessToken')}`
+      }
+    });
+    return response;
+  } catch (err) {
+    throw err;
+  }
+};
+
 export interface LensFrequency {
   left_lens_power: number;
   right_lens_power: number;
