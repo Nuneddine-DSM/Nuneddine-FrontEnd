@@ -2,10 +2,14 @@ import styled from 'styled-components/native';
 import { Button } from '../../components/Button';
 import { color, Font } from '../../styles';
 import { ImageBackground } from 'react-native';
+import { useNavigation } from '@react-navigation/native';
+import { StackNavigationProp } from '@react-navigation/stack';
 
 const OnboardingImage = require('../../assets/OnboardingImage.png');
 
 const Onboarding = () => {
+  const navigation = useNavigation<StackNavigationProp<any>>();
+
   return (
     <BackgroundImage source={OnboardingImage}>
       <TextBox>
@@ -15,8 +19,19 @@ const Onboarding = () => {
       </TextBox>
 
       <ButtonWrapper>
-        <Button text="로그인" onPress={() => {}} />
-        <Button text="회원가입" primaryButton={false} onPress={() => {}} />
+        <Button
+          text="로그인"
+          onPress={() => {
+            navigation.navigate('Login');
+          }}
+        />
+        <Button
+          text="회원가입"
+          primaryButton={false}
+          onPress={() => {
+            navigation.navigate('SignUp');
+          }}
+        />
       </ButtonWrapper>
     </BackgroundImage>
   );
