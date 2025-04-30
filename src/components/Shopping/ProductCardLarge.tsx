@@ -65,7 +65,7 @@ const ProductCardLarge = ({
             />
           </TitleBox>
 
-          <Tag text={tag} isDark={true} />
+          <Tag text={tag} isDark={isDarkMode} />
 
           <Font
             text={`${price ? Number(price).toLocaleString() : "0"}원`}
