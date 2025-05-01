@@ -6,9 +6,11 @@ import { Arrow } from '../../../assets';
 import DeliveryDetail from '../../../components/Shopping/Delivery';
 import { ScrollView } from 'react-native-gesture-handler';
 import { useNavigation } from '@react-navigation/native';
+import { DeliveryData } from '../Data';
+import { StackNavigationProp } from '@react-navigation/stack';
 
 const Delivery = () => {
-  const navigation = useNavigation();
+  const navigation = useNavigation<StackNavigationProp<any>>();
 
   return (
     <Container>
@@ -22,14 +24,14 @@ const Delivery = () => {
       />
       <ScrollView contentContainerStyle={{ paddingBottom: 80 }}>
         <DeliveryListWrapper>
-          <DeliveryDetail />
-          <DeliveryDetail />
-          <DeliveryDetail />
+          {DeliveryData.map((item) => (
+            <DeliveryDetail key={item.id} item={item} />
+          ))}
         </DeliveryListWrapper>
       </ScrollView>
 
       <ButtonWrapper>
-        <Button text="배송지 추가" />
+        <Button text="배송지 추가" onPress={() => navigation.navigate("DeliverAdd")} />
       </ButtonWrapper>
     </Container>
   );

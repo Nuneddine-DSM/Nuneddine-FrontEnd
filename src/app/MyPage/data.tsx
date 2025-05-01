@@ -101,3 +101,35 @@ export const MyOrderData: MyOrderDataType[] = [
     ]
   }
 ]
+
+interface DeliveryDataType {
+  id: number,
+  nickName: string,
+  userName: string,
+  phone: string,
+  address: string
+}
+
+export const DeliveryData: DeliveryDataType[] = [
+  {
+    id: 1,
+    nickName: "제 2의 집",
+    userName: "박예빈",
+    phone: "010-2250-6815",
+    address: "대전광역시 유성구 가정북로 76 (장동, 대덕소프트웨어마이스터고등학교), 우정관 택배함(기숙사)"
+  },
+  {
+    id: 2,
+    nickName: "제 2의 집",
+    userName: "박예빈",
+    phone: "010-2250-6815",
+    address: "대전광역시 유성구 가정북로 76 (장동, 대덕소프트웨어마이스터고등학교), 우정관 택배함(기숙사)"
+  },
+  {
+    id: 3,
+    nickName: "제 2의 집",
+    userName: "박예빈",
+    phone: "010-2250-6815",
+    address: "대전광역시 유성구 가정북로 76 (장동, 대덕소프트웨어마이스터고등학교), 우정관 택배함(기숙사)"
+  },
+]

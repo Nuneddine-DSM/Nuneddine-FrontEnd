@@ -8,7 +8,7 @@ import DeliveryList from "../../../components/Shopping/Delivery";
 export interface DeliveryType {
   selected?: boolean,
   nickName?: string,
-  name?: string,
+  userName?: string,
   phone?: string,
   address?: string,
   check?: boolean
@@ -18,14 +18,14 @@ const DeliveryData: DeliveryType[] = [
   {
     selected: true,
     nickName: "제 2의 집",
-    name: "박예빈",
+    userName: "박예빈",
     phone: "010-1234-1234",
     address: "대전광역시 유성구 가정북로 76 (장동, 대덕소프트웨어마이스터고등학교), 우정관 택배함(기숙사)"
   },
   {
     selected: false,
     nickName: "대마고",
-    name: "임다영",
+    userName: "임다영",
     phone: "010-1234-1234",
     address: "대전광역시 유성구 가정북로 76 (장동, 대덕소프트웨어마이스터고등학교), 우정관 택배함(기숙사)"
   },
