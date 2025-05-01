@@ -3,7 +3,7 @@ import { Font, color } from "../../styles"
 import { TopBar } from "../../components"
 import { TouchableOpacity } from "react-native"
 import { Arrow } from "../../assets"
-import NavigationData from "./Data"
+import { NavigationData } from "./Data"
 import { useNavigation, NavigationProp } from '@react-navigation/native'
 
 const MyPage = () => {

@@ -3,8 +3,10 @@ import { color, Font } from "../../styles"
 import { TopBar } from "../../components";
 import { TouchableOpacity } from "react-native";
 import { Arrow } from "../../assets";
-import OrderGlassesItem from "../../components/Shopping/OrderGlassesItem";
+import OrderGlassesItem from "../../components/Shopping/OrderDetails";
 import { useNavigation } from "@react-navigation/native";
+import { MyOrderData } from "./Data";
+import { ScrollView } from "react-native-gesture-handler";
 
 const OrderDetails = () => {
   const navigation = useNavigation();
@@ -19,14 +21,22 @@ const OrderDetails = () => {
           </TouchableOpacity>
         }
       />
-      <OrderSection>
-        <DateWrapper>
-          <Font text="2025.3.15" kind="bold24" />
-        </DateWrapper>
-        <OrderList>
-          {/* <OrderGlassesItem /> */}
-        </OrderList>
-      </OrderSection>
+      <ScrollView>
+        <OrderHistory>
+          {MyOrderData.map((order) => (
+            <OrderSection key={order.date}>
+              <DateWrapper>
+                <Font text={order.date} kind="bold24" />
+              </DateWrapper>
+              <OrderList>
+                {order.item.map((product) => (
+                  <OrderGlassesItem key={product.id} item={product} />
+                ))}
+              </OrderList>
+            </OrderSection>
+          ))}
+        </OrderHistory>
+      </ScrollView>
     </Container>
   )
 }
@@ -37,6 +47,11 @@ const Container = styled.View`
   gap: 15px;
   padding-top: 62px;
   background-color: ${color.gray50};
+`
+
+const OrderHistory = styled.View`
+  flex-direction: column;
+  gap: 15px;
 `
 
 const OrderSection = styled.View`
