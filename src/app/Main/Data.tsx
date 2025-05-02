@@ -18,22 +18,22 @@ export const NavigationListData: NavigationListDataType[] = [
   {
     id: 1,
     name: "안경테 ALL",
-    href: ""
+    href: "/"
   },
   {
     id: 2,
     name: "렌즈 ALL",
-    href: ""
+    href: "/"
   },
   {
     id: 3,
     name: "얼굴형 추천",
-    href: ""
+    href: "FaceFit"
   },
   {
     id: 4,
     name: "가이드",
-    href: ""
+    href: "Guide"
   },
 ]
 

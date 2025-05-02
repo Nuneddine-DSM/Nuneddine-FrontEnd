@@ -39,7 +39,7 @@ function App(): React.JSX.Element {
         <NavigationContainer>
           <Stack.Navigator
             screenOptions={{ headerShown: false }}
-            initialRouteName="GuideDetail">
+            initialRouteName="Main">
             <Stack.Screen name="NavBar" component={NavBar} />
             <Stack.Screen name="Main" component={Main} />
             <Stack.Screen name="Guide" component={Guide} />
