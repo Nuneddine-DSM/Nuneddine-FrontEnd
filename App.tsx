@@ -27,6 +27,7 @@ import EditProfile from './src/app/MyPage/EditProfile';
 import Frequency from './src/app/MyPage/Frequency';
 import FaceFit from './src/app/FaceFit/page'
 import Recommend from './src/app/FaceFit/Recommend'
+import GuideDetail from './src/app/Guide/Detail'
 import ShoppingDetail from "./src/app/Shopping/Detail/page"
 import { GestureHandlerRootView } from 'react-native-gesture-handler';
 import { BottomSheetModalProvider } from '@gorhom/bottom-sheet';
@@ -39,7 +40,7 @@ function App(): React.JSX.Element {
         <NavigationContainer>
           <Stack.Navigator
             screenOptions={{ headerShown: false }}
-            initialRouteName="ShoppingDetail">
+            initialRouteName="Main">
             <Stack.Screen name="NavBar" component={NavBar} />
             <Stack.Screen name="Main" component={Main} />
             <Stack.Screen name="Guide" component={Guide} />
@@ -59,6 +60,7 @@ function App(): React.JSX.Element {
             <Stack.Screen name="Frequency" component={Frequency} />
             <Stack.Screen name="FaceFit" component={FaceFit} />
             <Stack.Screen name="Recommend" component={Recommend} />
+            <Stack.Screen name="GuideDetail" component={GuideDetail} />
             <Stack.Screen name="ShoppingDetail" component={ShoppingDetail} />
           </Stack.Navigator>
         </NavigationContainer>

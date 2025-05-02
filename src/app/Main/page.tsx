@@ -7,9 +7,13 @@ import { Header, Footer } from "../../components/Main"
 import { NavigationListData, MainShoppingData, FramesTag } from "./Data"
 import { ProductCardSmall, Tab } from "../../components/Shopping"
 import { ScrollView } from "react-native-gesture-handler"
+import { useNavigation } from "@react-navigation/native";
+import { StackNavigationProp } from '@react-navigation/stack';
 import { CategoryData } from "./Data"
 
 const Main = () => {
+  const navigation = useNavigation<StackNavigationProp<any>>();
+
   const [selectedTab, setSelectedTab] = useState<number>(1);
   const [selectedTag, setSelectedTag] = useState<string>("둥근테");
 
@@ -21,10 +25,13 @@ const Main = () => {
         <Banner />
 
         <NavigationListWrapper>
-          {NavigationListData.map((value) => (
-            <NavigationTab key={value.id}>
+          {NavigationListData.map(({ id, name, href }) => (
+            <NavigationTab
+              key={id}
+              onPress={() => href ? navigation.navigate(href) : null}
+            >
               <TabIconWrapper></TabIconWrapper>
-              <Font text={value.name} kind="medium16" />
+              <Font text={name} kind="medium16" />
             </NavigationTab>
           ))}
         </NavigationListWrapper>
@@ -103,7 +110,7 @@ const NavigationListWrapper = styled.View`
   padding: 20px;
 `
 
-const NavigationTab = styled.View`
+const NavigationTab = styled.TouchableOpacity`
   align-items: center;
   gap: 10px;
 `
