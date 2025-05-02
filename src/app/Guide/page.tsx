@@ -24,7 +24,7 @@ const Guide = () => {
       />
       <ScrollView>
         <GuideListWrapper>
-          <GuideItem>
+          <GuideItem onPress={() => navigation.navigate("GuideDetail")}>
             <GuideImage></GuideImage>
             <InfoWrapper>
               <Font text="기초 지식 안내 TIP" kind="medium16" color="gray400" />
@@ -70,7 +70,7 @@ const GuideListWrapper = styled.View`
   background-color: ${color.white};
 `
 
-const GuideItem = styled.View`
+const GuideItem = styled.TouchableOpacity`
   padding: 14px 20px;
 `
 
@@ -99,7 +99,7 @@ const QuestionListWrapper = styled.View`
   gap: 12px;
 `
 
-const QuestionItem = styled.View`
+const QuestionItem = styled.TouchableOpacity`
   flex-direction: row;
   justify-content: space-between;
   align-items: center;

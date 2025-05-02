@@ -26,7 +26,10 @@ const Main = () => {
 
         <NavigationListWrapper>
           {NavigationListData.map(({ id, name, href }) => (
-            <NavigationTab key={id} onPress={() => navigation.navigate(href || '')}>
+            <NavigationTab
+              key={id}
+              onPress={() => href ? navigation.navigate(href) : null}
+            >
               <TabIconWrapper></TabIconWrapper>
               <Font text={name} kind="medium16" />
             </NavigationTab>
