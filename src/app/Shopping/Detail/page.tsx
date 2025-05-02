@@ -142,7 +142,13 @@ const SimilarProductSection = styled.View`
   background-color: ${color.white};
 `
 
-const SimilarProductList = styled.View``
+const SimilarProductList = styled.ScrollView.attrs(() => ({
+  horizontal: true,
+  showsHorizontalScrollIndicator: false,
+}))`
+  flex-direction: row;
+  gap: 10px;
+`
 
 const BottomActionBar = styled.View`
   width: 100%;
