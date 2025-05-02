@@ -5,6 +5,7 @@ import { TouchableOpacity } from 'react-native';
 import { Arrow } from '../../assets';
 import { useNavigation } from '@react-navigation/native';
 import { StackNavigationProp } from '@react-navigation/stack';
+import { ScrollView } from 'react-native-gesture-handler';
 
 const QuestionIcon = require("../../assets/Question.png")
 
@@ -14,42 +15,44 @@ const Guide = () => {
   return (
     <Container>
       <TopBar
-        text="주문내역"
+        text="가이드"
         leftIcon={
           <TouchableOpacity onPress={() => navigation.goBack()}>
             <Arrow size={34} />
           </TouchableOpacity>
         }
       />
-      <GuideListWrapper>
-        <GuideItem>
-          <GuideImage></GuideImage>
-          <InfoWrapper>
-            <Font text="기초 지식 안내 TIP" kind="medium16" color="gray400" />
-            <Font
-              text="렌즈는 어떻게 나뉘고, 각각 어떤 특징을 가질까?"
-              kind="bold24"
-              numberOfLines={2}
-              ellipsizeMode="tail"
-            />
-          </InfoWrapper>
-        </GuideItem>
-      </GuideListWrapper>
+      <ScrollView>
+        <GuideListWrapper>
+          <GuideItem>
+            <GuideImage></GuideImage>
+            <InfoWrapper>
+              <Font text="기초 지식 안내 TIP" kind="medium16" color="gray400" />
+              <Font
+                text="렌즈는 어떻게 나뉘고, 각각 어떤 특징을 가질까?"
+                kind="bold24"
+                numberOfLines={2}
+                ellipsizeMode="tail"
+              />
+            </InfoWrapper>
+          </GuideItem>
+        </GuideListWrapper>
 
-      <QuestionContent>
-        <Font text="자주 묻는 질문 (FAQ)" kind="bold24" />
+        <QuestionContent>
+          <Font text="자주 묻는 질문 (FAQ)" kind="bold24" />
 
-        <QuestionListWrapper>
-          <QuestionItem>
-            <TitleWrapper>
-              <QuestionImage source={QuestionIcon} />
-              <Font text="렌즈를 잃어버렸을 때 대처 방법" kind="medium16" color="gray600" />
-            </TitleWrapper>
-            <Arrow size={20} color={color.gray600} rotate="bottom" />
-          </QuestionItem>
-        </QuestionListWrapper>
-        
-      </QuestionContent>
+          <QuestionListWrapper>
+            <QuestionItem>
+              <TitleWrapper>
+                <QuestionImage source={QuestionIcon} />
+                <Font text="렌즈를 잃어버렸을 때 대처 방법" kind="medium16" color="gray600" />
+              </TitleWrapper>
+              <Arrow size={20} color={color.gray600} rotate="bottom" />
+            </QuestionItem>
+          </QuestionListWrapper>
+
+        </QuestionContent>
+      </ScrollView>
     </Container >
   )
 }
