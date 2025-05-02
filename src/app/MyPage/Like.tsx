@@ -3,11 +3,12 @@ import { color, Font } from "../../styles"
 import { TopBar } from "../../components";
 import { TouchableOpacity } from "react-native";
 import { Arrow } from "../../assets";
-import { GlassesLensTab } from "../../components/Shopping";
+import { Tab } from "../../components/Shopping";
 import { useState } from "react";
 import ProductCardLarge from "../../components/Shopping/ProductCardLarge";
 import { FlatList, ScrollView } from "react-native-gesture-handler";
 import { useNavigation } from "@react-navigation/native";
+import { CategoryData } from "../Main/Data";
 
 const data = [
   {
@@ -36,7 +37,11 @@ const Like = () => {
           </TouchableOpacity>
         }
       />
-      <GlassesLensTab selectedTab={selectedTab} setSelectedTab={setSelectedTab} />
+      <Tab
+        selectedTab={selectedTab}
+        setSelectedTab={setSelectedTab}
+        tabData={CategoryData}
+      />
 
       <ScrollView>
         <ProductCounter>

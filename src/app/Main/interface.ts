@@ -15,9 +15,8 @@ export interface BannerDataType {
 }
 
 export interface CategoryDataType {
-  id?: number,
-  name?: string,
-  text?: string,
+  id: number,
+  text: string,
   icon?: ReactNode
 }
 

@@ -5,8 +5,9 @@ import Banner from "./Banner"
 import { Arrow } from "../../assets"
 import { Header, Footer } from "../../components/Main"
 import { NavigationListData, MainShoppingData, FramesTag } from "./Data"
-import { ProductCardSmall, GlassesLensTab } from "../../components/Shopping"
+import { ProductCardSmall, Tab } from "../../components/Shopping"
 import { ScrollView } from "react-native-gesture-handler"
+import { CategoryData } from "./Data"
 
 const Main = () => {
   const [selectedTab, setSelectedTab] = useState<number>(1);
@@ -28,7 +29,11 @@ const Main = () => {
           ))}
         </NavigationListWrapper>
 
-        <GlassesLensTab selectedTab={selectedTab} setSelectedTab={setSelectedTab} />
+        <Tab
+          selectedTab={selectedTab}
+          setSelectedTab={setSelectedTab}
+          tabData={CategoryData}
+        />
 
         <RecommendedListWrapper>
           {MainShoppingData.map((item) => (
