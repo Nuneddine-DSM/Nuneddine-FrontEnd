@@ -85,15 +85,13 @@ export const BannerData: BannerDataType[] = [
 export const CategoryData: CategoryDataType[] = [
   {
     id: 1,
-    name: "Glasses",
     text: "안경테",
-    icon: <Glasses size={24} />,
+    icon: (selected) => <Glasses size={24} color={selected ? "black" : "gray"} />,
   },
   {
     id: 2,
-    name: "Lens",
     text: "렌즈",
-    icon: <Lens size={24} />,
+    icon: (selected) => <Lens size={24} color={selected ? "black" : "gray"} />
   }
 ]
 

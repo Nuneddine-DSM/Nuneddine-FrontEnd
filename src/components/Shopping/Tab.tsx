@@ -2,23 +2,34 @@ import styled from "styled-components/native";
 import { CategoryData } from "../../app/Main/Data"
 import { color, Font } from "../../styles"
 
+interface TabData {
+  id: number;
+  text: string;
+  icon?: (selected: boolean) => React.ReactNode;
+}
+
 interface PropsType {
   selectedTab: number;
   setSelectedTab: (id: number) => void;
+  tabData: TabData[];
 }
 
-const GlassesLensTab = ({ selectedTab, setSelectedTab }: PropsType) => {
+const Tab = ({ selectedTab, setSelectedTab, tabData = CategoryData }: PropsType) => {
 
   return (
     <CategoryTabContainer>
-      {CategoryData.map(({ id, text, icon }) => (
+      {tabData.map(({ id, text, icon }) => (
         <CategoryTab
           key={id}
           onPress={() => setSelectedTab(id!)}
           selected={selectedTab === id}
         >
-          {icon}
-          <Font text={text} kind="semi18" />
+          {icon && <IconWrapper>{icon(selectedTab === id)}</IconWrapper>}
+          <Font
+            text={text}
+            kind="semi18"
+            color={selectedTab === id ? "black" : "gray400"}
+          />
         </CategoryTab>
       ))}
     </CategoryTabContainer>
@@ -46,4 +57,9 @@ const CategoryTab = styled.TouchableOpacity<{
   border-bottom-color: ${({ selected }) => selected ? color.pink300 : color.gray100};
 `
 
-export default GlassesLensTab
+const IconWrapper = styled.View`
+  justify-content: center;
+  align-items: center;
+`
+
+export default Tab

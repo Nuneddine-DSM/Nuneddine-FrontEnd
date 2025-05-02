@@ -1,6 +1,6 @@
 import styled from "styled-components/native";
 import { Font, color } from "../../../styles"
-import { Input, TopBar, AuthButton } from "../../../components";
+import { Input, TopBar, Button } from "../../../components";
 import Amount from "../../../components/Shopping/Amount";
 import PaymentMethod from "./PaymentMethod";
 import OrderGlassesItem from "../../../components/Shopping/OrderDetails";

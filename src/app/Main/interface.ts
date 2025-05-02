@@ -15,10 +15,9 @@ export interface BannerDataType {
 }
 
 export interface CategoryDataType {
-  id?: number,
-  name?: string,
-  text?: string,
-  icon?: ReactNode
+  id: number,
+  text: string,
+  icon?: (selected: boolean) => React.ReactNode;
 }
 
 export interface FooterDataType {

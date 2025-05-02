@@ -5,7 +5,7 @@ import { TopBar, Dropdown } from '../../../components';
 import { Arrow } from '../../../assets';
 import { Font, color } from '../../../styles';
 import {
-  GlassesLensTab,
+  Tab,
   CheckBox,
   CartGlassesItem,
   CartLensItem,
@@ -19,6 +19,7 @@ import {
 import { Button } from '../../../components/Button';
 import Lens from './Lens';
 import Amount from '../../../components/Shopping/Amount';
+import { CategoryData } from '../../Main/Data';
 
 const Cart = () => {
   const [checkedGlassesItems, setCheckedGlassesItems] = useState<{
@@ -83,7 +84,7 @@ const Cart = () => {
       <TopBar
         text="장바구니"
         leftIcon={
-          <TouchableOpacity onPress={() => {}}>
+          <TouchableOpacity onPress={() => { }}>
             <Arrow size={34} />
           </TouchableOpacity>
         }
@@ -159,7 +160,11 @@ const CartTabSection = ({
   setSelectedTab: (tab: number) => void;
 }) => (
   <>
-    <GlassesLensTab selectedTab={selectedTab} setSelectedTab={setSelectedTab} />
+    <Tab
+      selectedTab={selectedTab}
+      setSelectedTab={setSelectedTab}
+      tabData={CategoryData}
+    />
   </>
 );
 
