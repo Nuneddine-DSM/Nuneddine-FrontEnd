@@ -5,7 +5,7 @@ import { color, Font } from "../../styles"
 interface TabData {
   id: number;
   text: string;
-  icon?: React.ReactNode;
+  icon?: (selected: boolean) => React.ReactNode;
 }
 
 interface PropsType {
@@ -24,11 +24,11 @@ const Tab = ({ selectedTab, setSelectedTab, tabData = CategoryData }: PropsType)
           onPress={() => setSelectedTab(id!)}
           selected={selectedTab === id}
         >
-          {icon && <IconWrapper>{icon}</IconWrapper>}
+          {icon && <IconWrapper>{icon(selectedTab === id)}</IconWrapper>}
           <Font
             text={text}
             kind="semi18"
-            color={selectedTab === id ? "gray400" : "black"}
+            color={selectedTab === id ? "black" : "gray400"}
           />
         </CategoryTab>
       ))}
