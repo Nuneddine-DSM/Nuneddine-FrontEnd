@@ -3,7 +3,7 @@ import { color, Font } from "../../styles";
 import { TopBar } from "../../components";
 import { TouchableOpacity, Animated } from "react-native";
 import { Arrow, Check } from "../../assets";
-import { AuthButton } from "../../components/Button";
+import { Button } from "../../components/Button";
 import { FaceData } from "./Data";
 import { useState, useEffect } from "react";
 import { useNavigation } from "@react-navigation/native";
@@ -94,7 +94,7 @@ const FaceFit = () => {
         </BubbleSection>
 
         <ButtonWrapper>
-          <AuthButton
+          <Button
             text="확인하러가기"
             onPress={() => {
               if (selectFaceFit !== null) {
