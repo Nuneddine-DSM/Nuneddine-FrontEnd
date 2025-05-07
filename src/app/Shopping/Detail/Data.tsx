@@ -1,3 +1,5 @@
+import { BannerDataType } from "../../Main/interface"
+
 export const TabInfoData = [
   {
     id: 1,

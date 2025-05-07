@@ -5,14 +5,31 @@ import { Tab, ProductCardSmall, Tag } from "../../../components/Shopping";
 import { Button } from "../../../components";
 import { Heart } from "../../../assets";
 import { TabInfoData } from "./Data";
-import { useState } from "react";
+import { useState, useCallback, useRef, useMemo } from "react";
 import { likeHandler } from "../../../apis/heart";
+import Banner from "../../Main/Banner";
+import {
+  BottomSheetModal,
+  BottomSheetBackdrop
+} from '@gorhom/bottom-sheet';
+import OrderItem from "./OrderItem";
+
+const GlassDummy = require("../../../assets/GlassesDummy.png")
 
 const shopId = 1;
+const colorId = 1;
+
+const data = [
+  {
+    id: 1,
+    image: GlassDummy
+  }
+]
 
 const ShoppingDetail = () => {
   const [selectedTab, setSelectedTab] = useState<number>(1);
   const [selectedHeart, setSelectedHeart] = useState<boolean>(false);
+  const [selectedColor, setSelectedColor] = useState<number>(1);
 
   const heartHandler = async () => {
     try {
@@ -23,12 +40,35 @@ const ShoppingDetail = () => {
     }
   }
 
+  const bottomSheetModalRef = useRef<BottomSheetModal>(null);
+  const snapPoints = useMemo(() => ['45%'], []);
+
+  const handlePresentModalPress = useCallback(() => {
+    bottomSheetModalRef.current?.present();
+  }, []);
+
+  const handleSheetChanges = useCallback((index: number) => {
+    console.log('handleSheetChanges', index);
+  }, []);
+
+  const renderBackdrop = useCallback(
+    (props: any) => (
+      <BottomSheetBackdrop
+        {...props}
+        pressBehavior="close"
+        disappearsOnIndex={-1}
+        appearsOnIndex={0}
+      />
+    ),
+    []
+  );
+
   return (
     <>
       <Header />
       <Container showsVerticalScrollIndicator={false}>
 
-        <ProductBanner></ProductBanner>
+        <Banner data={data} />
 
         <DetailContentWrapper>
 
@@ -53,6 +93,13 @@ const ShoppingDetail = () => {
             </ProductPriceWrapper>
           </ProductDetail>
 
+          <AnotherColorWrapper>
+            <Font text="다른 컬러 둘러보기" kind="semi24" />
+            <ColorProductList>
+              <ColorProductItem selected={selectedColor === colorId}></ColorProductItem>
+            </ColorProductList>
+          </AnotherColorWrapper>
+
           <>
             <Tab
               selectedTab={selectedTab}
@@ -70,7 +117,25 @@ const ShoppingDetail = () => {
           </SimilarProductSection>
         </DetailContentWrapper>
         <Footer />
-      </Container>
+      </Container >
+
+      <BottomSheetModal
+        ref={bottomSheetModalRef}
+        index={0}
+        snapPoints={snapPoints}
+        backdropComponent={renderBackdrop}
+        onChange={handleSheetChanges}>
+        <OptionWrapper>
+          <Font text="옵션 선택" kind="medium16" color="gray600" />
+          <ProductItemWrapper>
+            <OrderItem />
+            <PriceWrapper>
+              <Font text="결제 예상 금액" kind="semi18" />
+              <Font text="78,000원" kind="bold24" color="pink300" />
+            </PriceWrapper>
+          </ProductItemWrapper>
+        </OptionWrapper>
+      </BottomSheetModal>
 
       <BottomActionBar>
         <Heart
@@ -79,7 +144,11 @@ const ShoppingDetail = () => {
           color={selectedHeart ? color.pink300 : color.gray500}
           fill={selectedHeart ? color.pink300 : 'none'}
         />
-        <Button text="구매하기" width="90%" />
+        <Button
+          text="상품 구매하기"
+          width="90%"
+          onPress={() => handlePresentModalPress()}
+        />
       </BottomActionBar>
     </>
   )
@@ -99,6 +168,26 @@ const ProductBanner = styled.View`
   height: 430px;
   background-color: ${color.gray200};
   padding: 20px;
+`
+
+const AnotherColorWrapper = styled.View`
+  flex-direction: column;
+  padding: 20px;
+  gap: 20px;
+  background-color: ${color.white};
+`
+
+const ColorProductList = styled.ScrollView`
+  flex-direction: row;
+  gap: 12px;
+`
+
+const ColorProductItem = styled.ImageBackground<{ selected: boolean }>`
+  width: 100px;
+  height: 100px;
+  border-radius: 4px;
+  border-width: 1.5px;
+  background-color: ${color.gray100};
 `
 
 const DetailContentWrapper = styled.View`
@@ -163,6 +252,27 @@ const BottomActionBar = styled.View`
 const TagWrapper = styled.View`
   flex-wrap: wrap;
   gap: 8px;
+`
+
+const OptionWrapper = styled.View`
+  flex-direction: column;
+  padding: 24px 26px 16px;
+  gap: 16px;
+`
+
+const ProductItemWrapper = styled.View`
+  flex-direction: column;
+  justify-content: space-between;
+  gap: 48px;
+`
+
+const PriceWrapper = styled.View`
+  flex-direction: row;
+  justify-content: space-between;
+  align-items: center;
+  padding: 24px 0 12px;
+  border-top-width: 1px;
+  border-color: ${color.gray300};
 `
 
 export default ShoppingDetail;
