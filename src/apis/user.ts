@@ -1,7 +1,7 @@
 import { getItem } from '../utils/asyncStorage';
 import { instance } from './axios';
 
-const user = '/user';
+const user = '/users';
 
 export const myPage = async () => {
   try {
