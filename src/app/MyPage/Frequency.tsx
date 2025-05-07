@@ -36,8 +36,14 @@ const Frequency = () => {
         setLoading(true);
         const response = await getLensFrequency();
         setLoading(false);
-        setLeftSelectedIndex(response.data.left_lens_power * -4);
-        setRightSelectedIndex(response.data.right_lens_power * -4);
+        setLeftSelectedIndex(
+          response.data.left_lens_power ? response.data.left_lens_power * -4 : 0
+        );
+        setRightSelectedIndex(
+          response.data.right_lens_power
+            ? response.data.right_lens_power * -4
+            : 0
+        );
       } catch (err) {
         setLoading(false);
         console.error(err);
@@ -65,6 +71,10 @@ const Frequency = () => {
       Alert.alert('렌즈 도수 설정 중 오류가 발생하였습니다.');
     }
   };
+
+  if (isLoading) {
+    return <Container />;
+  }
 
   return (
     <Container>
@@ -129,7 +139,8 @@ const Frequency = () => {
               <Font text={'왼쪽 (L)'} kind="medium18" color="gray600" />
               <Font
                 text={`SPH: ${
-                  lensFrequencyList[leftSelectedIndex] === 0
+                  !lensFrequencyList[leftSelectedIndex] ||
+                  leftSelectedIndex === 0
                     ? '-0.00'
                     : lensFrequencyList[leftSelectedIndex].toFixed(2)
                 }`}
@@ -140,7 +151,8 @@ const Frequency = () => {
               <Font text={'오른쪽 (R)'} kind="medium18" color="gray600" />
               <Font
                 text={`SPH: ${
-                  lensFrequencyList[rightSelectedIndex] === 0
+                  !lensFrequencyList[rightSelectedIndex] ||
+                  rightSelectedIndex === 0
                     ? '-0.00'
                     : lensFrequencyList[rightSelectedIndex].toFixed(2)
                 }`}

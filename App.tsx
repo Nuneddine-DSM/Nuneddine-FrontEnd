@@ -25,8 +25,8 @@ import DeliveryDetail from './src/app/MyPage/Delivery/page';
 import DeliverAdd from './src/app/MyPage/Delivery/Add';
 import EditProfile from './src/app/MyPage/EditProfile';
 import Frequency from './src/app/MyPage/Frequency';
-import FaceFit from './src/app/FaceFit/page'
-import Recommend from './src/app/FaceFit/Recommend'
+import FaceFit from './src/app/FaceFit/page';
+import Recommend from './src/app/FaceFit/Recommend';
 import { GestureHandlerRootView } from 'react-native-gesture-handler';
 import { BottomSheetModalProvider } from '@gorhom/bottom-sheet';
 
