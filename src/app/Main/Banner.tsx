@@ -1,13 +1,12 @@
 import styled from "styled-components/native";
 import { useState, useRef, useEffect, useCallback } from "react";
-import { BannerData } from "./Data";
 import { FlatList, Dimensions, NativeSyntheticEvent, NativeScrollEvent } from "react-native";
 import { BannerDataType } from "./interface";
 import { Font } from "../../styles"
 
 const { width } = Dimensions.get('window');
 
-const Banner = () => {
+const Banner = ({ data } : { data : BannerDataType[] }) => {
   const [currentIndex, setCurrentIndex] = useState(0);
   const flatListRef = useRef<FlatList<BannerDataType>>(null);
   const indexRef = useRef(0);
@@ -20,7 +19,7 @@ const Banner = () => {
 
   useEffect(() => {
     const interval = setInterval(() => {
-      const nextIndex = (indexRef.current + 1) % BannerData.length;
+      const nextIndex = (indexRef.current + 1) % data.length;
       flatListRef.current?.scrollToOffset({
         offset: nextIndex * width,
         animated: true,
@@ -46,7 +45,7 @@ const Banner = () => {
     <BannerContainer>
       <FlatList
         ref={flatListRef}
-        data={BannerData}
+        data={data}
         renderItem={renderBannerItem}
         horizontal
         pagingEnabled
@@ -57,7 +56,7 @@ const Banner = () => {
       />
       <BannerController>
         <Font
-          text={`${currentIndex + 1} | ${BannerData.length}`}
+          text={`${currentIndex + 1} | ${data.length}`}
           kind="medium14"
           color="gray600"
         />

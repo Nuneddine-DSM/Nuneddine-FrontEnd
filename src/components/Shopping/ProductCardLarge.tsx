@@ -24,19 +24,20 @@ interface CardPropsType extends ShoppingContentType {
 }
 
 const ProductCardLarge = ({
-  isDarkMode = false,
+  shopId,
   image,
   title,
   describe,
   tag,
-  price
+  price,
+  isDarkMode = false,
 }: CardPropsType) => {
   const theme = isDarkMode ? darkTheme : lightTheme;
   const [selected, setSelected] = useState(false);
 
   return (
     <ThemeProvider theme={theme}>
-      <CardContainer background={theme.background}>
+      <CardContainer key={shopId} background={theme.background}>
         <ImageWrapper>
           <ProductImage source={{ uri: image }} />
           <IconWrapper>
