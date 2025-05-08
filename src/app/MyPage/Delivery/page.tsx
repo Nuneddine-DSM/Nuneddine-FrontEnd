@@ -6,9 +6,39 @@ import { Arrow } from '../../../assets';
 import DeliveryDetail from '../../../components/Shopping/Delivery';
 import { ScrollView } from 'react-native-gesture-handler';
 import { useNavigation } from '@react-navigation/native';
+import { deleteAddress, getAddress } from '../../../apis/address';
+import { DeliveryType } from '../../Shopping/Delivery/page';
+import { useEffect, useState } from 'react';
+import { StackNavigationProp } from '@react-navigation/stack';
 
 const Delivery = () => {
-  const navigation = useNavigation();
+  const navigation = useNavigation<StackNavigationProp<any>>();
+
+  const [addressList, setAddressList] = useState<DeliveryType[]>([]);
+
+  useEffect(() => {
+    const myAddress = async () => {
+      try {
+        const response = await getAddress();
+        setAddressList(response.data.addresses);
+      } catch (err) {
+        console.error(err);
+      }
+    };
+
+    myAddress();
+  }, []);
+
+  const removeAddress = async (index: number, addressId: number) => {
+    try {
+      const response = await deleteAddress(addressId);
+      if (response.status === 200) {
+        addressList.splice(index, 1);
+      }
+    } catch (err) {
+      console.error(err);
+    }
+  };
 
   return (
     <Container>
@@ -22,14 +52,24 @@ const Delivery = () => {
       />
       <ScrollView contentContainerStyle={{ paddingBottom: 80 }}>
         <DeliveryListWrapper>
-          <DeliveryDetail />
-          <DeliveryDetail />
-          <DeliveryDetail />
+          {addressList.map((item, index) => (
+            <DeliveryDetail
+              item={item}
+              onPress={() => {
+                removeAddress(index, item.addressId || 0);
+              }}
+            />
+          ))}
         </DeliveryListWrapper>
       </ScrollView>
 
       <ButtonWrapper>
-        <Button text="배송지 추가" />
+        <Button
+          text="배송지 추가"
+          onPress={() => {
+            navigation.navigate('DeliveryAdd');
+          }}
+        />
       </ButtonWrapper>
     </Container>
   );
