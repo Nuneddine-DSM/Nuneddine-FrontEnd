@@ -37,7 +37,7 @@ export const Input = ({
 
   return (
     <Container width={width}>
-      {label && <Font kind="semi16" text={label} />}
+      {label && <Font kind="semi16" text={label} color="gray600" />}
       <InputContainerBox
         focused={isFocused}
         readonly={readonly}
