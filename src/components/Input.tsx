@@ -25,12 +25,12 @@ export const Input = ({
   autoFocus,
   value,
   multiline,
-  readonly,
+  readonly = false,
   width = '100%',
   borderRadius = 10,
   padding = '18px 16px',
   onChangeText,
-  onKeyPress,
+  onKeyPress
 }: InputProps) => {
   const [press, setPress] = useState<boolean>(false);
   const [isFocused, setIsFocused] = useState<boolean>(false);
@@ -38,7 +38,10 @@ export const Input = ({
   return (
     <Container width={width}>
       {label && <Font kind="semi16" text={label} />}
-      <InputContainerBox focused={isFocused} borderRadius={borderRadius}>
+      <InputContainerBox
+        focused={isFocused}
+        readonly={readonly}
+        borderRadius={borderRadius}>
         <InputBox
           readOnly={readonly}
           value={value}
@@ -68,25 +71,30 @@ export const Input = ({
   );
 };
 
-const Container = styled.View<{ width: string}>`
+const Container = styled.View<{ width: string }>`
   width: ${({ width }) => width};
   gap: 6px;
 `;
 
 const InputBox = styled.TextInput<{ padding: string }>`
   flex: 1;
-  padding: ${({ padding }) => padding}; 
+  padding: ${({ padding }) => padding};
   font-size: 16px;
   font-weight: 600;
   color: black;
 `;
 
-const InputContainerBox = styled.View<{ focused: boolean, borderRadius: number }>`
+const InputContainerBox = styled.View<{
+  focused: boolean;
+  readonly: boolean;
+  borderRadius: number;
+}>`
   width: 100%;
   border-radius: ${({ borderRadius }) => borderRadius}px;
   align-items: center;
   flex-direction: row;
-  background-color: ${color.white};
+  background-color: ${({ readonly }) =>
+    readonly ? color.gray100 : color.white};
   overflow: hidden;
   border: 1px solid ${color.gray300};
   ${({ focused }) => focused && `border: 1px solid ${color.pink300}`};
