@@ -4,6 +4,7 @@ import { TopBar } from "../../../components";
 import { TouchableOpacity } from "react-native";
 import { Arrow } from "../../../assets";
 import DeliveryList from "../../../components/Shopping/Delivery";
+import { NavigationProp, useNavigation } from "@react-navigation/native";
 
 export interface DeliveryType {
   selected?: boolean,
@@ -32,12 +33,14 @@ const DeliveryData: DeliveryType[] = [
 ]
 
 const Delivery = () => {
+  const navigation = useNavigation<NavigationProp<any>>();
+
   return (
     <Container>
       <TopBar
         text="배송지 목록"
         leftIcon={
-          <TouchableOpacity onPress={() => { }}>
+          <TouchableOpacity onPress={() => navigation.navigate("Payment")}>
             <Arrow size={34} />
           </TouchableOpacity>
         }

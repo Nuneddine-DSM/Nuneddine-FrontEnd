@@ -2,15 +2,31 @@ import styled from "styled-components/native";
 import Logo from "../../assets/Logo.png"
 import { Bell, Basket, Search } from "../../assets";
 import { color } from "../../styles"
+import { useNavigation } from '@react-navigation/native';
+import { StackNavigationProp } from '@react-navigation/stack';
 
 const Header = () => {
+  const navigation = useNavigation<StackNavigationProp<any>>();
+
   return (
     <Container>
       <LogoImage source={Logo} />
       <IconWrapper>
-        <Search size={34} color={color.gray500} onPress={() => { }} />
-        <Bell size={34} color={color.gray500} onPress={() => { }} />
-        <Basket size={34} color={color.gray500} onPress={() => { }} />
+        <Search
+          size={34}
+          color={color.gray500}
+          onPress={() => navigation.navigate('Search')}
+        />
+        <Bell
+          size={34}
+          color={color.gray500}
+          onPress={() => navigation.navigate('')}
+        />
+        <Basket
+          size={34}
+          color={color.gray500}
+          onPress={() => navigation.navigate('Cart')}
+        />
       </IconWrapper>
     </Container>
   )
