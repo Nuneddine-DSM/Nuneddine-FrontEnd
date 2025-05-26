@@ -75,7 +75,18 @@ const Frequency = () => {
   };
 
   if (isLoading) {
-    return <Container />;
+    return (
+      <Container>
+        <TopBar
+          text="렌즈 도수 설정"
+          leftIcon={
+            <TouchableOpacity onPress={prevPage}>
+              <Arrow size={34} />
+            </TouchableOpacity>
+          }
+        />
+      </Container>
+    );
   }
 
   return (
@@ -141,7 +152,6 @@ const Frequency = () => {
               <Font text={'왼쪽 (L)'} kind="medium18" color="gray600" />
               <Font
                 text={`SPH: ${
-                  !lensFrequencyList[leftSelectedIndex] ||
                   leftSelectedIndex === 0
                     ? '-0.00'
                     : lensFrequencyList[leftSelectedIndex].toFixed(2)
@@ -153,7 +163,6 @@ const Frequency = () => {
               <Font text={'오른쪽 (R)'} kind="medium18" color="gray600" />
               <Font
                 text={`SPH: ${
-                  !lensFrequencyList[rightSelectedIndex] ||
                   rightSelectedIndex === 0
                     ? '-0.00'
                     : lensFrequencyList[rightSelectedIndex].toFixed(2)
