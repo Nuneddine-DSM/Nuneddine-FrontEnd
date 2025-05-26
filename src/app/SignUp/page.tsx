@@ -64,8 +64,8 @@ const SignUp = () => {
 
         reset();
         setPage(0);
-        navigation.push('Login');
-        console.log('회원가입 성공');
+        navigation.pop();
+        navigation.replace('NavBar');
       } catch (error: any) {
         console.error('회원가입 실패', error);
       }
