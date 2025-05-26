@@ -25,7 +25,7 @@ const EditProfile = () => {
     try {
       setLoading(true);
       const requestData: ModifyProfileRequest = {
-        nickname: nickname
+        nickname: name
       };
       const response = await modifyProfile(requestData);
 
@@ -45,7 +45,7 @@ const EditProfile = () => {
   return (
     <Container>
       <TopBar
-        text="주문내역"
+        text="사용자 정보 수정"
         leftIcon={
           <TouchableOpacity onPress={() => navigation.goBack()}>
             <Arrow size={34} />
