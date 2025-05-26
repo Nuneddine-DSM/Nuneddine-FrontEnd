@@ -35,7 +35,6 @@ const Frequency = () => {
       try {
         setLoading(true);
         const response = await getLensFrequency();
-        setLoading(false);
         setLeftSelectedIndex(
           response.data.left_lens_power ? response.data.left_lens_power * -4 : 0
         );
@@ -45,8 +44,9 @@ const Frequency = () => {
             : 0
         );
       } catch (err) {
-        setLoading(false);
         console.error(err);
+      } finally {
+        setLoading(false);
       }
     };
 
@@ -69,6 +69,8 @@ const Frequency = () => {
     } catch (err) {
       console.error(err);
       Alert.alert('렌즈 도수 설정 중 오류가 발생하였습니다.');
+    } finally {
+      setLoading(false);
     }
   };
 
