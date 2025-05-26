@@ -4,28 +4,34 @@ import { TopBar } from "../../components";
 import { TouchableOpacity } from "react-native";
 import { Arrow } from "../../assets";
 import { Tab } from "../../components/Shopping";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import ProductCardLarge from "../../components/Shopping/ProductCardLarge";
 import { FlatList, ScrollView } from "react-native-gesture-handler";
 import { useNavigation } from "@react-navigation/native";
 import { CategoryData } from "../Main/Data";
-
-const data = [
-  {
-    shopId: 1,
-    title: "브랜드",
-    describe: "[안경 이름] 암튼 이름 겁나 김 뭐 mm 까지 나와있음",
-    tag: "굵은테",
-    price: 39000,
-    image: "https://i.namu.wiki/i/8hxgVnq4W5zCE6FHyM9FhjBSPZ6K3MAxfKsOO5Vrzj8O121kWBnchyK7Ux6caItuyy0K2odSOD-GJhAvzfn5ZA.webp",
-  },
-
-]
+import { wishlistHandler } from "../../apis/shops";
 
 const Like = () => {
   const navigation = useNavigation();
 
-  const [selectedTab, setSelectedTab] = useState<number>(1)
+  const [wishlist, setWishlist] = useState([]);
+  const [loading, setLoading] = useState(true);
+  const [selectedTab, setSelectedTab] = useState<number>(1);
+
+  useEffect(() => {
+    const fetchWishlist = async () => {
+      try {
+        const response = await wishlistHandler();
+        setWishlist(response.data.shop_list);
+      } catch (err) {
+        console.error(err);
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    fetchWishlist();
+  }, []);
 
   return (
     <Container>
@@ -45,11 +51,11 @@ const Like = () => {
 
       <ScrollView>
         <ProductCounter>
-          <Font text={`상품 ${data.length}개`} kind="semi18" />
+          <Font text={`상품 ${wishlistHandler.length}개`} kind="semi18" />
         </ProductCounter>
 
         <FlatList
-          data={data}
+          data={wishlist}
           keyExtractor={(idx) => `${idx}`}
           renderItem={({ item }) => (
             <ProductCardLarge {...item} />

@@ -9,7 +9,7 @@ import { ProductCardSmall, Tab } from "../../components/Shopping"
 import { ScrollView } from "react-native-gesture-handler"
 import { useNavigation } from "@react-navigation/native";
 import { StackNavigationProp } from '@react-navigation/stack';
-import { CategoryData } from "./Data"
+import { CategoryData, BannerData } from "./Data"
 
 const Main = () => {
   const navigation = useNavigation<StackNavigationProp<any>>();
@@ -22,7 +22,7 @@ const Main = () => {
       <Header />
       <Container showsVerticalScrollIndicator={false}>
 
-        <Banner />
+        <Banner data={BannerData}/>
 
         <NavigationListWrapper>
           {NavigationListData.map(({ id, name, href }) => (

@@ -1,4 +1,3 @@
-import { ReactNode } from "react"
 import { ImageSourcePropType } from "react-native"
 
 export interface NavigationListDataType {
@@ -8,8 +7,8 @@ export interface NavigationListDataType {
 }
 
 export interface BannerDataType {
-  id?: number,
-  image?: ImageSourcePropType,
+  id: number,
+  image: ImageSourcePropType,
   title?: string,
   subTitle?: string
 }
