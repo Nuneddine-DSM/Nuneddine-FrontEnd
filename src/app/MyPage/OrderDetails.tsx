@@ -40,38 +40,47 @@ const OrderDetails = () => {
         }
       />
 
-      {myOrderList.map((order, index) => (
-        <OrderSection key={index}>
-          <DateWrapper>
-            <Font text={order.date} kind="bold24" />
-          </DateWrapper>
-          <OrderList>
-            {order.histories.map((item, itemIndex) => (
-              <OrderGlassesItem
-                key={itemIndex}
-                item={{
-                  id: item.shopId,
-                  name: item.brandName,
-                  description: item.glassName,
-                  count: item.count,
-                  price: item.price.toLocaleString(),
-                  image: item.imageUrls[0]
-                }}
-              />
-            ))}
-          </OrderList>
-        </OrderSection>
-      ))}
+      <OrderWapper>
+        {myOrderList.map((order, index) => (
+          <OrderSection key={index}>
+            <DateWrapper>
+              <Font text={order.date} kind="bold24" />
+            </DateWrapper>
+            <OrderList>
+              {order.histories.map((item, itemIndex) => (
+                <OrderGlassesItem
+                  key={item.shopId}
+                  item={{
+                    id: item.shopId,
+                    name: item.brandName,
+                    description: item.glassName,
+                    count: item.count,
+                    price: item.price.toLocaleString(),
+                    image: item.imageUrls[0]
+                  }}
+                />
+              ))}
+            </OrderList>
+          </OrderSection>
+        ))}
+      </OrderWapper>
     </Container>
   );
 };
 
-const Container = styled.ScrollView`
+const Container = styled.View`
+  flex: 1;
+  flex-direction: column;
+  gap: 15px;
+  background-color: ${color.gray50};
+`;
+
+const OrderWapper = styled.ScrollView`
+  margin-top: 62px;
   flex: 1;
   flex-direction: column;
   gap: 15px;
   padding-bottom: 100px;
-  background-color: ${color.gray50};
 `;
 
 const OrderSection = styled.View`
