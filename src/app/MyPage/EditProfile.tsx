@@ -1,12 +1,46 @@
 import styled from 'styled-components/native';
-import { Font, color } from '../../styles';
+import { color } from '../../styles';
 import { Input, TopBar, Button } from '../../components';
-import { TouchableOpacity } from 'react-native';
+import { Alert, TouchableOpacity } from 'react-native';
 import { Arrow } from '../../assets';
-import { useNavigation } from '@react-navigation/native';
+import { RouteProp, useNavigation, useRoute } from '@react-navigation/native';
+import { useState } from 'react';
+import { EditProfileParams } from '../../interface/params';
+import { modifyProfile, ModifyProfileRequest } from '../../apis/user';
 
 const EditProfile = () => {
   const navigation = useNavigation();
+  const route = useRoute<RouteProp<EditProfileParams, 'EditProfile'>>();
+  const { name, accountId } = route.params;
+
+  const [loading, setLoading] = useState(false);
+  const [nickname, setNickname] = useState('');
+  const [id, setId] = useState('');
+  const [password, setPassword] = useState('');
+
+  setNickname(name);
+  setId(accountId);
+
+  const changeProfile = async () => {
+    try {
+      setLoading(true);
+      const requestData: ModifyProfileRequest = {
+        nickname: nickname
+      };
+      const response = await modifyProfile(requestData);
+
+      if (response.status === 200) {
+        navigation.goBack();
+      } else {
+        Alert.alert('프로필 수정에 실패하였습니다');
+      }
+    } catch (err) {
+      console.error(err);
+      Alert.alert('프로필 수정 실패');
+    } finally {
+      setLoading(false);
+    }
+  };
 
   return (
     <Container>
@@ -20,21 +54,41 @@ const EditProfile = () => {
       />
       <EditSection>
         <InputWrapper>
-          <Font text="닉네임" kind="semi16" color="gray600" />
-          <Input placeholder="닉네임을 입력해주세요" />
+          <Input
+            label="닉네임"
+            placeholder="닉네임을 입력해주세요"
+            value={nickname}
+            onChangeText={setNickname}
+          />
         </InputWrapper>
         <InputWrapper>
-          <Font text="아이디" kind="semi16" color="gray600" />
-          <Input placeholder="아이디를 입력해주세요" />
+          <Input
+            label="아이디"
+            placeholder="아이디를 입력해주세요"
+            readonly={true}
+            value={id}
+            onChangeText={setId}
+          />
         </InputWrapper>
         <InputWrapper>
-          <Font text="비밀번호" kind="semi16" color="gray600" />
-          <Input placeholder="비밀번호를 입력해주세요" />
+          <Input
+            label="비밀번호"
+            placeholder="비밀번호를 입력해주세요"
+            readonly={true}
+            onChangeText={setPassword}
+            value={password}
+          />
         </InputWrapper>
       </EditSection>
 
       <ButtonWrapper>
-        <Button text="수정하기" />
+        <Button
+          text="수정하기"
+          loading={loading}
+          onPress={() => {
+            changeProfile();
+          }}
+        />
       </ButtonWrapper>
     </Container>
   );

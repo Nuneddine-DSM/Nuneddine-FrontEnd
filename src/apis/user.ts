@@ -53,3 +53,26 @@ export const setLensFrequency = async (data: LensFrequency) => {
     throw err;
   }
 };
+
+export interface ModifyProfileRequest {
+  nickname: string;
+}
+
+export const modifyProfile = async (data: ModifyProfileRequest) => {
+  try {
+    const response = await instance.patch(
+      `${user}/info`,
+      {
+        nickname: data.nickname
+      },
+      {
+        headers: {
+          Authorization: `Bearer ${await getItem('accessToken')}`
+        }
+      }
+    );
+    return response;
+  } catch (err) {
+    throw err;
+  }
+};
