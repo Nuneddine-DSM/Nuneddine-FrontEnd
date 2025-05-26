@@ -40,8 +40,12 @@ export const wishlistHandler = async () => {
 
 export const productPurchase = async () => {
   try {
-    const response = await instance.post(`${shops}`);
-    return response;
+    const response = await instance.post(`${shops}`, {
+      headers: {
+        Authorization: `Bearer ${await getItem('accessToken')}`
+      }
+    });
+    return response.data;
   } catch (err) {
     throw err;
   }
