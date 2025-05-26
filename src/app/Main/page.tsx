@@ -1,15 +1,19 @@
-import { useState } from "react"
+import { useState, useMemo } from "react"
 import { color, Font } from "../../styles"
 import styled from "styled-components/native"
 import Banner from "./Banner"
 import { Arrow } from "../../assets"
 import { Header, Footer } from "../../components/Main"
-import { NavigationListData, MainShoppingData, FramesTag } from "./Data"
+import { NavigationListData, FramesTag } from "./Data"
 import { ProductCardSmall, Tab } from "../../components/Shopping"
 import { ScrollView } from "react-native-gesture-handler"
 import { useNavigation } from "@react-navigation/native";
 import { StackNavigationProp } from '@react-navigation/stack';
 import { CategoryData, BannerData } from "./Data"
+import { glassesProduct, lensProduct } from "../../apis/shops"
+import { useQuery } from "@tanstack/react-query";
+import { mapFrameShape } from "../Data"
+import { ProductType } from "../../interface"
 
 const Main = () => {
   const navigation = useNavigation<StackNavigationProp<any>>();
@@ -17,12 +21,84 @@ const Main = () => {
   const [selectedTab, setSelectedTab] = useState<number>(1);
   const [selectedTag, setSelectedTag] = useState<string>("둥근테");
 
+  const { data: glassesData } = useQuery({
+    queryKey: ["glassesProduct"],
+    queryFn: glassesProduct,
+  })
+
+  const { data: lensData } = useQuery({
+    queryKey: ["lensProduct"],
+    queryFn: lensProduct
+  })
+
+  const sectionGlassesData = [
+    {
+      key: "trending_list",
+      title: "유행템, 나도 찰떡 가능?",
+      subTitle: "요즘 인기템 총정리! 고르기 전에 참고해요",
+      name: "Popular",
+      list: glassesData?.trending_list ?? [],
+    },
+    {
+      key: "hot_now_list",
+      title: "태만 봐도 느낌 온다",
+      subTitle: "각진 태부터 둥근 태까지, 내 얼굴에 맞는 스타일 찾기",
+      name: "Frames",
+      list: glassesData?.hot_now_list ?? [],
+    },
+    {
+      key: "hipster_list",
+      title: "힙스터's Pick",
+      subTitle: "스타일에 진심인 사람들의 추천템!",
+      name: "Hipster",
+      list: glassesData?.hipster_list ?? [],
+    },
+    {
+      key: "classic_list",
+      title: "클래식은 영원하다",
+      subTitle: "꾸준히 사랑받는 스테디셀러",
+      name: "Classic",
+      list: glassesData?.classic_list ?? [],
+    },
+  ];
+
+
+  const sectionLensData = [
+    {
+      key: "trending_list",
+      title: "유행템, 나도 찰떡 가능?",
+      subTitle: "요즘 인기템 총정리! 고르기 전에 참고해요",
+      name: "Popular",
+      list: lensData?.trending_list ?? [],
+    },
+    {
+      key: "hot_now_list",
+      title: "태만 봐도 느낌 온다",
+      subTitle: "각진 태부터 둥근 태까지, 내 얼굴에 맞는 스타일 찾기",
+      name: "Frames",
+      list: lensData?.hot_now_list ?? [],
+    },
+    {
+      key: "hipster_list",
+      title: "힙스터's Pick",
+      subTitle: "스타일에 진심인 사람들의 추천템!",
+      name: "Hipster",
+      list: lensData?.hipster_list ?? [],
+    },
+    {
+      key: "classic_list",
+      title: "클래식은 영원하다",
+      subTitle: "꾸준히 사랑받는 스테디셀러",
+      name: "Classic",
+      list: lensData?.classic_list ?? [],
+    },
+  ]
+
   return (
     <>
       <Header />
       <Container showsVerticalScrollIndicator={false}>
-
-        <Banner data={BannerData}/>
+        <Banner data={BannerData} />
 
         <NavigationListWrapper>
           {NavigationListData.map(({ id, name, href }) => (
@@ -30,7 +106,7 @@ const Main = () => {
               key={id}
               onPress={() => href ? navigation.navigate(href) : null}
             >
-              <TabIconWrapper></TabIconWrapper>
+              <TabIconWrapper />
               <Font text={name} kind="medium16" />
             </NavigationTab>
           ))}
@@ -42,52 +118,119 @@ const Main = () => {
           tabData={CategoryData}
         />
 
-        <RecommendedListWrapper>
-          {MainShoppingData.map((item) => (
-            <RecommendedSection key={item.name}>
-              <ProductIntroWrapper>
-                <TextBox>
-                  <Font text={item.title} kind="semi24" />
-                  <Font text={item.subTitle} kind="regular16" color="gray600" />
-                </TextBox>
+        {selectedTab === 1 ?
+          <RecommendedListWrapper>
+            {sectionGlassesData.map((item) => (
+              <RecommendedSection key={item.name}>
+                <ProductIntroWrapper>
+                  <TextBox>
+                    <Font text={item.title} kind="semi24" />
+                    <Font text={item.subTitle} kind="regular16" color="gray600" />
+                  </TextBox>
 
-                {item.name === "Frames" && (
+                  {item.name === "Frames" && (
+                    <ScrollView horizontal showsHorizontalScrollIndicator={false}>
+                      <TagWrapper>
+                        {FramesTag.map((tag, index) => (
+                          <Tag
+                            key={index}
+                            isSelected={selectedTag === tag}
+                            onPress={() => setSelectedTag(tag)}
+                          >
+                            <Font
+                              text={tag}
+                              kind="medium16"
+                              color={selectedTag === tag ? "pink300" : "gray500"}
+                            />
+                          </Tag>
+                        ))}
+                      </TagWrapper>
+                    </ScrollView>
+                  )}
+
+                  {item.name === "Hipster" && <Image source={require("../../assets/Hipster.png")} />}
+
                   <ScrollView horizontal showsHorizontalScrollIndicator={false}>
-                    <TagWrapper>
-                      {FramesTag.map((tag, index) => (
-                        <Tag
+                    <ProductList>
+                      {item.list.map((product: ProductType, index: number) => (
+                        <ProductCardSmall
                           key={index}
-                          isSelected={selectedTag === tag}
-                          onPress={() => setSelectedTag(tag)}
-                        >
-                          <Font
-                            text={tag}
-                            kind="medium16"
-                            color={selectedTag === tag ? "pink300" : "gray500"}
-                          />
-                        </Tag>
+                          shopId={product.shop_id}
+                          image={product.image_urls[0]}
+                          title={product.brand_name}
+                          describe={product.glasses_name}
+                          tag={mapFrameShape(product.frame_shape)}
+                          price={product.price}
+                        />
                       ))}
-                    </TagWrapper>
+                    </ProductList>
                   </ScrollView>
-                )}
-                {item.name === "Hipster" && <Image source={require("../../assets/Hipster.png")} />}
+                </ProductIntroWrapper>
 
-                <ScrollView horizontal showsHorizontalScrollIndicator={false}>
-                  <ProductList>
-                    {item.content.map((product, index) => (
-                      <ProductCardSmall key={index} {...product} />
-                    ))}
-                  </ProductList>
-                </ScrollView>
-              </ProductIntroWrapper>
+                <MoreProductsButton>
+                  <Font text="더 많은 상품 구경하기" kind="medium16" color="gray500" />
+                  <Arrow size={24} color={color.gray500} rotate="right" />
+                </MoreProductsButton>
+              </RecommendedSection>
+            ))}
+          </RecommendedListWrapper> :
+          <RecommendedListWrapper>
+            {sectionLensData.map((item) => (
+              <RecommendedSection key={item.name}>
+                <ProductIntroWrapper>
+                  <TextBox>
+                    <Font text={item.title} kind="semi24" />
+                    <Font text={item.subTitle} kind="regular16" color="gray600" />
+                  </TextBox>
 
-              <MoreProductsButton>
-                <Font text="더 많은 상품 구경하기" kind="medium16" color="gray500" />
-                <Arrow size={24} color={color.gray500} rotate="right" />
-              </MoreProductsButton>
-            </RecommendedSection>
-          ))}
-        </RecommendedListWrapper>
+                  {item.name === "Frames" && (
+                    <ScrollView horizontal showsHorizontalScrollIndicator={false}>
+                      <TagWrapper>
+                        {FramesTag.map((tag, index) => (
+                          <Tag
+                            key={index}
+                            isSelected={selectedTag === tag}
+                            onPress={() => setSelectedTag(tag)}
+                          >
+                            <Font
+                              text={tag}
+                              kind="medium16"
+                              color={selectedTag === tag ? "pink300" : "gray500"}
+                            />
+                          </Tag>
+                        ))}
+                      </TagWrapper>
+                    </ScrollView>
+                  )}
+
+                  {item.name === "Hipster" && <Image source={require("../../assets/Hipster.png")} />}
+
+                  <ScrollView horizontal showsHorizontalScrollIndicator={false}>
+                    <ProductList>
+                      {item.list.map((product: ProductType, index: number) => (
+                        <ProductCardSmall
+                          key={index}
+                          shopId={product.shop_id}
+                          image={product.image_urls[0]}
+                          title={product.brand_name}
+                          describe={product.glasses_name}
+                          tag={mapFrameShape(product.frame_shape)}
+                          price={product.price}
+                        />
+                      ))}
+                    </ProductList>
+                  </ScrollView>
+                </ProductIntroWrapper>
+
+                <MoreProductsButton>
+                  <Font text="더 많은 상품 구경하기" kind="medium16" color="gray500" />
+                  <Arrow size={24} color={color.gray500} rotate="right" />
+                </MoreProductsButton>
+              </RecommendedSection>
+            ))}
+          </RecommendedListWrapper>
+        }
+
 
         <Footer />
       </Container >
