@@ -1,7 +1,7 @@
-import styled from "styled-components/native";
-import { Font, color } from "../../styles";
-import { OrderItemsType } from "../../app/Shopping/Payment/Data";
-import QuantitySelector from "./QuantitySelector";
+import styled from 'styled-components/native';
+import { Font, color } from '../../styles';
+import { OrderItemsType } from '../../app/Shopping/Payment/Data';
+import QuantitySelector from './QuantitySelector';
 
 interface Props {
   item: OrderItemsType;
@@ -14,20 +14,18 @@ const OrderGlassesItem = ({ item }: Props) => {
 
       <ProductInfoSection>
         <TitleAndCounter>
-
           <TitleBlock>
             <Font text={item.name} kind="bold16" />
             <Font
               text={item.description}
               kind="medium16"
-              style={{ flexWrap: "wrap" }}
+              style={{ flexWrap: 'wrap' }}
               numberOfLines={2}
               ellipsizeMode="tail"
             />
           </TitleBlock>
 
           <QuantitySelector count={item.count} />
-
         </TitleAndCounter>
 
         <Font text={`${item.price}원`} kind="bold16" />
@@ -51,7 +49,7 @@ const ProductInfoSection = styled.View`
   display: flex;
   flex-direction: column;
   justify-content: space-between;
-`
+`;
 
 const ProductImage = styled.Image`
   width: 125px;
@@ -72,4 +70,4 @@ const TitleBlock = styled.View`
   gap: 4px;
 `;
 
-export default OrderGlassesItem
+export default OrderGlassesItem;
