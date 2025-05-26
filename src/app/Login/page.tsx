@@ -7,7 +7,6 @@ import { Arrow } from '../../assets/Arrow';
 import { loginHandler, LoginRequest } from '../../apis/auth';
 import { Alert, TouchableOpacity } from 'react-native';
 import { StackNavigationProp } from '@react-navigation/stack';
-import { setItem } from '../../utils/asyncStorage';
 import axios from 'axios';
 import { Text, View } from 'react-native';
 
