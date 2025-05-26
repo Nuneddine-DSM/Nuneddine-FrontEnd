@@ -30,6 +30,10 @@ const Filter = () => {
   const [isFrameOpen, setIsFrameOpen] = useState(true);
   const [isLensOpen, setIsLensOpen] = useState(true);
 
+  const handleSliderChange = (newValues: number[]) => {
+    setValues([newValues[0], newValues[1]]);
+  };
+
   return (
     <>
       <TopBar
@@ -128,7 +132,7 @@ const Filter = () => {
                       borderWidth: 1,
                       marginTop: 7,
                     }}
-                    onValuesChange={setValues}
+                    onValuesChange={handleSliderChange}
                     selectedStyle={{ backgroundColor: color.pink300 }}
                     unselectedStyle={{ backgroundColor: color.gray300 }}
                     containerStyle={{ height: 24, justifyContent: 'center' }}
