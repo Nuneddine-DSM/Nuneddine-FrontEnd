@@ -6,11 +6,16 @@ import { Arrow } from '../../../assets';
 import { useNavigation } from '@react-navigation/native';
 import { useState } from 'react';
 import { addAddress, AddAddressRequest } from '../../../apis/address';
+import { StackNavigationProp } from '@react-navigation/stack';
+import { RootStackParamList } from '../../../interface/params';
+import { SafeAreaView } from 'react-native-safe-area-context';
+import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view';
 
 const Add = () => {
-  const navigation = useNavigation();
+  const navigation =
+    useNavigation<StackNavigationProp<RootStackParamList, 'AddressWebview'>>();
 
-  const [postNumber, setPostNumber] = useState('');
+  const [postCode, setPostCode] = useState('');
   const [address, setAddress] = useState('');
   const [detailAddress, setDetailAddress] = useState('');
   const [addressName, setAddressName] = useState('');
@@ -19,13 +24,14 @@ const Add = () => {
 
   const postAddress = async () => {
     try {
+      const formatPhone = formatPhoneNumber(phone);
       const requestData: AddAddressRequest = {
-        postNumber: postNumber,
         address: address,
-        detailAddress: detailAddress,
-        addressName: addressName,
-        personName: personName,
-        phone: phone
+        delivery_address_name: addressName,
+        detail_address: detailAddress,
+        post_code: postCode,
+        receiver: personName,
+        phone_number: formatPhone
       };
       const response = await addAddress(requestData);
       if (response.status == 200) {
@@ -39,7 +45,7 @@ const Add = () => {
   };
 
   return (
-    <AddAddressContainer>
+    <SafeAreaView style={{ flex: 1, backgroundColor: color.white }}>
       <TopBar
         text="배송지 관리"
         leftIcon={
@@ -48,64 +54,81 @@ const Add = () => {
           </TouchableOpacity>
         }
       />
-      <FormWrapper>
-        <FormSection>
-          <Font text="주소" kind="semi16" color="gray600" />
-          <RowInputWrapper>
+
+      <KeyboardAwareScrollView enableOnAndroid={true} extraHeight={20}>
+        <FormWrapper>
+          <FormSection>
+            <Font text="주소" kind="semi16" color="gray600" />
+            <RowInputWrapper>
+              <Input
+                width="280px"
+                placeholder="우편번호를 입력해주세요."
+                value={postCode}
+                onChangeText={setPostCode}
+                readonly={true}
+              />
+              <Button
+                text="찾기"
+                width="80px"
+                onPress={() => {
+                  navigation.navigate('AddressWebview', {
+                    onSelect: ({ zonecode, resultAddress }) => {
+                      setPostCode(zonecode);
+                      setAddress(resultAddress);
+                    }
+                  });
+                }}
+              />
+            </RowInputWrapper>
             <Input
-              width="280px"
-              placeholder="우편번호를 입력해주세요."
-              value={postNumber}
-              onChangeText={setPostNumber}
+              placeholder="주소지를 입력해주세요."
+              value={address}
+              onChangeText={setAddress}
+              readonly={true}
+              multiline={true}
             />
-            <Button text="찾기" width="80px" />
-          </RowInputWrapper>
-          <Input
-            placeholder="주소지를 입력해주세요."
-            value={address}
-            onChangeText={setAddress}
-          />
-          <Input
-            placeholder="상세주소를 입력해주세요."
-            value={detailAddress}
-            onChangeText={setDetailAddress}
-          />
-        </FormSection>
+            <Input
+              placeholder="상세주소를 입력해주세요."
+              value={detailAddress}
+              onChangeText={setDetailAddress}
+            />
+          </FormSection>
 
-        <FormSection>
-          <Font text="배송지명" kind="semi16" color="gray600" />
-          <Input
-            placeholder="집, 회사 등 배송지명을 입력해주세요."
-            value={addressName}
-            onChangeText={setAddressName}
-          />
-        </FormSection>
+          <FormSection>
+            <Font text="배송지명" kind="semi16" color="gray600" />
+            <Input
+              placeholder="집, 회사 등 배송지명을 입력해주세요."
+              value={addressName}
+              onChangeText={setAddressName}
+            />
+          </FormSection>
 
-        <FormSection>
-          <Font text="수령인" kind="semi16" color="gray600" />
-          <Input
-            placeholder="이름을 입력해주세요."
-            value={personName}
-            onChangeText={setPersonName}
-          />
-        </FormSection>
+          <FormSection>
+            <Font text="수령인" kind="semi16" color="gray600" />
+            <Input
+              placeholder="이름을 입력해주세요."
+              value={personName}
+              onChangeText={setPersonName}
+            />
+          </FormSection>
 
-        <FormSection>
-          <Font text="전화번호" kind="semi16" color="gray600" />
-          <Input
-            placeholder="전화번호를 입력해주세요."
-            value={phone}
-            onChangeText={setPhone}
-          />
-        </FormSection>
-      </FormWrapper>
+          <FormSection>
+            <Font text="전화번호" kind="semi16" color="gray600" />
+            <Input
+              placeholder="전화번호를 입력해주세요."
+              value={phone}
+              onChangeText={setPhone}
+            />
+          </FormSection>
+        </FormWrapper>
+      </KeyboardAwareScrollView>
 
-      <ButtonWrapper>
+      <ButtonWrapper pointerEvents="box-none">
         <Button
           text="저장하기"
           onPress={() => {
             if (
-              !postNumber ||
+              !postCode ||
               !address ||
               !detailAddress ||
               !addressName ||
@@ -119,17 +142,21 @@ const Add = () => {
           }}
         />
       </ButtonWrapper>
-    </AddAddressContainer>
+    </SafeAreaView>
   );
 };
 
-const AddAddressContainer = styled.View`
-  flex: 1;
-  flex-direction: column;
-  gap: 24px;
-  padding-top: 62px;
-  background-color: ${color.white};
-`;
+const formatPhoneNumber = (phone: string): string => {
+  const cleaned = phone.replace(/\D/g, '');
+
+  if (cleaned.length < 4) {
+    return cleaned;
+  } else if (cleaned.length < 7) {
+    return `${cleaned.slice(0, 3)}-${cleaned.slice(3)}`;
+  } else {
+    return `${cleaned.slice(0, 3)}-${cleaned.slice(3, 7)}-${cleaned.slice(7)}`;
+  }
+};
 
 const FormWrapper = styled.View`
   padding: 50px 20px;
