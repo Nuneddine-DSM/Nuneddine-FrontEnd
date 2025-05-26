@@ -33,7 +33,7 @@ const Login = () => {
       const response = await loginHandler(requestData);
 
       if (response.status === 200) {
-        await setItem('accessToken', response.data.access_token);
+        navigation.pop();
         navigation.replace('NavBar');
       } else {
         Alert.alert('아이디 또는 비밀번호를 잘못입력하였습니다.');

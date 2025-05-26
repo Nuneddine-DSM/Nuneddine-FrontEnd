@@ -1,5 +1,6 @@
 import { instance, storeData } from './axios';
 import { getDeviceToken } from '../utils/firebase';
+import { setItem } from '../utils/asyncStorage';
 
 const auth = '/auth';
 
@@ -17,6 +18,7 @@ export const loginHandler = async (data: LoginRequest) => {
       password: data.password,
       device_token: deviceToken
     });
+    await setItem('accessToken', response.data.access_token);
     return response;
   } catch (err) {
     throw err;
@@ -39,10 +41,11 @@ export const signUpHandler = async (data: SignupData) => {
       device_token: deviceToken
     });
 
-    const { accessToken } = response.data;
+    const { accessToken } = response.data.access_token;
 
     if (accessToken) {
       await storeData('accessToken', accessToken);
+      await setItem('accessToken', accessToken);
     }
 
     return response;
