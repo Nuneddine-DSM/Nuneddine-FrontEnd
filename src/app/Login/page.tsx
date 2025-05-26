@@ -38,7 +38,6 @@ const Login = () => {
         Alert.alert('아이디 또는 비밀번호를 잘못입력하였습니다.');
       }
     } catch (err) {
-      setLoading(false);
       if (axios.isAxiosError(err)) {
         console.error('AxiosError', err);
         if (err.response?.status === 401) {
@@ -109,6 +108,7 @@ const Login = () => {
                 login();
               }
             }}
+            loading={loading}
           />
         </ButtonBox>
       </LoginBox>
