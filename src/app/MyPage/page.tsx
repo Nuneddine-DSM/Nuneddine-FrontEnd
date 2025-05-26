@@ -49,7 +49,15 @@ const MyPage = () => {
 
       <MenuList>
         {NavigationData.map(({ id, name, icon, href }) => (
-          <MenuItem key={id} onPress={() => navigation.navigate(href)}>
+          <MenuItem
+            key={id}
+            onPress={() => {
+              if (href === 'EditProfile') {
+                navigation.navigate(href, { name, accountId });
+              } else {
+                navigation.navigate(href);
+              }
+            }}>
             <Font text={name} kind="medium18" />
             {icon}
           </MenuItem>
