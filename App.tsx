@@ -29,6 +29,9 @@ import FaceFit from './src/app/FaceFit/page'
 import Recommend from './src/app/FaceFit/Recommend'
 import GuideDetail from './src/app/Guide/Detail'
 import ShoppingDetail from "./src/app/Shopping/Detail/page"
+import Search from './src/app/Search/page';
+import SearchProduct from './src/app/SearchProduct/page'
+import Filter from './src/app/SearchProduct/Filter'
 import { GestureHandlerRootView } from 'react-native-gesture-handler';
 import { BottomSheetModalProvider } from '@gorhom/bottom-sheet';
 
@@ -40,7 +43,7 @@ function App(): React.JSX.Element {
         <NavigationContainer>
           <Stack.Navigator
             screenOptions={{ headerShown: false }}
-            initialRouteName="ShoppingDetail">
+            initialRouteName="SearchProduct">
             <Stack.Screen name="NavBar" component={NavBar} />
             <Stack.Screen name="Main" component={Main} />
             <Stack.Screen name="Guide" component={Guide} />
@@ -62,6 +65,9 @@ function App(): React.JSX.Element {
             <Stack.Screen name="Recommend" component={Recommend} />
             <Stack.Screen name="GuideDetail" component={GuideDetail} />
             <Stack.Screen name="ShoppingDetail" component={ShoppingDetail} />
+            <Stack.Screen name="Search" component={Search} />
+            <Stack.Screen name="SearchProduct" component={SearchProduct} />
+            <Stack.Screen name="Filter" component={Filter} />
           </Stack.Navigator>
         </NavigationContainer>
       </BottomSheetModalProvider>
