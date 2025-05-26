@@ -1,13 +1,33 @@
-import styled from "styled-components/native";
-import { color, Font } from "../../styles"
-import { TopBar } from "../../components";
-import { TouchableOpacity } from "react-native";
-import { Arrow } from "../../assets";
-import OrderGlassesItem from "../../components/Shopping/OrderGlassesItem";
-import { useNavigation } from "@react-navigation/native";
+import styled from 'styled-components/native';
+import { color, Font } from '../../styles';
+import { TopBar } from '../../components';
+import { TouchableOpacity } from 'react-native';
+import { Arrow } from '../../assets';
+import OrderGlassesItem from '../../components/Shopping/OrderGlassesItem';
+import { useNavigation } from '@react-navigation/native';
+import { useEffect, useState } from 'react';
+import {
+  getMyOrderHistory,
+  MyOrderHistoryData
+} from '../../apis/purchaseHistories';
 
 const OrderDetails = () => {
   const navigation = useNavigation();
+
+  const [myOrderList, setMyOrderList] = useState<MyOrderHistoryData[]>([]);
+
+  useEffect(() => {
+    const getMyOrder = async () => {
+      try {
+        const response = await getMyOrderHistory();
+        setMyOrderList(response.data.purchaseHistories);
+      } catch (err) {
+        console.error(err);
+      }
+    };
+
+    getMyOrder();
+  }, []);
 
   return (
     <Container>
@@ -19,37 +39,52 @@ const OrderDetails = () => {
           </TouchableOpacity>
         }
       />
-      <OrderSection>
-        <DateWrapper>
-          <Font text="2025.3.15" kind="bold24" />
-        </DateWrapper>
-        <OrderList>
-          {/* <OrderGlassesItem /> */}
-        </OrderList>
-      </OrderSection>
-    </Container>
-  )
-}
 
-const Container = styled.View`
+      {myOrderList.map((order, index) => (
+        <OrderSection key={index}>
+          <DateWrapper>
+            <Font text={order.date} kind="bold24" />
+          </DateWrapper>
+          <OrderList>
+            {order.histories.map((item, itemIndex) => (
+              <OrderGlassesItem
+                key={itemIndex}
+                item={{
+                  id: item.shopId,
+                  name: item.brandName,
+                  description: item.glassName,
+                  count: item.count,
+                  price: item.price.toLocaleString(),
+                  image: item.imageUrls[0]
+                }}
+              />
+            ))}
+          </OrderList>
+        </OrderSection>
+      ))}
+    </Container>
+  );
+};
+
+const Container = styled.ScrollView`
   flex: 1;
   flex-direction: column;
   gap: 15px;
-  padding-top: 62px;
+  padding-bottom: 100px;
   background-color: ${color.gray50};
-`
+`;
 
 const OrderSection = styled.View`
   padding: 15px 20px;
   background-color: ${color.white};
-`
+`;
 
 const DateWrapper = styled.View`
   padding: 8px 0;
-`
+`;
 
 const OrderList = styled.View`
   flex-direction: column;
-`
+`;
 
-export default OrderDetails
+export default OrderDetails;
