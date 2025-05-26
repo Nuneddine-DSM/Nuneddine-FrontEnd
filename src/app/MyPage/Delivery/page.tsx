@@ -1,39 +1,45 @@
 import styled from 'styled-components/native';
 import { color } from '../../../styles';
 import { Button, TopBar } from '../../../components';
-import { TouchableOpacity } from 'react-native';
+import { Alert, TouchableOpacity } from 'react-native';
 import { Arrow } from '../../../assets';
-import DeliveryDetail from '../../../components/Shopping/Delivery';
 import { ScrollView } from 'react-native-gesture-handler';
-import { useNavigation } from '@react-navigation/native';
-import { deleteAddress, getAddress } from '../../../apis/address';
-import { DeliveryType } from '../../Shopping/Delivery/page';
-import { useEffect, useState } from 'react';
+import { useFocusEffect, useNavigation } from '@react-navigation/native';
+import { AddressData, deleteAddress, getAddress } from '../../../apis/address';
+import { useCallback, useState } from 'react';
 import { StackNavigationProp } from '@react-navigation/stack';
+import MyPageAddress from '../../../components/MyPage/Address';
 
 const Delivery = () => {
   const navigation = useNavigation<StackNavigationProp<any>>();
 
-  const [addressList, setAddressList] = useState<DeliveryType[]>([]);
+  const [addressList, setAddressList] = useState<AddressData[]>([]);
 
-  useEffect(() => {
-    const myAddress = async () => {
-      try {
-        const response = await getAddress();
-        setAddressList(response.data.addresses);
-      } catch (err) {
-        console.error(err);
-      }
-    };
+  useFocusEffect(
+    useCallback(() => {
+      const myAddress = async () => {
+        try {
+          const response = await getAddress();
+          setAddressList(response.data.addresses);
+        } catch (err) {
+          console.error(err);
+        }
+      };
 
-    myAddress();
-  }, []);
+      myAddress();
+    }, [])
+  );
 
   const removeAddress = async (index: number, addressId: number) => {
     try {
       const response = await deleteAddress(addressId);
       if (response.status === 200) {
-        addressList.splice(index, 1);
+        const updatedList = [...addressList];
+        updatedList.splice(index, 1);
+        setAddressList(updatedList);
+      } else {
+        console.log(response);
+        Alert.alert('배송지 삭제 실패');
       }
     } catch (err) {
       console.error(err);
@@ -53,10 +59,18 @@ const Delivery = () => {
       <ScrollView contentContainerStyle={{ paddingBottom: 80 }}>
         <DeliveryListWrapper>
           {addressList.map((item, index) => (
-            <DeliveryDetail
+            <MyPageAddress
+              key={item.id}
               item={item}
               onPress={() => {
-                removeAddress(index, item.addressId || 0);
+                removeAddress(index, item.id);
+                Alert.prompt(
+                  '해당 배송지를 삭제하시겠습니까?',
+                  item.delivery_address_name,
+                  () => {
+                    removeAddress(index, item.id);
+                  }
+                );
               }}
             />
           ))}
