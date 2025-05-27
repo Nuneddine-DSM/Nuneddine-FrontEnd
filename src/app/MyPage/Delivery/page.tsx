@@ -23,6 +23,7 @@ const Delivery = () => {
           setAddressList(response.data.addresses);
         } catch (err) {
           console.error(err);
+          Alert.alert('배송지 정보를 불러오는 데 실패했습니다');
         }
       };
 

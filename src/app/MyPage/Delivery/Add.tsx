@@ -135,7 +135,7 @@ const Add = () => {
               !personName ||
               !phone
             ) {
-              Alert.alert('모두 입력해주세요');
+              Alert.alert('모든 필드를 입력해주세요');
             } else {
               postAddress();
             }
