@@ -14,12 +14,9 @@ const EditProfile = () => {
   const { name, accountId } = route.params;
 
   const [loading, setLoading] = useState(false);
-  const [nickname, setNickname] = useState('');
-  const [id, setId] = useState('');
+  const [nickname, setNickname] = useState(name);
+  const [id, setId] = useState(accountId);
   const [password, setPassword] = useState('');
-
-  setNickname(name);
-  setId(accountId);
 
   const changeProfile = async () => {
     try {
