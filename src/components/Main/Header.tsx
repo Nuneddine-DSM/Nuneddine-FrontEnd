@@ -1,16 +1,20 @@
 import styled from "styled-components/native";
 import Logo from "../../assets/Logo.png"
-import { Bell, Basket, Search } from "../../assets";
 import { color } from "../../styles"
+import { Bell, Basket, Search } from "../../assets";
 import { useNavigation } from '@react-navigation/native';
 import { StackNavigationProp } from '@react-navigation/stack';
+import { TouchableOpacity } from "react-native";
 
 const Header = () => {
   const navigation = useNavigation<StackNavigationProp<any>>();
 
   return (
     <Container>
-      <LogoImage source={Logo} />
+      <TouchableOpacity onPress={() => navigation.navigate('Main')}>
+        <LogoImage source={Logo} />
+      </TouchableOpacity>
+
       <IconWrapper>
         <Search
           size={34}
