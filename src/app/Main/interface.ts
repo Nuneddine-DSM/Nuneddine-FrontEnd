@@ -3,7 +3,10 @@ import { ImageSourcePropType } from "react-native"
 export interface NavigationListDataType {
   id?: number,
   name?: string,
-  href?: string
+  href?: string,
+  image?: ImageSourcePropType,
+  imageHeight?: number,
+  imageWidth?: number
 }
 
 export interface BannerDataType {
