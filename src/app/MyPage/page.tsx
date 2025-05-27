@@ -1,7 +1,7 @@
 import styled from 'styled-components/native';
 import { Font, color } from '../../styles';
 import { TopBar } from '../../components';
-import { TouchableOpacity } from 'react-native';
+import { ActivityIndicator, Alert, TouchableOpacity } from 'react-native';
 import { Arrow } from '../../assets';
 import NavigationData from './Data';
 import { useNavigation, NavigationProp } from '@react-navigation/native';
@@ -13,28 +13,42 @@ const MyPage = () => {
 
   const [name, setName] = useState('');
   const [accountId, setAccountId] = useState('');
+  const [loading, setLoading] = useState(false);
 
   useEffect(() => {
     const myPageInfo = async () => {
       try {
+        setLoading(true);
         const response = await myPage();
         const { name, account_id } = response.data;
         setName(name);
         setAccountId(account_id);
       } catch (err) {
         console.error(err);
+        Alert.alert('내 정보를 불러오는 데 실패했습니다');
+      } finally {
+        setLoading(false);
       }
     };
 
     myPageInfo();
   }, []);
 
+  if (loading) {
+    return <ActivityIndicator />;
+  }
+
   return (
     <PageContainer>
       <TopBar
         text="마이페이지"
         leftIcon={
-          <TouchableOpacity onPress={() => {}}>
+          <TouchableOpacity
+            onPress={() => {
+              if (navigation.canGoBack()) {
+                navigation.goBack();
+              }
+            }}>
             <Arrow size={34} />
           </TouchableOpacity>
         }
