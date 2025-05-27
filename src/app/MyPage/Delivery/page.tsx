@@ -1,7 +1,7 @@
 import styled from 'styled-components/native';
 import { color } from '../../../styles';
 import { Button, TopBar } from '../../../components';
-import { Alert, TouchableOpacity } from 'react-native';
+import { ActivityIndicator, Alert, TouchableOpacity } from 'react-native';
 import { Arrow } from '../../../assets';
 import { ScrollView } from 'react-native-gesture-handler';
 import { useFocusEffect, useNavigation } from '@react-navigation/native';
@@ -14,16 +14,20 @@ const Delivery = () => {
   const navigation = useNavigation<StackNavigationProp<any>>();
 
   const [addressList, setAddressList] = useState<AddressData[]>([]);
+  const [loading, setLoading] = useState(false);
 
   useFocusEffect(
     useCallback(() => {
       const myAddress = async () => {
         try {
+          setLoading(true);
           const response = await getAddress();
           setAddressList(response.data.addresses);
         } catch (err) {
           console.error(err);
           Alert.alert('배송지 정보를 불러오는 데 실패했습니다');
+        } finally {
+          setLoading(false);
         }
       };
 
@@ -57,30 +61,34 @@ const Delivery = () => {
           </TouchableOpacity>
         }
       />
-      <ScrollView contentContainerStyle={{ paddingBottom: 80 }}>
-        <DeliveryListWrapper>
-          {addressList.map((item, index) => (
-            <MyPageAddress
-              key={item.id}
-              item={item}
-              onPress={() => {
-                Alert.alert(
-                  '배송지 삭제',
-                  `${item.delivery_address_name}을 삭제하시겠습니까?`,
-                  [
-                    { text: '취소', style: 'cancel' },
-                    {
-                      text: '삭제',
-                      style: 'destructive',
-                      onPress: () => removeAddress(index, item.id)
-                    }
-                  ]
-                );
-              }}
-            />
-          ))}
-        </DeliveryListWrapper>
-      </ScrollView>
+      {loading ? (
+        <ActivityIndicator />
+      ) : (
+        <ScrollView contentContainerStyle={{ paddingBottom: 80 }}>
+          <DeliveryListWrapper>
+            {addressList.map((item, index) => (
+              <MyPageAddress
+                key={item.id}
+                item={item}
+                onPress={() => {
+                  Alert.alert(
+                    '배송지 삭제',
+                    `${item.delivery_address_name}을 삭제하시겠습니까?`,
+                    [
+                      { text: '취소', style: 'cancel' },
+                      {
+                        text: '삭제',
+                        style: 'destructive',
+                        onPress: () => removeAddress(index, item.id)
+                      }
+                    ]
+                  );
+                }}
+              />
+            ))}
+          </DeliveryListWrapper>
+        </ScrollView>
+      )}
 
       <ButtonWrapper>
         <Button

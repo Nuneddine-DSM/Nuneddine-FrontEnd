@@ -3,7 +3,7 @@ import styled from 'styled-components/native';
 import { TopBar, Button } from '../../components';
 import { color, Font } from '../../styles';
 import { Arrow } from '../../assets/Arrow';
-import { Alert, TouchableOpacity } from 'react-native';
+import { ActivityIndicator, Alert, TouchableOpacity } from 'react-native';
 import { useNavigation } from '@react-navigation/native';
 import { StackNavigationProp } from '@react-navigation/stack';
 import ScrollPicker from 'react-native-wheel-scrollview-picker';
@@ -74,21 +74,6 @@ const Frequency = () => {
     }
   };
 
-  if (loading) {
-    return (
-      <Container>
-        <TopBar
-          text="렌즈 도수 설정"
-          leftIcon={
-            <TouchableOpacity onPress={prevPage}>
-              <Arrow size={34} />
-            </TouchableOpacity>
-          }
-        />
-      </Container>
-    );
-  }
-
   return (
     <Container>
       <TopBar
@@ -99,80 +84,84 @@ const Frequency = () => {
           </TouchableOpacity>
         }
       />
-      <FrequencyBox>
-        <SwitchButtonBox>
-          <SwitchButton
-            isSelected={isLeftSelected}
-            onPress={() => setLeftSelected(true)}>
-            <Font
-              text={'왼쪽 눈 (L)'}
-              kind="semi18"
-              color={isLeftSelected ? 'pink300' : 'gray400'}
-            />
-          </SwitchButton>
-          <SwitchButton
-            isSelected={!isLeftSelected}
-            onPress={() => {
-              setLeftSelected(false);
-            }}>
-            <Font
-              text={'오른쪽 눈 (R)'}
-              kind="semi18"
-              color={!isLeftSelected ? 'pink300' : 'gray400'}
-            />
-          </SwitchButton>
-        </SwitchButtonBox>
-        <Space height={36} />
-        <Font text={'근시 도수 (SPH)'} kind="semi20" />
-        <Space height={10} />
-        <Font
-          text={'근시 교정을 위한 도수를 선택하세요'}
-          kind="regular16"
-          color="gray600"
-        />
-        <Space height={20} />
-        <WheelPicker
-          selectedIndex={selectedIndex}
-          onValueChange={(_, index) => {
-            if (isLeftSelected) {
-              setLeftSelectedIndex(index);
-            } else {
-              setRightSelectedIndex(index);
-            }
-          }}
-          lensFrequency={lensFrequencyList}
-          isLeftSelected={isLeftSelected}
-        />
-        <Space height={24} />
-        <InfoBox>
-          <Font text={'입력된 정보'} kind="semi18" color="black" />
+      {loading ? (
+        <ActivityIndicator />
+      ) : (
+        <FrequencyBox>
+          <SwitchButtonBox>
+            <SwitchButton
+              isSelected={isLeftSelected}
+              onPress={() => setLeftSelected(true)}>
+              <Font
+                text={'왼쪽 눈 (L)'}
+                kind="semi18"
+                color={isLeftSelected ? 'pink300' : 'gray400'}
+              />
+            </SwitchButton>
+            <SwitchButton
+              isSelected={!isLeftSelected}
+              onPress={() => {
+                setLeftSelected(false);
+              }}>
+              <Font
+                text={'오른쪽 눈 (R)'}
+                kind="semi18"
+                color={!isLeftSelected ? 'pink300' : 'gray400'}
+              />
+            </SwitchButton>
+          </SwitchButtonBox>
+          <Space height={36} />
+          <Font text={'근시 도수 (SPH)'} kind="semi20" />
+          <Space height={10} />
+          <Font
+            text={'근시 교정을 위한 도수를 선택하세요'}
+            kind="regular16"
+            color="gray600"
+          />
+          <Space height={20} />
+          <WheelPicker
+            selectedIndex={selectedIndex}
+            onValueChange={(_, index) => {
+              if (isLeftSelected) {
+                setLeftSelectedIndex(index);
+              } else {
+                setRightSelectedIndex(index);
+              }
+            }}
+            lensFrequency={lensFrequencyList}
+            isLeftSelected={isLeftSelected}
+          />
           <Space height={24} />
-          <FrequenciesBox>
-            <OneFrequency>
-              <Font text={'왼쪽 (L)'} kind="medium18" color="gray600" />
-              <Font
-                text={`SPH: ${
-                  leftSelectedIndex === 0
-                    ? '-0.00'
-                    : lensFrequencyList[leftSelectedIndex].toFixed(2)
-                }`}
-                kind="medium18"
-              />
-            </OneFrequency>
-            <OneFrequency>
-              <Font text={'오른쪽 (R)'} kind="medium18" color="gray600" />
-              <Font
-                text={`SPH: ${
-                  rightSelectedIndex === 0
-                    ? '-0.00'
-                    : lensFrequencyList[rightSelectedIndex].toFixed(2)
-                }`}
-                kind="medium18"
-              />
-            </OneFrequency>
-          </FrequenciesBox>
-        </InfoBox>
-      </FrequencyBox>
+          <InfoBox>
+            <Font text={'입력된 정보'} kind="semi18" color="black" />
+            <Space height={24} />
+            <FrequenciesBox>
+              <OneFrequency>
+                <Font text={'왼쪽 (L)'} kind="medium18" color="gray600" />
+                <Font
+                  text={`SPH: ${
+                    leftSelectedIndex === 0
+                      ? '-0.00'
+                      : lensFrequencyList[leftSelectedIndex].toFixed(2)
+                  }`}
+                  kind="medium18"
+                />
+              </OneFrequency>
+              <OneFrequency>
+                <Font text={'오른쪽 (R)'} kind="medium18" color="gray600" />
+                <Font
+                  text={`SPH: ${
+                    rightSelectedIndex === 0
+                      ? '-0.00'
+                      : lensFrequencyList[rightSelectedIndex].toFixed(2)
+                  }`}
+                  kind="medium18"
+                />
+              </OneFrequency>
+            </FrequenciesBox>
+          </InfoBox>
+        </FrequencyBox>
+      )}
 
       <ButtonBox>
         <Button

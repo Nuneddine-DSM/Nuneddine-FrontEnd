@@ -53,30 +53,36 @@ const MyPage = () => {
           </TouchableOpacity>
         }
       />
-      <UserSection>
-        <UserDetails>
-          <Font text={name} kind="semi28" />
-          <Font text={accountId} kind="regular16" color="gray500" />
-        </UserDetails>
-        <ProfileImage />
-      </UserSection>
+      {loading ? (
+        <ActivityIndicator />
+      ) : (
+        <>
+          <UserSection>
+            <UserDetails>
+              <Font text={name} kind="semi28" />
+              <Font text={accountId} kind="regular16" color="gray500" />
+            </UserDetails>
+            <ProfileImage />
+          </UserSection>
 
-      <MenuList>
-        {NavigationData.map(({ id, name, icon, href }) => (
-          <MenuItem
-            key={id}
-            onPress={() => {
-              if (href === 'EditProfile') {
-                navigation.navigate(href, { name, accountId });
-              } else {
-                navigation.navigate(href);
-              }
-            }}>
-            <Font text={name} kind="medium18" />
-            {icon}
-          </MenuItem>
-        ))}
-      </MenuList>
+          <MenuList>
+            {NavigationData.map(({ id, name, icon, href }) => (
+              <MenuItem
+                key={id}
+                onPress={() => {
+                  if (href === 'EditProfile') {
+                    navigation.navigate(href, { name, accountId });
+                  } else {
+                    navigation.navigate(href);
+                  }
+                }}>
+                <Font text={name} kind="medium18" />
+                {icon}
+              </MenuItem>
+            ))}
+          </MenuList>
+        </>
+      )}
     </PageContainer>
   );
 };
