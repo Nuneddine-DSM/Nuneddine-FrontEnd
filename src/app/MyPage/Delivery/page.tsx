@@ -64,13 +64,17 @@ const Delivery = () => {
               key={item.id}
               item={item}
               onPress={() => {
-                removeAddress(index, item.id);
-                Alert.prompt(
-                  '해당 배송지를 삭제하시겠습니까?',
-                  item.delivery_address_name,
-                  () => {
-                    removeAddress(index, item.id);
-                  }
+                Alert.alert(
+                  '배송지 삭제',
+                  `${item.delivery_address_name}을 삭제하시겠습니까?`,
+                  [
+                    { text: '취소', style: 'cancel' },
+                    {
+                      text: '삭제',
+                      style: 'destructive',
+                      onPress: () => removeAddress(index, item.id)
+                    }
+                  ]
                 );
               }}
             />
