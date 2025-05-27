@@ -13,6 +13,8 @@ import {
   BottomSheetBackdrop
 } from '@gorhom/bottom-sheet';
 import OrderItem from "./OrderItem";
+import { addCartItem } from "../../../apis/carts";
+import { BottomButtonsProps } from "../../../interface";
 
 const GlassDummy = require("../../../assets/GlassesDummy.png")
 
@@ -30,6 +32,9 @@ const ShoppingDetail = () => {
   const [selectedTab, setSelectedTab] = useState<number>(1);
   const [selectedHeart, setSelectedHeart] = useState<boolean>(false);
   const [selectedColor, setSelectedColor] = useState<number>(1);
+  
+  const [lensPower, setLensPower] = useState<number>(11.6);
+  const [count, setCount] = useState<number>(1)
 
   const heartHandler = async () => {
     try {
@@ -41,7 +46,7 @@ const ShoppingDetail = () => {
   }
 
   const bottomSheetModalRef = useRef<BottomSheetModal>(null);
-  const snapPoints = useMemo(() => ['45%'], []);
+  const snapPoints = useMemo(() => ['55%'], []);
 
   const handlePresentModalPress = useCallback(() => {
     bottomSheetModalRef.current?.present();
@@ -62,6 +67,11 @@ const ShoppingDetail = () => {
     ),
     []
   );
+
+  const handelAddCart = () => {
+    handlePresentModalPress();
+    addCartItem(shopId, lensPower, count);
+  }
 
   return (
     <>
@@ -135,6 +145,13 @@ const ShoppingDetail = () => {
             </PriceWrapper>
           </ProductItemWrapper>
         </OptionWrapper>
+
+        <BottomButtons
+          hearted={selectedHeart}
+          onHeartPress={heartHandler}
+          buttonText="장바구니 담기"
+          onButtonPress={handelAddCart}
+        />
       </BottomSheetModal>
 
       <BottomActionBar>
@@ -150,9 +167,32 @@ const ShoppingDetail = () => {
           onPress={() => handlePresentModalPress()}
         />
       </BottomActionBar>
+      
+      <BottomButtons
+        hearted={selectedHeart}
+        onHeartPress={heartHandler}
+        buttonText="상품 구매하기"
+        onButtonPress={handlePresentModalPress}
+      />
     </>
   )
 }
+
+const BottomButtons = ({ hearted, onHeartPress, buttonText, onButtonPress }: BottomButtonsProps) => (
+  <BottomActionBar>
+    <Heart
+      onPress={onHeartPress}
+      size={28}
+      color={hearted ? color.pink300 : color.gray500}
+      fill={hearted ? color.pink300 : 'none'}
+    />
+    <Button
+      text={buttonText}
+      width="90%"
+      onPress={onButtonPress}
+    />
+  </BottomActionBar>
+);
 
 const Container = styled.ScrollView.attrs(() => ({
   contentContainerStyle: {
@@ -240,6 +280,8 @@ const SimilarProductList = styled.ScrollView.attrs(() => ({
 `
 
 const BottomActionBar = styled.View`
+  position: absolute;
+  bottom: 0;
   width: 100%;
   flex-direction: row;
   justify-content: space-between;
@@ -247,6 +289,7 @@ const BottomActionBar = styled.View`
   padding: 12px 20px;
   gap: 20px;
   background-color: ${color.white};
+  z-index: 100;
 `
 
 const TagWrapper = styled.View`
