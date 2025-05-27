@@ -1,4 +1,4 @@
-import { useState, useMemo } from "react";
+import { useState, useMemo, useEffect } from "react";
 import { color, Font } from "../../styles";
 import styled from "styled-components/native";
 import Banner from "./Banner";
@@ -84,6 +84,16 @@ const Main = () => {
     queryKey: ['search', filters],
     queryFn: () => searchHandler(filters),
   });
+
+  useEffect(() => {
+    if (selectedTab === 1 && frame_shape.length === 0) {
+      const firstKey = Object.keys(FrameShapeMap)[0] as FrameShapeType;
+      setSingleFilterValue('frame_shape', firstKey);
+    } else if (selectedTab !== 1 && lens_color.length === 0) {
+      const firstKey = Object.keys(LensColorMap)[0] as LensColorType;
+      setSingleFilterValue('lens_color', firstKey);
+    }
+  }, [selectedTab]);
 
   const renderSection = (item: typeof sectionData[0]) => (
     <RecommendedSection key={item.name}>
