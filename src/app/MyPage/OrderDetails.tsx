@@ -49,13 +49,13 @@ const OrderDetails = () => {
         <ActivityIndicator />
       ) : (
         <OrderWapper>
-          {myOrderList.map(order => (
-            <OrderSection key={order.date}>
+          {myOrderList.map((order, index) => (
+            <OrderSection key={`${order.date}-${index}`}>
               <DateWrapper>
                 <Font text={order.date} kind="bold24" />
               </DateWrapper>
               <OrderList>
-                {order.histories.map((item, itemIndex) => (
+                {order.histories.map(item => (
                   <OrderGlassesItem
                     key={item.shopId}
                     item={{
