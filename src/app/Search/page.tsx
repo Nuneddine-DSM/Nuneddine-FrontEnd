@@ -9,6 +9,7 @@ import SearchInput from "./component/SearchInput";
 import Tag from "./component/Tag"
 import Rank from "./component/Rank"
 import RecentSearches from "./component/RecentSearches"
+import { useSearchStore } from "../../stores/useSearchStore"
 
 const recently = ["투명렌즈"];
 const recommend = ["힙한", "렌즈", "추천", "검색어", "힙한", "검색어"];
@@ -23,7 +24,15 @@ const rankValue = [
 const Search = () => {
   const navigation = useNavigation<NavigationProp<any>>();
 
-  const [searchText, setSearchText] = useState("");
+  const [searchText, setSearchText] = useState('');
+
+  const { setKeyword } = useSearchStore();
+
+  const handleSearch = () => {
+    if (!searchText.trim()) return;
+    setKeyword(searchText.trim());
+    navigation.navigate('SearchProduct');
+  }
 
   return (
     <>
@@ -34,7 +43,11 @@ const Search = () => {
           </TouchableOpacity>
         }
         rightIcon={
-          <SearchInput value={searchText} onChangeText={setSearchText} />
+          <SearchInput
+            value={searchText}
+            onChangeText={setSearchText}
+            onSubmit={handleSearch}
+          />
         }
       />
       <Content>

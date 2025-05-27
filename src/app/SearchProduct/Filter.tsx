@@ -17,14 +17,12 @@ import {
   LensColorType,
   LensColorCodeMap
 } from '../Data';
+import { useSearchStore } from "../../stores/useSearchStore";
+import { ScrollView } from "react-native"
 
 const Filter = () => {
   const navigation = useNavigation<NavigationProp<any>>();
 
-  const [selectedFrameShape, setSelectedFrameShape] = useState<FrameShapeType | null>(null);
-  const [selectedFrameMaterial, setSelectedFrameMaterial] = useState<FrameMaterialType | null>(null);
-  const [selectedLensColor, setSelectedLensColor] = useState<LensColorType | null>(null);
-  const [selectedLensDate, setSelectedLensDate] = useState<LensDateType | null>(null);
   const [values, setValues] = useState<[number, number]>([11.6, 13.9]);
 
   const [isFrameOpen, setIsFrameOpen] = useState(true);
@@ -33,6 +31,22 @@ const Filter = () => {
   const handleSliderChange = (newValues: number[]) => {
     setValues([newValues[0], newValues[1]]);
   };
+
+  const {
+    frame_shape,
+    frame_material,
+    lens_color,
+    lens_date_type,
+    toggleFilterValue,
+    resetFilters
+  } = useSearchStore();
+
+  const allSelectedFilters = [
+    ...frame_shape,
+    ...frame_material,
+    ...lens_color,
+    ...lens_date_type,
+  ];
 
   return (
     <>
@@ -45,12 +59,16 @@ const Filter = () => {
         text="필터 적용하기"
       />
       <PageContainer>
-        <SelectedFilterTagWrapper>
-          <SelectedTag>
-            <Font text="선택태그" kind="medium16" color="white" />
-            <X size={20} color={color.gray500} />
-          </SelectedTag>
-        </SelectedFilterTagWrapper>
+        <ScrollView horizontal showsHorizontalScrollIndicator={false}>
+          <SelectedFilterTagWrapper>
+            {allSelectedFilters.map((value, index) => (
+              <SelectedTag key={index}>
+                <Font text={value} kind="medium16" color="white" />
+                <X size={20} color={color.gray500} />
+              </SelectedTag>
+            ))}
+          </SelectedFilterTagWrapper>
+        </ScrollView>
 
         <FilterSections>
           <SectionWrapper>
@@ -64,10 +82,14 @@ const Filter = () => {
                 <FilterItem>
                   <Font text="프레임 모양" kind="semi18" />
                   <TagList>
-                    {Object.entries(FrameShapeMap).map(([key, label]) => (
-                      <TouchableOpacity key={key} onPress={() => setSelectedFrameShape(key as FrameShapeType)}>
-                        <Tag isSelected={selectedFrameShape === key}>
-                          <Font text={label} kind="semi16" />
+                    {Object.entries(FrameShapeMap).map(([key, value]) => (
+                      <TouchableOpacity key={key} onPress={() => toggleFilterValue('frame_shape', key)}>
+                        <Tag isSelected={frame_shape.includes(key as FrameShapeType)}>
+                          <Font
+                            text={value}
+                            kind="medium16"
+                            color={frame_shape.includes(key as FrameShapeType) ? "white" : "black"}
+                          />
                         </Tag>
                       </TouchableOpacity>
                     ))}
@@ -77,10 +99,14 @@ const Filter = () => {
                 <FilterItem>
                   <Font text="프레임 형태" kind="semi18" />
                   <TagList>
-                    {Object.entries(FrameMaterialMap).map(([key, label]) => (
-                      <TouchableOpacity key={key} onPress={() => setSelectedFrameMaterial(key as FrameMaterialType)}>
-                        <Tag isSelected={selectedFrameMaterial === key}>
-                          <Font text={label} kind="semi16" />
+                    {Object.entries(FrameMaterialMap).map(([key, value]) => (
+                      <TouchableOpacity key={key} onPress={() => toggleFilterValue('frame_material', key)}>
+                        <Tag key={key} isSelected={frame_material.includes(key as FrameMaterialType)}>
+                          <Font
+                            text={value}
+                            kind="medium16"
+                            color={frame_material.includes(key as FrameMaterialType) ? "white" : "black"}
+                          />
                         </Tag>
                       </TouchableOpacity>
                     ))}
@@ -101,10 +127,14 @@ const Filter = () => {
                 <FilterItem>
                   <Font text="주기" kind="semi18" />
                   <TagList>
-                    {Object.entries(LensDateTypeMap).map(([key, label]) => (
-                      <TouchableOpacity key={key} onPress={() => setSelectedLensDate(key as LensDateType)}>
-                        <Tag isSelected={selectedLensDate === key}>
-                          <Font text={label} kind="semi16" />
+                    {Object.entries(LensDateTypeMap).map(([key, value]) => (
+                      <TouchableOpacity onPress={() => toggleFilterValue('lens_date_type', key)}>
+                        <Tag key={key} isSelected={lens_date_type.includes(key as LensDateType)}>
+                          <Font
+                            text={value}
+                            kind="medium16"
+                            color={lens_date_type.includes(key as LensDateType) ? "white" : "black"}
+                          />
                         </Tag>
                       </TouchableOpacity>
                     ))}
@@ -112,7 +142,7 @@ const Filter = () => {
                 </FilterItem>
 
                 <FilterItem>
-                  <Font text="색상" kind="semi18" />
+                  <Font text="직경" kind="semi18" />
                   <Font
                     text={`${values[0].toFixed(1)}mm ~ ${values[1].toFixed(1)}mm`}
                     color="pink300"
@@ -143,8 +173,11 @@ const Filter = () => {
                   <Font text="색상" kind="semi18" />
                   <TagList>
                     {Object.entries(LensColorMap).map(([key, label]) => (
-                      <TouchableOpacity key={key} onPress={() => setSelectedLensColor(key as LensColorType)}>
-                        <Tag isSelected={selectedLensColor === key}>
+                      <TouchableOpacity
+                        key={key}
+                        onPress={() => toggleFilterValue('lens_color', key)}
+                      >
+                        <Tag isSelected={lens_color.includes(key as LensColorType)}>
                           {key === 'OTHER' ? null : (
                             <View
                               style={{
@@ -155,7 +188,11 @@ const Filter = () => {
                               }}
                             />
                           )}
-                          <Font text={label} kind="semi16" />
+                          <Font
+                            text={label}
+                            kind="semi16"
+                            color={lens_color.includes(key) ? "white" : "black"}
+                          />
                         </Tag>
                       </TouchableOpacity>
                     ))}
@@ -168,11 +205,11 @@ const Filter = () => {
       </PageContainer>
 
       <ControlBar>
-        <ResetButton>
+        <ResetButton onPress={resetFilters}>
           <Reset />
           <Font text="선택 초기화" kind="semi16" />
         </ResetButton>
-        <Button>
+        <Button onPress={() => navigation.navigate("SearchProduct")}>
           <Font text="29,000개의 상품보기" color="white" kind="semi16" />
         </Button>
       </ControlBar>
@@ -224,8 +261,8 @@ const Tag = styled.View<{ isSelected: boolean }>`
   border-width: 1px;
   flex-direction: row;
   gap: 8px;
-  border-color: ${color.gray300};
-  background-color: ${color.white};
+  border-color: ${({ isSelected }) => isSelected ? color.black : color.gray300};
+  background-color: ${({ isSelected }) => isSelected ? color.black : color.white};
 `;
 
 const ControlBar = styled.View`
@@ -245,7 +282,7 @@ const ResetButton = styled.TouchableOpacity`
   align-items: center;
 `;
 
-const Button = styled.View`
+const Button = styled.TouchableOpacity`
   flex: 1;
   padding: 14px 0;
   justify-content: center;
