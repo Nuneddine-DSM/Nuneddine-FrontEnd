@@ -11,18 +11,14 @@ export interface LoginRequest {
 }
 
 export const loginHandler = async (data: LoginRequest) => {
-  try {
-    const deviceToken = await getDeviceToken();
-    const response = await instance.post(`${auth}/login`, {
-      account_id: data.account_id,
-      password: data.password,
-      device_token: deviceToken
-    });
-    await setItem('accessToken', response.data.access_token);
-    return response;
-  } catch (err) {
-    throw err;
-  }
+  const deviceToken = await getDeviceToken();
+  const response = await instance.post(`${auth}/login`, {
+    account_id: data.account_id,
+    password: data.password,
+    device_token: deviceToken
+  });
+  await setItem('accessToken', response.data.access_token);
+  return response;
 };
 
 interface SignupData {

@@ -1,4 +1,3 @@
-import { getItem } from '../utils/asyncStorage';
 import { authenticatedRequest } from '../utils/token';
 import { instance } from './axios';
 
@@ -22,15 +21,11 @@ export interface MyOrderHistoryData {
 }
 
 export const getMyOrderHistory = async () => {
-  try {
-    const token = await authenticatedRequest();
-    const response = await instance.get(`${purchaseHistories}`, {
-      headers: {
-        Authorization: token
-      }
-    });
-    return response;
-  } catch (err) {
-    throw err;
-  }
+  const token = await authenticatedRequest();
+  const response = await instance.get(`${purchaseHistories}`, {
+    headers: {
+      Authorization: token
+    }
+  });
+  return response;
 };
