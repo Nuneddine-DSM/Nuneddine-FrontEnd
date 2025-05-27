@@ -44,21 +44,10 @@ export interface AddAddressRequest {
 
 export const addAddress = async (data: AddAddressRequest) => {
   const token = await authenticatedRequest();
-  const response = await instance.post(
-    `${address}`,
-    {
-      address: data.address,
-      delivery_address_name: data.delivery_address_name,
-      detail_address: data.detail_address,
-      post_code: data.post_code,
-      receiver: data.receiver,
-      phone_number: data.phone_number
-    },
-    {
-      headers: {
-        Authorization: token
-      }
+  const response = await instance.post(`${address}`, data, {
+    headers: {
+      Authorization: token
     }
-  );
+  });
   return response;
 };

@@ -30,18 +30,11 @@ export const getLensFrequency = async () => {
 
 export const setLensFrequency = async (data: LensFrequency) => {
   const token = await authenticatedRequest();
-  const response = await instance.patch(
-    `${user}/lens`,
-    {
-      left_lens_power: data.left_lens_power,
-      right_lens_power: data.right_lens_power
-    },
-    {
-      headers: {
-        Authorization: token
-      }
+  const response = await instance.patch(`${user}/lens`, data, {
+    headers: {
+      Authorization: token
     }
-  );
+  });
   return response;
 };
 
@@ -51,16 +44,10 @@ export interface ModifyProfileRequest {
 
 export const modifyProfile = async (data: ModifyProfileRequest) => {
   const token = await authenticatedRequest();
-  const response = await instance.patch(
-    `${user}/info`,
-    {
-      name: data.name
-    },
-    {
-      headers: {
-        Authorization: token
-      }
+  const response = await instance.patch(`${user}/info`, data, {
+    headers: {
+      Authorization: token
     }
-  );
+  });
   return response;
 };
