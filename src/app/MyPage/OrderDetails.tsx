@@ -48,7 +48,7 @@ const OrderDetails = () => {
       {loading ? (
         <ActivityIndicator />
       ) : (
-        <OrderWapper>
+        <OrderWrapper>
           {myOrderList.map((order, index) => (
             <OrderSection key={`${order.date}-${index}`}>
               <DateWrapper>
@@ -71,7 +71,7 @@ const OrderDetails = () => {
               </OrderList>
             </OrderSection>
           ))}
-        </OrderWapper>
+        </OrderWrapper>
       )}
     </Container>
   );
@@ -84,7 +84,7 @@ const Container = styled.View`
   background-color: ${color.gray50};
 `;
 
-const OrderWapper = styled.ScrollView`
+const OrderWrapper = styled.ScrollView`
   margin-top: 62px;
   flex: 1;
   flex-direction: column;
