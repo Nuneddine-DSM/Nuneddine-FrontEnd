@@ -1,23 +1,25 @@
-import { useState, useMemo } from "react";
+import { useState, useMemo, useEffect } from "react";
 import { color, Font } from "../../styles";
 import styled from "styled-components/native";
 import Banner from "./Banner";
+import MainBanner from "../../assets/MainBanner.png"
 import { Arrow } from "../../assets";
 import { Header, Footer } from "../../components/Main";
-import { NavigationListData, FramesTag, CategoryData, BannerData } from "./Data";
 import { ProductCardSmall, Tab } from "../../components/Shopping";
-import { ScrollView } from "react-native-gesture-handler";
+import { ScrollView, FlatList } from "react-native-gesture-handler";
 import { useNavigation } from "@react-navigation/native";
-import type { StackNavigationProp } from '@react-navigation/stack';
-import { glassesProduct, lensProduct } from "../../apis/shops";
+import { StackNavigationProp } from '@react-navigation/stack';
+import { glassesProduct, lensProduct, searchHandler } from "../../apis/shops";
 import { useQuery } from "@tanstack/react-query";
-import { mapFrameShape } from "../Data";
-import type { ProductType } from "../../interface";
+import { NavigationListData, CategoryData, BannerData } from "./Data";
+import { FrameShapeMap, FrameShapeType, mapFrameShape, LensColorMap, LensColorType } from "../Data";
+import { useSearchStore } from "../../stores/useSearchStore";
 
 const Main = () => {
   const navigation = useNavigation<StackNavigationProp<any>>();
   const [selectedTab, setSelectedTab] = useState<number>(1);
-  const [selectedTag, setSelectedTag] = useState<string>("둥근테");
+
+  const { frame_shape, lens_color, setSingleFilterValue } = useSearchStore();
 
   const { data: glassesData } = useQuery({
     queryKey: ["glassesProduct"],
@@ -39,15 +41,15 @@ const Main = () => {
         key: "trending_list",
         title: "유행템, 나도 찰떡 가능?",
         subTitle: "요즘 인기템 총정리! 고르기 전에 참고해요",
-        name: "Popular",
+        name: "Trending",
         list: dataSource.trending_list ?? [],
       },
       {
-        key: "hot_now_list",
+        key: "popular_list",
         title: isGlasses ? "태만 봐도 느낌 온다" : "렌즈 맛집은 나야",
         subTitle: isGlasses ? "각진 태부터 둥근 태까지, 내 얼굴에 맞는 스타일 찾기" : "자연스러운 데일리부터 포인트까지, 찰떡 렌즈 고르기",
-        name: "Frames",
-        list: dataSource.hot_now_list ?? [],
+        name: "Popular",
+        list: []
       },
       {
         key: "hipster_list",
@@ -57,14 +59,30 @@ const Main = () => {
         list: dataSource.hipster_list ?? [],
       },
       {
+        key: "hot_now_list",
+        title: "지금 가장 핫한 브랜드",
+        subTitle: "놓치면 아쉬운, 지금 제일 잘나가는 브랜드만!",
+        name: "Hot",
+        list: dataSource.hot_now_list ?? []
+      },
+      {
         key: "classic_list",
-        title: "클래식은 영원하다",
-        subTitle: "꾸준히 사랑받는 스테디셀러",
+        title: "Classic in Retro Mood",
+        subTitle: "빈티지 감성 좋아하는 당신을 위한 셀렉션",
         name: "Classic",
         list: dataSource.classic_list ?? [],
       },
     ];
   }, [selectedTab, glassesData, lensData]);
+
+  const filters = selectedTab === 1
+    ? { frame_shape }
+    : { lens_color };
+
+  const { data: searchData } = useQuery({
+    queryKey: ['search', filters],
+    queryFn: () => searchHandler(filters),
+  });
 
   const renderSection = (item: typeof sectionData[0]) => (
     <RecommendedSection key={item.name}>
@@ -74,49 +92,84 @@ const Main = () => {
           <Font text={item.subTitle} kind="regular16" color="gray600" />
         </TextBox>
 
-        {item.name === "Frames" && (
-          <ScrollView horizontal showsHorizontalScrollIndicator={false}>
-            <TagWrapper>
-              {FramesTag.map((tag, index) => (
-                <Tag
-                  key={index}
-                  isSelected={selectedTag === tag}
-                  onPress={() => setSelectedTag(tag)}
-                >
-                  <Font
-                    text={tag}
-                    kind="medium16"
-                    color={selectedTag === tag ? "pink300" : "gray500"}
-                  />
-                </Tag>
-              ))}
-            </TagWrapper>
-          </ScrollView>
+        {item.name === "Popular" && (
+          <>
+            <ScrollView horizontal showsHorizontalScrollIndicator={false}>
+              <TagWrapper>
+                {Object.entries(selectedTab === 1 ? FrameShapeMap : LensColorMap).map(([key, value]) => {
+                  const shapeKey = key as FrameShapeType | LensColorType;
+                  const isSelected = selectedTab === 1
+                    ? frame_shape.includes(shapeKey as FrameShapeType)
+                    : lens_color.includes(shapeKey as LensColorType);
+
+                  return (
+                    <Tag
+                      key={key}
+                      isSelected={isSelected}
+                      onPress={() => {
+                        if (!isSelected) {
+                          if (selectedTab === 1) {
+                            setSingleFilterValue('frame_shape', shapeKey as FrameShapeType);
+                          } else {
+                            setSingleFilterValue('lens_color', shapeKey as LensColorType);
+                          }
+                        }
+                      }}
+                    >
+                      <Font
+                        text={value}
+                        kind="medium16"
+                        color={isSelected ? "pink300" : "gray500"}
+                      />
+                    </Tag>
+                  );
+                })}
+              </TagWrapper>
+            </ScrollView>
+
+            <FlatList
+              horizontal
+              data={searchData ?? []}
+              keyExtractor={item => item.shop_id.toString()}
+              renderItem={({ item }) => (
+                <ProductCardSmall
+                  shopId={item.shop_id}
+                  image={item.image_urls?.[0] ?? ''}
+                  title={item.brand_name}
+                  describe={item.glasses_name}
+                  tag={mapFrameShape(item.frame_shape)}
+                  price={item.price}
+                />
+              )}
+            />
+          </>
         )}
 
         {item.name === "Hipster" && <Image source={require("../../assets/Hipster.png")} />}
 
-        <ScrollView horizontal showsHorizontalScrollIndicator={false}>
-          <ProductList>
-            {item.list.map((product: ProductType, index: number) => (
-              <ProductCardSmall
-                key={index}
-                shopId={product.shop_id}
-                image={product.image_urls[0]}
-                title={product.brand_name}
-                describe={product.glasses_name}
-                tag={mapFrameShape(product.frame_shape)}
-                price={product.price}
-              />
-            ))}
-          </ProductList>
-        </ScrollView>
+        <FlatList
+          horizontal
+          data={item.list}
+          keyExtractor={item => item.shop_id.toString()}
+          renderItem={({ item }) => (
+            <ProductCardSmall
+              shopId={item.shop_id}
+              image={item.image_urls?.[0] ?? ''}
+              title={item.brand_name}
+              describe={item.glasses_name}
+              tag={mapFrameShape(item.frame_shape)}
+              price={item.price}
+            />
+          )}
+        />
       </ProductIntroWrapper>
 
-      <MoreProductsButton>
+      <MoreProductsButton onPress={() => navigation.navigate("SearchProduct")}>
         <Font text="더 많은 상품 구경하기" kind="medium16" color="gray500" />
         <Arrow size={24} color={color.gray500} rotate="right" />
       </MoreProductsButton>
+
+      {item.name === "Trending" && <BannerImage source={MainBanner} />}
     </RecommendedSection>
   );
 
@@ -127,12 +180,14 @@ const Main = () => {
         <Banner data={BannerData} />
 
         <NavigationListWrapper>
-          {NavigationListData.map(({ id, name, href }) => (
+          {NavigationListData.map(({ id, name, href, image, imageHeight = 0, imageWidth = 0 }) => (
             <NavigationTab
               key={id}
               onPress={() => href ? navigation.navigate(href) : null}
             >
-              <TabIconWrapper />
+              <TabIconWrapper>
+                <Icon source={image} height={imageHeight} width={imageWidth} />
+              </TabIconWrapper>
               <Font text={name} kind="medium16" />
             </NavigationTab>
           ))}
@@ -180,8 +235,16 @@ const TabIconWrapper = styled.View`
   justify-content: center;
   align-items: center;
   border-radius: 12px;
-  background-color: red;
+  background-color: #F4F4F7;
 `;
+
+const Icon = styled.Image<{
+  height: number,
+  width: number
+}>`
+  width: ${({ width }) => `${width}px`};
+  height: ${({ height }) => `${height}px`};
+`
 
 const RecommendedListWrapper = styled.View`
   padding: 35px 0 185px 20px;
@@ -203,11 +266,6 @@ const TextBox = styled.View`
 const Image = styled.Image`
   width: 370px;
   height: 390px;
-`;
-
-const ProductList = styled.View`
-  flex-direction: row;
-  gap: 10px;
 `;
 
 const MoreProductsButton = styled.TouchableOpacity`
@@ -235,5 +293,11 @@ const Tag = styled.TouchableOpacity<{ isSelected?: boolean }>`
   border-color: ${({ isSelected }) => (isSelected ? color.pink300 : color.gray400)};
   background-color: ${({ isSelected }) => (isSelected ? color.pink100 : color.white)};
 `;
+
+const BannerImage = styled.Image`
+  width: 370px;
+  height: 139px;
+  border-radius: 8px;
+`
 
 export default Main;
