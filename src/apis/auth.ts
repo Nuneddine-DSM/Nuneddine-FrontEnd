@@ -1,5 +1,6 @@
 import { instance, storeData } from './axios';
 import { getDeviceToken } from '../utils/firebase';
+import { setItem } from '../utils/asyncStorage';
 
 const auth = '/auth';
 
@@ -10,17 +11,14 @@ export interface LoginRequest {
 }
 
 export const loginHandler = async (data: LoginRequest) => {
-  try {
-    const deviceToken = await getDeviceToken();
-    const response = await instance.post(`${auth}/login`, {
-      account_id: data.account_id,
-      password: data.password,
-      device_token: deviceToken
-    });
-    return response;
-  } catch (err) {
-    throw err;
-  }
+  const deviceToken = await getDeviceToken();
+  const response = await instance.post(`${auth}/login`, {
+    account_id: data.account_id,
+    password: data.password,
+    device_token: deviceToken
+  });
+  await setItem('accessToken', response.data.access_token);
+  return response;
 };
 
 interface SignupData {
@@ -39,10 +37,11 @@ export const signUpHandler = async (data: SignupData) => {
       device_token: deviceToken
     });
 
-    const { accessToken } = response.data;
+    const accessToken = response.data.access_token;
 
     if (accessToken) {
       await storeData('accessToken', accessToken);
+      await setItem('accessToken', accessToken);
     }
 
     return response;

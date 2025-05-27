@@ -1,10 +1,10 @@
-import styled from "styled-components/native";
-import { color, Font } from "../../styles"
-import CheckBox from "./CheckBox"
-import { X } from "../../assets"
-import QuantitySelector from "./QuantitySelector";
-import { CartItemType } from "../../interface";
-import { TouchableOpacity } from "react-native";
+import styled from 'styled-components/native';
+import { color, Font } from '../../styles';
+import CheckBox from './CheckBox';
+import { X } from '../../assets';
+import QuantitySelector from './QuantitySelector';
+import { CartItemType } from '../../interface';
+import { TouchableOpacity } from 'react-native';
 
 const CartGlassesItem = ({
   item,
@@ -12,7 +12,7 @@ const CartGlassesItem = ({
   count,
   onToggleSelect,
   onDelete,
-  onCountChange,
+  onCountChange
 }: {
   item: CartItemType;
   isSelected: boolean;
@@ -38,7 +38,7 @@ const CartGlassesItem = ({
                 <Font
                   text={item.glass_name}
                   kind="medium16"
-                  style={{ flexWrap: "wrap" }}
+                  style={{ flexWrap: 'wrap' }}
                   numberOfLines={2}
                   ellipsizeMode="tail"
                 />
@@ -55,8 +55,8 @@ const CartGlassesItem = ({
         </TouchableOpacity>
       </ItemContent>
     </ItemContainer>
-  )
-}
+  );
+};
 
 export default CartGlassesItem;
 
@@ -69,7 +69,6 @@ const ItemContainer = styled.View`
   border-color: ${color.gray200};
   background-color: ${color.white};
 `;
-
 
 const ItemContent = styled.View`
   display: flex;

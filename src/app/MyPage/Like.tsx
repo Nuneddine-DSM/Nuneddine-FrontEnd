@@ -67,15 +67,15 @@ const Like = () => {
         />
       </ScrollView>
     </Container>
-  )
-}
+  );
+};
 
 const Container = styled.View`
   flex: 1;
   flex-direction: column;
   padding-top: 62px;
   background-color: ${color.white};
-`
+`;
 
 const ProductCounter = styled.View`
   padding: 20px;
@@ -89,4 +89,4 @@ const ProductList = styled.View`
   padding: 10px 16px;
 `;
 
-export default Like
+export default Like;

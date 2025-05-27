@@ -27,10 +27,11 @@ const Onboarding = () => {
         />
         <Button
           text="회원가입"
-          primaryButton={false}
           onPress={() => {
             navigation.navigate('SignUp');
           }}
+          buttonColor="white"
+          textColor="pink300"
         />
       </ButtonWrapper>
     </BackgroundImage>

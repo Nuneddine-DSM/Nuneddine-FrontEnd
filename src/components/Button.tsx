@@ -1,45 +1,53 @@
 import React from 'react';
 import styled from 'styled-components/native';
 import { color, Font } from '../styles';
+import { ActivityIndicator } from 'react-native';
 
 interface ButtonPropsType {
   text?: string;
   width?: string;
   onPress?: () => void;
-  primaryButton?: boolean;
+  buttonColor?: keyof typeof color;
+  textColor?: keyof typeof color;
+  loading?: boolean;
 }
 
 export function Button({
   text,
   width = '100%',
   onPress,
-  primaryButton = true
+  buttonColor = 'pink300',
+  textColor = 'white',
+  loading = false
 }: ButtonPropsType) {
   return (
     <BasedButton
       width={width}
-      primaryButton={primaryButton}
       paddingValue={14}
-      onPress={onPress}>
-      <Font
-        kind="semi16"
-        text={text}
-        color={primaryButton ? 'white' : 'pink300'}
-      />
+      onPress={onPress}
+      buttonColor={buttonColor}
+      disabled={loading}>
+      {loading ? (
+        <ActivityIndicator
+          size="small"
+          color={buttonColor === color.white ? color.pink300 : color.white}
+        />
+      ) : (
+        <Font kind="semi16" text={text} color={textColor} />
+      )}
     </BasedButton>
   );
 }
 
 const BasedButton = styled.TouchableOpacity<{
   width?: string;
-  primaryButton?: boolean;
+  buttonColor?: string;
   paddingValue?: number;
 }>`
   border-radius: 10px;
   width: ${({ width }) => width};
   max-height: 55px;
-  background-color: ${({ primaryButton }) =>
-    primaryButton ? color.pink300 : color.white};
+  background-color: ${({ buttonColor }) => buttonColor};
   padding-top: ${({ paddingValue }) => paddingValue};
   padding-bottom: ${({ paddingValue }) => paddingValue};
   justify-content: center;

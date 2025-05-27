@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import { useNavigation } from '@react-navigation/native';
+import { CommonActions, useNavigation } from '@react-navigation/native';
 import styled from 'styled-components/native';
 import { TopBar, Input, Button } from '../../components';
 import { color, Font } from '../../styles';
@@ -7,7 +7,6 @@ import { Arrow } from '../../assets/Arrow';
 import { loginHandler, LoginRequest } from '../../apis/auth';
 import { Alert, TouchableOpacity } from 'react-native';
 import { StackNavigationProp } from '@react-navigation/stack';
-import { setItem } from '../../utils/asyncStorage';
 import axios from 'axios';
 import { Text, View } from 'react-native';
 
@@ -33,13 +32,16 @@ const Login = () => {
       const response = await loginHandler(requestData);
 
       if (response.status === 200) {
-        await setItem('accessToken', response.data.access_token);
-        navigation.replace('NavBar');
+        navigation.dispatch(
+          CommonActions.reset({
+            index: 0,
+            routes: [{ name: 'NavBar' }]
+          })
+        );
       } else {
         Alert.alert('아이디 또는 비밀번호를 잘못입력하였습니다.');
       }
     } catch (err) {
-      setLoading(false);
       if (axios.isAxiosError(err)) {
         console.error('AxiosError', err);
         if (err.response?.status === 401) {
@@ -110,6 +112,7 @@ const Login = () => {
                 login();
               }
             }}
+            loading={loading}
           />
         </ButtonBox>
       </LoginBox>
