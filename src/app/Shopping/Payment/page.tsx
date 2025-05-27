@@ -24,7 +24,7 @@ const Payment = () => {
       <TopBar
         text="장바구니/결제"
         leftIcon={
-          <TouchableOpacity onPress={() => { }}>
+          <TouchableOpacity onPress={() => navigation.goBack()}>
             <Arrow size={34} />
           </TouchableOpacity>
         }
