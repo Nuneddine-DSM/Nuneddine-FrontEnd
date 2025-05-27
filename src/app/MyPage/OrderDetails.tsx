@@ -50,8 +50,8 @@ const OrderDetails = () => {
       />
 
       <OrderWapper>
-        {myOrderList.map((order, index) => (
-          <OrderSection key={index}>
+        {myOrderList.map(order => (
+          <OrderSection key={order.date}>
             <DateWrapper>
               <Font text={order.date} kind="bold24" />
             </DateWrapper>
