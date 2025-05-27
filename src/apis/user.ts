@@ -46,7 +46,7 @@ export const setLensFrequency = async (data: LensFrequency) => {
 };
 
 export interface ModifyProfileRequest {
-  nickname: string;
+  name: string;
 }
 
 export const modifyProfile = async (data: ModifyProfileRequest) => {
@@ -54,7 +54,7 @@ export const modifyProfile = async (data: ModifyProfileRequest) => {
   const response = await instance.patch(
     `${user}/info`,
     {
-      nickname: data.nickname
+      name: data.name
     },
     {
       headers: {

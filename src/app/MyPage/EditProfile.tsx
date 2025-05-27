@@ -22,7 +22,7 @@ const EditProfile = () => {
     try {
       setLoading(true);
       const requestData: ModifyProfileRequest = {
-        nickname: name
+        name: nickname
       };
       const response = await modifyProfile(requestData);
 
