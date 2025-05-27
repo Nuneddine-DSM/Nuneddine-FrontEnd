@@ -1,7 +1,7 @@
 import styled from 'styled-components/native';
 import { color, Font } from '../../styles';
 import { TopBar } from '../../components';
-import { TouchableOpacity } from 'react-native';
+import { ActivityIndicator, Alert, TouchableOpacity } from 'react-native';
 import { Arrow } from '../../assets';
 import OrderGlassesItem from '../../components/Shopping/OrderGlassesItem';
 import { useNavigation } from '@react-navigation/native';
@@ -15,19 +15,28 @@ const OrderDetails = () => {
   const navigation = useNavigation();
 
   const [myOrderList, setMyOrderList] = useState<MyOrderHistoryData[]>([]);
+  const [loading, setLoading] = useState(false);
 
   useEffect(() => {
     const getMyOrder = async () => {
       try {
+        setLoading(true);
         const response = await getMyOrderHistory();
         setMyOrderList(response.data.purchaseHistories);
       } catch (err) {
+        Alert.alert('주문 내역을 불러오는 데 실패하였습니다');
         console.error(err);
+      } finally {
+        setLoading(false);
       }
     };
 
     getMyOrder();
   }, []);
+
+  if (loading) {
+    return <ActivityIndicator />;
+  }
 
   return (
     <Container>
