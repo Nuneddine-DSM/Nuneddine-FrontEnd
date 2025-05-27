@@ -17,18 +17,21 @@ interface PostcodeSelectParams {
 const AddressWebview = () => {
   const route =
     useRoute<RouteProp<Record<string, PostcodeSelectParams>, string>>();
-  const naivigation = useNavigation();
+  const navigation = useNavigation();
 
   const handleSelected = (data: AddressWebviewData) => {
     const { address, zonecode, buildingName, bname } = data;
-    const resultAddress = `${address} (${bname}, ${buildingName})`;
+    const additionalInfo = [bname, buildingName].filter(Boolean).join(', ');
+    const resultAddress = additionalInfo
+      ? `${address} (${additionalInfo})`
+      : address;
 
     route.params.onSelect({
       zonecode: zonecode.toString(),
       resultAddress: resultAddress
     });
 
-    naivigation.goBack();
+    navigation.goBack();
   };
 
   return (
