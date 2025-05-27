@@ -56,3 +56,26 @@ export type FrameShapeType = keyof typeof FrameShapeMap;
 export type FrameMaterialType = keyof typeof FrameMaterialMap;
 export type LensColorType = keyof typeof LensColorMap;
 export type LensDateType = keyof typeof LensDateTypeMap;
+
+export const mapFrameShape = (shape: FrameShapeType | string): string => {
+  switch (shape) {
+    case "ROUND":
+      return "둥근테";
+    case "SQUARE":
+      return "각진테";
+    case "BOSTON":
+      return "보스턴테";
+    case "OVAL":
+      return "타원형테";
+    case "CAT_EYE":
+      return "캣아이테";
+    case "WAYFARER":
+      return "웨이페어러테";
+    case "PILOT":
+      return "파일럿테";
+    case "OTHER":
+      return "기타테";
+    default:
+      return "기타";
+  }
+};

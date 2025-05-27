@@ -6,12 +6,15 @@ interface SearchProps {
   value?: string;
   onChangeText?: (i: string) => void;
   onKeyPress?: (i: any) => void;
+  onSubmit?: () => void;
 }
 
 const SearchInput = ({
   value,
   onChangeText,
-  onKeyPress
+  onKeyPress,
+  onSubmit,
+  ...props
 }: SearchProps) => {
   return (
     <Container>
@@ -21,7 +24,10 @@ const SearchInput = ({
           placeholder="검색어를 입력해주세요."
           placeholderTextColor={color.gray400}
           onChangeText={onChangeText}
+          onSubmitEditing={onSubmit}
           onKeyPress={onKeyPress}
+          returnKeyType="search"
+          {...props}
         />
         <IconWrapper>
           <SearchIcon size={28} color={color.gray500} />

@@ -30,7 +30,7 @@ const OrderDetails = ({ item }: { item: OrderDataItemType }) => {
 
       <OptionBox>
         <Font
-          text={`옵션 : ${item.option[0].number}개 ${item.type === "Lens" ? item.option[0].lensType : ""}`}
+          text={`옵션 : ${1}개 ${item.type === "Lens" ? item.option[0].lensType : ""}`}
           kind="regular14"
           color="gray600"
         />

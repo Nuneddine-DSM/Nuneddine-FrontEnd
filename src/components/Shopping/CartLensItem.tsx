@@ -1,80 +1,76 @@
 import styled from "styled-components/native";
 import { color, Font } from "../../styles"
-import CheckBox from "./CheckBox";
-import { useState } from "react";
 import { X } from "../../assets"
-import Tag from "./Tag";
 import { TouchableOpacity } from "react-native";
+import { CartItemType } from "../../interface";
+import CheckBox from "./CheckBox"
+import Tag from "./Tag";
 
-interface CartLensItemProps {
-  checkedItems: { [id: string]: boolean };
-  setCheckedItems: React.Dispatch<React.SetStateAction<{ [id: string]: boolean }>>;
-  onPressOption: () => void;
-}
-
-const CartLensItem = ({ checkedItems, setCheckedItems, onPressOption }: CartLensItemProps) => {
-  const [lens] = useState([
-    { id: 'lens1', count: 1 },
-    { id: 'lens2', count: 1 }
-  ]);
-
-  const toggleItem = (id: string) => {
-    setCheckedItems(prev => ({
-      ...prev,
-      [id]: !prev[id]
-    }));
-  };
+const CartLensItem = ({
+  item,
+  isSelected,
+  count,
+  onToggleSelect,
+  onDelete,
+  onCountChange
+}: {
+  item: CartItemType;
+  isSelected: boolean;
+  count: number;
+  onToggleSelect: () => void;
+  onDelete: () => void;
+  onCountChange: (newCount: number) => void;
+}) => {
+  const formattedAmount = item.price.toLocaleString();
 
   return (
-    <>
-      {lens.map(item => (
-        <ItemContainer key={item.id}>
-          <CheckBox
-            onPress={() => toggleItem(item.id)}
-            selected={checkedItems[item.id] || false}
+    <ItemContainer>
+      <CheckBox onPress={onToggleSelect} selected={isSelected} />
+
+      <ItemContent>
+        <ProductInfoSection>
+          <ProductImage />
+          <CartItemDetail>
+            <TitleBlock>
+              <Font text={item.brand_name} kind="bold16" />
+              <Font
+                text={item.glass_name}
+                kind="medium16"
+                style={{ flexWrap: "wrap" }}
+                numberOfLines={2}
+                ellipsizeMode="tail"
+              />
+            </TitleBlock>
+
+            <CategoryPriceBlock>
+              <Tag text="한달용" />
+              <Font text={`${formattedAmount}원`} kind="bold16" />
+            </CategoryPriceBlock>
+          </CartItemDetail>
+          <X />
+        </ProductInfoSection>
+
+        <OptionWrapper>
+          <Font
+            text={`옵션 : ${item.count}개 / ${item.lens_power}`}
+            color="gray600"
+            kind="regular14"
           />
-
-          <ItemContent>
-            <ProductInfoSection>
-              <ProductImage />
-              <CartItemDetail>
-                <TitleBlock>
-                  <Font text="브랜드" kind="bold16" />
-                  <Font
-                    text="[안경 이름] 암튼 이름 겁나 김 뭐 mm 까지 나와있음..."
-                    kind="medium16"
-                    style={{ flexWrap: "wrap" }}
-                    numberOfLines={2}
-                    ellipsizeMode="tail"
-                  />
-                </TitleBlock>
-
-                <CategoryPriceBlock>
-                  <Tag text="한달용" />
-                  <Font text="12,000원" kind="bold16" />
-                </CategoryPriceBlock>
-              </CartItemDetail>
-              <X />
-            </ProductInfoSection>
-
-            <OptionWrapper>
-              <Font text="옵션 : 1개 / -1.00" color="gray600" kind="regular14" />
-              <TouchableOpacity onPress={onPressOption}>
-                <Font
-                  text="옵션변경"
-                  color="gray600"
-                  kind="regular14"
-                  style={{ textDecorationLine: 'underline' }}
-                />
-              </TouchableOpacity>
-            </OptionWrapper>
-          </ItemContent>
-        </ItemContainer>
-      ))}
-
-    </>
+          <TouchableOpacity onPress={() => { }}>
+            <Font
+              text="옵션변경"
+              color="gray600"
+              kind="regular14"
+              style={{ textDecorationLine: 'underline' }}
+            />
+          </TouchableOpacity>
+        </OptionWrapper>
+      </ItemContent>
+    </ItemContainer>
   )
 }
+
+export default CartLensItem;
 
 const ItemContainer = styled.View`
   display: flex;
@@ -133,5 +129,3 @@ const OptionWrapper = styled.View`
   border-radius: 4px;
   background-color: ${color.gray50};
 `
-
-export default CartLensItem

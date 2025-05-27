@@ -6,18 +6,46 @@ import { TopBar } from "../../components"
 import { TouchableOpacity } from "react-native"
 import { useNavigation, NavigationProp } from '@react-navigation/native'
 import SearchInput from "../Search/component/SearchInput";
-import { FlatList } from "react-native-gesture-handler";
+import { FlatList, ScrollView } from "react-native-gesture-handler";
 import { ProductCardLarge } from "../../components/Shopping";
 import { ProductData } from "./Data";
 import { Footer } from "../../components/Main";
+import { useSearchStore } from "../../stores/useSearchStore";
+import { searchHandler } from "../../apis/shops";
 
 const productCount = 1000;
-const selectTag = ["화이트", "블랙", "굵은태"];
 
 const SearchProduct = () => {
   const navigation = useNavigation<NavigationProp<any>>();
 
   const [searchText, setSearchText] = useState("");
+
+  const {
+    keyword,
+    frame_shape,
+    frame_material,
+    lens_date_type,
+    lens_color
+  } = useSearchStore();
+
+  const allSelectedFilters = [
+    ...frame_shape,
+    ...frame_material,
+    ...lens_color,
+    ...lens_date_type,
+  ];
+
+  const filters = {
+    keyword,
+    frame_shape: [...frame_shape],
+    frame_material: [...frame_material],
+    lens_color: [...lens_color],
+    lens_date_type: [...lens_date_type]
+  }
+
+  const Searched = () => {
+    searchHandler(filters)
+  }
 
   return (
     <>
@@ -52,14 +80,16 @@ const SearchProduct = () => {
                   <Font text="필터 적용하기" kind="semi16" />
                 </FilterHeader>
 
-                <SelectedTagsWrapper>
-                  {selectTag.map((tag, index) =>
-                    <TagController key={index}>
-                      <Font text={tag} kind="medium14" color="gray600" />
-                      <X size={20} color={color.gray600} />
-                    </TagController>
-                  )}
-                </SelectedTagsWrapper>
+                <ScrollView horizontal showsHorizontalScrollIndicator={false}>
+                  <SelectedTagsWrapper>
+                    {allSelectedFilters.map((tag, index) =>
+                      <TagController key={index}>
+                        <Font text={tag} kind="medium14" color="gray600" />
+                        <X size={20} color={color.gray600} />
+                      </TagController>
+                    )}
+                  </SelectedTagsWrapper>
+                </ScrollView>
               </FilterWrapper>
 
               <ProductCountText>

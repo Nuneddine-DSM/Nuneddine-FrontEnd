@@ -7,14 +7,24 @@ import OrderGlassesItem from "../../../components/Shopping/OrderDetails";
 import { TouchableOpacity } from "react-native"
 import { Arrow } from "../../../assets";
 import { OrderGlassesItems } from "./Data"
+import { NavigationProp, useNavigation } from "@react-navigation/native";
+import { useQuery } from "@tanstack/react-query";
+import { productPurchase } from "../../../apis/shops";
 
 const Payment = () => {
+  const navigation = useNavigation<NavigationProp<any>>();
+
+  const { data } = useQuery({
+    queryKey: ["productPurchase"],
+    queryFn: productPurchase
+  })
+
   return (
     <>
       <TopBar
         text="장바구니/결제"
         leftIcon={
-          <TouchableOpacity onPress={() => {}}>
+          <TouchableOpacity onPress={() => { }}>
             <Arrow size={34} />
           </TouchableOpacity>
         }
@@ -27,15 +37,17 @@ const Payment = () => {
               <Font text="배송지 정보" kind="bold20" />
               <Font text="*" kind="bold20" color="pink300" />
             </RequiredTitle>
-            <Font
-              text="배송지 변경"
-              kind="medium16"
-              color="pink300"
-              style={{
-                textDecorationLine: 'underline',
-                textDecorationColor: color.pink300
-              }}
-            />
+            <TouchableOpacity onPress={() => navigation.navigate("Delivery")}>
+              <Font
+                text="배송지 변경"
+                kind="medium16"
+                color="pink300"
+                style={{
+                  textDecorationLine: 'underline',
+                  textDecorationColor: color.pink300
+                }}
+              />
+            </TouchableOpacity>
           </DeliveryHeader>
 
           <DeliverySection>
@@ -58,9 +70,11 @@ const Payment = () => {
           <ItemHeader>
             <Font text="주문 상품" kind="bold20" />
           </ItemHeader>
-          {OrderGlassesItems.map(item => (
-            <OrderGlassesItem key={item.id} item={item} />
-          ))}
+          <OrderListWrapper>
+            {OrderGlassesItems.map(item => (
+              <OrderGlassesItem key={item.id} item={item} />
+            ))}
+          </OrderListWrapper>
         </OrderItemList>
 
         <PaymentMethod />
@@ -146,5 +160,9 @@ const ButtonWrapper = styled.View`
   border-color: ${color.gray100};
   background-color: ${color.white};
 `;
+
+const OrderListWrapper = styled.View`
+  padding: 0 20px;
+`
 
 export default Payment;
