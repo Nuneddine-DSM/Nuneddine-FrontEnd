@@ -9,7 +9,6 @@ import {
   getMyOrderHistory,
   MyOrderHistoryData
 } from '../../apis/purchaseHistories';
-import { CartGlassesItem } from '../../components/Shopping';
 import MyHistoryItem from '../../components/MyPage/OrderGlassItem';
 
 const OrderDetails = () => {
