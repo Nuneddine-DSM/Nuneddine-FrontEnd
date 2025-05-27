@@ -1,8 +1,9 @@
-import { useState, useMemo, useEffect } from "react";
+import { useState, useMemo } from "react";
 import { color, Font } from "../../styles";
 import styled from "styled-components/native";
 import Banner from "./Banner";
 import MainBanner from "../../assets/MainBanner.png"
+import { View } from "react-native"
 import { Arrow } from "../../assets";
 import { Header, Footer } from "../../components/Main";
 import { ProductCardSmall, Tab } from "../../components/Shopping";
@@ -141,6 +142,8 @@ const Main = () => {
                   price={item.price}
                 />
               )}
+              ItemSeparatorComponent={() => <View style={{ width: 10 }} />}
+              showsHorizontalScrollIndicator={false}
             />
           </>
         )}
@@ -161,6 +164,8 @@ const Main = () => {
               price={item.price}
             />
           )}
+          ItemSeparatorComponent={() => <View style={{ width: 10 }} />}
+          showsHorizontalScrollIndicator={false}
         />
       </ProductIntroWrapper>
 
