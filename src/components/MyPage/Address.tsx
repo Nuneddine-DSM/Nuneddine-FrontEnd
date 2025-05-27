@@ -42,7 +42,7 @@ const Wrapper = styled.View`
 
 const DeleteWrapper = styled.TouchableOpacity`
   justify-content: center;
-  align=items: center;
+  align-items: center;
   border-radius: 20px;
   border-width: 1px;
   border-color: ${color.red};
