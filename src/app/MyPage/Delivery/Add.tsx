@@ -146,6 +146,7 @@ const Add = () => {
             }
           }}
           loading={loading}
+          buttonColor="black"
         />
       </ButtonWrapper>
     </SafeAreaView>

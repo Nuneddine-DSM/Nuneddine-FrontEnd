@@ -16,7 +16,7 @@ import {
 const Frequency = () => {
   const navigation = useNavigation<StackNavigationProp<any>>();
 
-  const [isLoading, setLoading] = useState(false);
+  const [loading, setLoading] = useState(false);
   const [isLeftSelected, setLeftSelected] = useState(true);
   const [leftSelectedIndex, setLeftSelectedIndex] = useState(0);
   const [rightSelectedIndex, setRightSelectedIndex] = useState(0);
@@ -74,7 +74,7 @@ const Frequency = () => {
     }
   };
 
-  if (isLoading) {
+  if (loading) {
     return (
       <Container>
         <TopBar
@@ -178,10 +178,12 @@ const Frequency = () => {
         <Button
           text="설정 완료"
           onPress={() => {
-            if (!isLoading) {
+            if (!loading) {
               patchFrequency();
             }
           }}
+          buttonColor="black"
+          loading={loading}
         />
       </ButtonBox>
     </Container>

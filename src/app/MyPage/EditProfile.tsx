@@ -85,6 +85,7 @@ const EditProfile = () => {
           onPress={() => {
             changeProfile();
           }}
+          buttonColor="black"
         />
       </ButtonWrapper>
     </Container>

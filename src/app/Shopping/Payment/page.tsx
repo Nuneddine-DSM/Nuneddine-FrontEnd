@@ -68,7 +68,7 @@ const Payment = () => {
         <Amount last={true} />
 
         <ButtonWrapper>
-          <Button text="상품 구매하기" />
+          <Button text="상품 구매하기" buttonColor="black" />
         </ButtonWrapper>
       </Container>
     </>

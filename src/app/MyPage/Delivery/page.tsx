@@ -88,6 +88,7 @@ const Delivery = () => {
           onPress={() => {
             navigation.navigate('DeliveryAdd');
           }}
+          buttonColor="black"
         />
       </ButtonWrapper>
     </Container>

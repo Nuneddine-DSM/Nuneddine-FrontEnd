@@ -1,19 +1,19 @@
-import styled from "styled-components/native";
-import { color, Font } from "../../styles"
-import { TopBar } from "../../components";
-import { TouchableOpacity } from "react-native";
-import { Arrow } from "../../assets";
-import { GlassesLensTab } from "../../components/Shopping";
-import { useState } from "react";
-import ProductCard from "../../components/Shopping/ProductCardLarge";
-import { ScrollView } from "react-native-gesture-handler";
-import { useNavigation } from "@react-navigation/native";
+import styled from 'styled-components/native';
+import { color, Font } from '../../styles';
+import { TopBar } from '../../components';
+import { TouchableOpacity } from 'react-native';
+import { Arrow } from '../../assets';
+import { GlassesLensTab } from '../../components/Shopping';
+import { useState } from 'react';
+import ProductCard from '../../components/Shopping/ProductCardLarge';
+import { ScrollView } from 'react-native-gesture-handler';
+import { useNavigation } from '@react-navigation/native';
 
 const Like = () => {
   const navigation = useNavigation();
 
-  const [selectedTab, setSelectedTab] = useState<number>(1)
-  const [counter, setCounter] = useState<number>(1)
+  const [selectedTab, setSelectedTab] = useState<number>(1);
+  const [counter, setCounter] = useState<number>(1);
 
   return (
     <Container>
@@ -25,7 +25,10 @@ const Like = () => {
           </TouchableOpacity>
         }
       />
-      <GlassesLensTab selectedTab={selectedTab} setSelectedTab={setSelectedTab} />
+      <GlassesLensTab
+        selectedTab={selectedTab}
+        setSelectedTab={setSelectedTab}
+      />
 
       <ScrollView>
         <ProductCounter>
@@ -33,26 +36,26 @@ const Like = () => {
         </ProductCounter>
 
         <ProductList>
+          {/* <ProductCard />
           <ProductCard />
           <ProductCard />
-          <ProductCard />
-          <ProductCard />
+          <ProductCard /> */}
         </ProductList>
       </ScrollView>
     </Container>
-  )
-}
+  );
+};
 
 const Container = styled.View`
   flex: 1;
   flex-direction: column;
   padding-top: 62px;
   background-color: ${color.white};
-`
+`;
 
 const ProductCounter = styled.View`
   padding: 16px;
-`
+`;
 
 const ProductList = styled.View`
   flex-direction: row;
@@ -62,4 +65,4 @@ const ProductList = styled.View`
   padding: 10px 16px;
 `;
 
-export default Like
+export default Like;
