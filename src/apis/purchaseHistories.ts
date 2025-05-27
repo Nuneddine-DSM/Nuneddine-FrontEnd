@@ -1,3 +1,4 @@
+import { LensDateType } from '../app/Data';
 import { authenticatedRequest } from '../utils/token';
 import { instance } from './axios';
 
@@ -13,6 +14,7 @@ export interface MyOrderHistoryItemData {
   lensPower: number;
   type: 'GLASSES' | 'LENS';
   frameShape: string;
+  lensDateType: LensDateType;
 }
 
 export interface MyOrderHistoryData {
