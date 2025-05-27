@@ -41,7 +41,7 @@ export const signUpHandler = async (data: SignupData) => {
       device_token: deviceToken
     });
 
-    const { accessToken } = response.data.access_token;
+    const accessToken = response.data.access_token;
 
     if (accessToken) {
       await storeData('accessToken', accessToken);
