@@ -57,7 +57,7 @@ export type FrameMaterialType = keyof typeof FrameMaterialMap;
 export type LensColorType = keyof typeof LensColorMap;
 export type LensDateType = keyof typeof LensDateTypeMap;
 
-export const mapFrameShape = (shape: FrameShapeType | string): string => {
+export const mapFrameShape = (shape: FrameShapeType): string => {
   switch (shape) {
     case "ROUND":
       return "둥근테";
@@ -74,7 +74,7 @@ export const mapFrameShape = (shape: FrameShapeType | string): string => {
     case "PILOT":
       return "파일럿테";
     case "OTHER":
-      return "기타테";
+      return "기타";
     default:
       return "기타";
   }
