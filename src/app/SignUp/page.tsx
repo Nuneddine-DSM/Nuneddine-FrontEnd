@@ -5,7 +5,7 @@ import { color } from '../../styles';
 import { Animated, Dimensions, Keyboard, TouchableOpacity } from 'react-native';
 import { Arrow } from '../../assets';
 import { useState, useEffect, useRef } from 'react';
-import { useNavigation } from '@react-navigation/native';
+import { CommonActions, useNavigation } from '@react-navigation/native';
 import { StackNavigationProp } from '@react-navigation/stack';
 import { useForm } from 'react-hook-form';
 import NickName from './NickName';
@@ -64,8 +64,12 @@ const SignUp = () => {
 
         reset();
         setPage(0);
-        navigation.pop();
-        navigation.replace('NavBar');
+        navigation.dispatch(
+          CommonActions.reset({
+            index: 0,
+            routes: [{ name: 'NavBar' }]
+          })
+        );
       } catch (error: any) {
         console.error('회원가입 실패', error);
       }

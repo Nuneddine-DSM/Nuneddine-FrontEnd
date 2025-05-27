@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import { useNavigation } from '@react-navigation/native';
+import { CommonActions, useNavigation } from '@react-navigation/native';
 import styled from 'styled-components/native';
 import { TopBar, Input, Button } from '../../components';
 import { color, Font } from '../../styles';
@@ -32,8 +32,12 @@ const Login = () => {
       const response = await loginHandler(requestData);
 
       if (response.status === 200) {
-        navigation.pop();
-        navigation.replace('NavBar');
+        navigation.dispatch(
+          CommonActions.reset({
+            index: 0,
+            routes: [{ name: 'NavBar' }]
+          })
+        );
       } else {
         Alert.alert('아이디 또는 비밀번호를 잘못입력하였습니다.');
       }
