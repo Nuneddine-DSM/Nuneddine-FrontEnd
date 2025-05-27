@@ -6,11 +6,19 @@ import { Arrow } from '../../assets';
 import { useNavigation } from '@react-navigation/native';
 import { StackNavigationProp } from '@react-navigation/stack';
 import { ScrollView } from 'react-native-gesture-handler';
+import { getGuides } from '../../apis/guids';
+import { useQuery } from "@tanstack/react-query";
+import { GuideItemType } from '../../interface';
 
 const QuestionIcon = require("../../assets/Question.png")
 
 const Guide = () => {
   const navigation = useNavigation<StackNavigationProp<any>>();
+
+  const { data } = useQuery({
+    queryKey: [getGuides],
+    queryFn: getGuides
+  })
 
   return (
     <Container>
@@ -24,18 +32,20 @@ const Guide = () => {
       />
       <ScrollView>
         <GuideListWrapper>
-          <GuideItem onPress={() => navigation.navigate("GuideDetail")}>
-            <GuideImage></GuideImage>
-            <InfoWrapper>
-              <Font text="기초 지식 안내 TIP" kind="medium16" color="gray400" />
-              <Font
-                text="렌즈는 어떻게 나뉘고, 각각 어떤 특징을 가질까?"
-                kind="bold24"
-                numberOfLines={2}
-                ellipsizeMode="tail"
-              />
-            </InfoWrapper>
-          </GuideItem>
+          {data.map((item: GuideItemType) => (
+            <GuideItem onPress={() => navigation.navigate("GuideDetail")}>
+              <GuideImage></GuideImage>
+              <InfoWrapper>
+                <Font text="기초 지식 안내 TIP" kind="medium16" color="gray400" />
+                <Font
+                  text={item.title}
+                  kind="bold24"
+                  numberOfLines={2}
+                  ellipsizeMode="tail"
+                />
+              </InfoWrapper>
+            </GuideItem>
+          ))}
         </GuideListWrapper>
 
         <QuestionContent>
