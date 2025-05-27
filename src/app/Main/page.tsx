@@ -129,7 +129,7 @@ const Main = () => {
 
             <FlatList
               horizontal
-              data={searchData ?? []}
+              data={(searchData && searchData.shop_list) ?? []}
               keyExtractor={item => item.shop_id.toString()}
               renderItem={({ item }) => (
                 <ProductCardSmall
