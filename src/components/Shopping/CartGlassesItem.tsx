@@ -1,69 +1,64 @@
 import styled from "styled-components/native";
-import { X } from "../../assets";
-import { Font, color } from "../../styles";
-import { useState } from "react";
-import CheckBox from "./CheckBox";
+import { color, Font } from "../../styles"
+import CheckBox from "./CheckBox"
+import { X } from "../../assets"
 import QuantitySelector from "./QuantitySelector";
+import { CartItemType } from "../../interface";
+import { TouchableOpacity } from "react-native";
 
-interface CartGlassesItemProps {
-  checkedItems: { [id: string]: boolean };
-  setCheckedItems: React.Dispatch<React.SetStateAction<{ [id: string]: boolean }>>;
-}
-
-const CartGlassesItem = ({ checkedItems, setCheckedItems }: CartGlassesItemProps) => {
-  const [glasses] = useState([
-    { id: 'glasses1', count: 1 },
-    { id: 'glasses2', count: 1 }
-  ]);
-
-  const toggleItem = (id: string) => {
-    setCheckedItems(prev => ({
-      ...prev,
-      [id]: !prev[id]
-    }));
-  };
+const CartGlassesItem = ({
+  item,
+  isSelected,
+  count,
+  onToggleSelect,
+  onDelete,
+  onCountChange,
+}: {
+  item: CartItemType;
+  isSelected: boolean;
+  count: number;
+  onToggleSelect: () => void;
+  onDelete: () => void;
+  onCountChange: (newCount: number) => void;
+}) => {
+  const formattedAmount = item.price.toLocaleString();
 
   return (
-    <>
-      {glasses.map(item => (
-        <ItemContainer key={item.id}>
-          <CheckBox
-            onPress={() => toggleItem(item.id)}
-            selected={checkedItems[item.id] || false}
-          />
+    <ItemContainer>
+      <CheckBox onPress={onToggleSelect} selected={isSelected} />
 
-          <ItemContent>
-            <ProductInfoSection>
-              <ProductImage />
+      <ItemContent>
+        <ProductInfoSection>
+          <ProductImage src={item.image_urls[1]} />
 
-              <ProductDetails>
-                <TitleAndCounter>
-                  <TitleBlock>
-                    <Font text="브랜드" kind="bold16" />
-                    <Font
-                      text="[안경 이름] 암튼 이름 겁나 김 뭐 mm 까지 나와있음..."
-                      kind="medium16"
-                      style={{ flexWrap: "wrap" }}
-                      numberOfLines={2}
-                      ellipsizeMode="tail"
-                    />
-                  </TitleBlock>
+          <ProductDetails>
+            <TitleAndCounter>
+              <TitleBlock>
+                <Font text={item.brand_name} kind="bold16" />
+                <Font
+                  text={item.glass_name}
+                  kind="medium16"
+                  style={{ flexWrap: "wrap" }}
+                  numberOfLines={2}
+                  ellipsizeMode="tail"
+                />
+              </TitleBlock>
 
-                  <QuantitySelector count={item.count} />
+              <QuantitySelector count={count} onChange={onCountChange} />
+            </TitleAndCounter>
+            <Font text={`${formattedAmount}원`} kind="bold16" />
+          </ProductDetails>
+        </ProductInfoSection>
 
-                </TitleAndCounter>
-                <Font text="39,000원" kind="bold16" />
-              </ProductDetails>
-            </ProductInfoSection>
+        <TouchableOpacity onPress={onDelete}>
+          <X size={30} />
+        </TouchableOpacity>
+      </ItemContent>
+    </ItemContainer>
+  )
+}
 
-            <X size={30} />
-          </ItemContent>
-        </ItemContainer>
-      ))}
-    </>
-  );
-};
-
+export default CartGlassesItem;
 
 const ItemContainer = styled.View`
   display: flex;
@@ -113,5 +108,3 @@ const TitleBlock = styled.View`
   flex-direction: column;
   gap: 4px;
 `;
-
-export default CartGlassesItem
