@@ -3,13 +3,14 @@ import { color, Font } from '../../styles';
 import { TopBar } from '../../components';
 import { ActivityIndicator, Alert, TouchableOpacity } from 'react-native';
 import { Arrow } from '../../assets';
-import OrderGlassesItem from '../../components/Shopping/OrderGlassesItem';
 import { useNavigation } from '@react-navigation/native';
 import { useEffect, useState } from 'react';
 import {
   getMyOrderHistory,
   MyOrderHistoryData
 } from '../../apis/purchaseHistories';
+import { CartGlassesItem } from '../../components/Shopping';
+import MyHistoryItem from '../../components/MyPage/OrderGlassItem';
 
 const OrderDetails = () => {
   const navigation = useNavigation();
@@ -56,17 +57,7 @@ const OrderDetails = () => {
               </DateWrapper>
               <OrderList>
                 {order.histories.map(item => (
-                  <OrderGlassesItem
-                    key={item.shopId}
-                    item={{
-                      id: item.shopId,
-                      name: item.brandName,
-                      description: item.glassName,
-                      count: item.count,
-                      price: item.price.toLocaleString(),
-                      image: item.imageUrls[0]
-                    }}
-                  />
+                  <MyHistoryItem item={item} />
                 ))}
               </OrderList>
             </OrderSection>
