@@ -64,7 +64,6 @@ const EditProfile = () => {
             placeholder="아이디를 입력해주세요"
             readonly={true}
             value={id}
-            onChangeText={setId}
           />
         </InputWrapper>
         <InputWrapper>
@@ -72,7 +71,6 @@ const EditProfile = () => {
             label="비밀번호"
             placeholder="비밀번호를 입력해주세요"
             readonly={true}
-            onChangeText={setPassword}
             value={password}
           />
         </InputWrapper>
