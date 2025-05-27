@@ -1,4 +1,5 @@
 import { getItem } from '../utils/asyncStorage';
+import { authenticatedRequest } from '../utils/token';
 import { instance } from './axios';
 
 const purchaseHistories = '/purchase_histories';
@@ -22,9 +23,10 @@ export interface MyOrderHistoryData {
 
 export const getMyOrderHistory = async () => {
   try {
+    const token = await authenticatedRequest();
     const response = await instance.get(`${purchaseHistories}`, {
       headers: {
-        Authorization: `Bearer ${await getItem('accessToken')}`
+        Authorization: token
       }
     });
     return response;

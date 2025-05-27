@@ -1,13 +1,15 @@
 import { getItem } from '../utils/asyncStorage';
+import { authenticatedRequest } from '../utils/token';
 import { instance } from './axios';
 
 const user = '/users';
 
 export const myPage = async () => {
   try {
+    const token = await authenticatedRequest();
     const response = await instance.get(`${user}/my-page`, {
       headers: {
-        Authorization: `Bearer ${await getItem('accessToken')}`
+        Authorization: token
       }
     });
     return response;
@@ -23,9 +25,10 @@ export interface LensFrequency {
 
 export const getLensFrequency = async () => {
   try {
+    const token = await authenticatedRequest();
     const response = await instance.get(`${user}/lens`, {
       headers: {
-        Authorization: `Bearer ${await getItem('accessToken')}`
+        Authorization: token
       }
     });
     return response;
@@ -36,6 +39,7 @@ export const getLensFrequency = async () => {
 
 export const setLensFrequency = async (data: LensFrequency) => {
   try {
+    const token = await authenticatedRequest();
     const response = await instance.patch(
       `${user}/lens`,
       {
@@ -44,7 +48,7 @@ export const setLensFrequency = async (data: LensFrequency) => {
       },
       {
         headers: {
-          Authorization: `Bearer ${await getItem('accessToken')}`
+          Authorization: token
         }
       }
     );
@@ -60,6 +64,7 @@ export interface ModifyProfileRequest {
 
 export const modifyProfile = async (data: ModifyProfileRequest) => {
   try {
+    const token = await authenticatedRequest();
     const response = await instance.patch(
       `${user}/info`,
       {
@@ -67,7 +72,7 @@ export const modifyProfile = async (data: ModifyProfileRequest) => {
       },
       {
         headers: {
-          Authorization: `Bearer ${await getItem('accessToken')}`
+          Authorization: token
         }
       }
     );

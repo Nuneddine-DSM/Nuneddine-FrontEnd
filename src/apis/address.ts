@@ -1,4 +1,5 @@
 import { getItem } from '../utils/asyncStorage';
+import { authenticatedRequest } from '../utils/token';
 import { instance } from './axios';
 
 const address = '/address';
@@ -15,9 +16,10 @@ export interface AddressData {
 
 export const getAddress = async () => {
   try {
+    const token = await authenticatedRequest();
     const response = await instance.get(`${address}`, {
       headers: {
-        Authorization: `Bearer ${await getItem('accessToken')}`
+        Authorization: token
       }
     });
     return response;
@@ -28,9 +30,10 @@ export const getAddress = async () => {
 
 export const deleteAddress = async (addressId: number) => {
   try {
+    const token = await authenticatedRequest();
     const response = await instance.delete(`${address}/${addressId}`, {
       headers: {
-        Authorization: `Bearer ${await getItem('accessToken')}`
+        Authorization: token
       }
     });
     return response;
@@ -50,6 +53,7 @@ export interface AddAddressRequest {
 
 export const addAddress = async (data: AddAddressRequest) => {
   try {
+    const token = await authenticatedRequest();
     const response = await instance.post(
       `${address}`,
       {
@@ -62,7 +66,7 @@ export const addAddress = async (data: AddAddressRequest) => {
       },
       {
         headers: {
-          Authorization: `Bearer ${await getItem('accessToken')}`
+          Authorization: token
         }
       }
     );
