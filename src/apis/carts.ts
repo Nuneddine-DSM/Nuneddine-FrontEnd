@@ -44,7 +44,7 @@ export const addCartItem = async (shopId: number, lensPower: number, count: numb
   }
 }
 
-export const deleteCartItem = async (cartIds: Array<string>) => {
+export const deleteCartItem = async (cartIds: Array<number>) => {
   try {
     const response = await instance.delete(`${carts}`, {
       data: {
