@@ -6,13 +6,12 @@ import { Arrow } from '../../../assets';
 import DeliveryList from '../../../components/Shopping/Delivery';
 
 export interface DeliveryType {
-  addressId?: number;
-  selected?: boolean;
-  nickName?: string;
-  name?: string;
-  phone?: string;
-  address?: string;
-  check?: boolean;
+  selected?: boolean,
+  nickName?: string,
+  userName?: string,
+  phone?: string,
+  address?: string,
+  check?: boolean
 }
 
 const DeliveryData: DeliveryType[] = [
@@ -35,12 +34,14 @@ const DeliveryData: DeliveryType[] = [
 ];
 
 const Delivery = () => {
+  const navigation = useNavigation<NavigationProp<any>>();
+
   return (
     <Container>
       <TopBar
         text="배송지 목록"
         leftIcon={
-          <TouchableOpacity onPress={() => {}}>
+          <TouchableOpacity onPress={() => navigation.navigate("Payment")}>
             <Arrow size={34} />
           </TouchableOpacity>
         }

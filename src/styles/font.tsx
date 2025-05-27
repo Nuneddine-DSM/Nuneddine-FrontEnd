@@ -112,6 +112,11 @@ const fonts: { [key: string]: TextStyle } = {
     lineHeight: 24,
     fontWeight: '700'
   },
+  extraBold20: {
+    fontSize: 20,
+    lineHeight: 24,
+    fontWeight: '800'
+  },
   light24: {
     fontSize: 24,
     lineHeight: 24,

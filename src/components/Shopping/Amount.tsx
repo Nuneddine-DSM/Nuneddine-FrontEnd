@@ -12,16 +12,21 @@ const Amount = ({
   deliveryAmount = 0,
   last = false
 }: AmountProps) => {
+
+  const formattedOrderAmount = orderAmount.toLocaleString();
+  const formattedDeliveryAmount = deliveryAmount.toLocaleString();
+  const formattedTotal = (orderAmount + deliveryAmount).toLocaleString();
+
   return (
     <TotalAmountWrapper>
       <TotalWrapper>
         <Font text="총 주문 금액" color="gray600" kind="semi18" />
-        <Font text={`${orderAmount}원`} kind="medium18" />
+        <Font text={`${formattedOrderAmount}원`} kind="medium18" />
       </TotalWrapper>
       <TotalWrapper>
         <Font text="총 배송비" color="gray600" kind="semi18" />
         <Font
-          text={deliveryAmount === 0 ? `무료배송` : `${deliveryAmount}원`}
+          text={deliveryAmount === 0 ? `무료배송` : `${formattedDeliveryAmount}원`}
           kind="medium18"
           color="pink200"
         />
@@ -31,7 +36,7 @@ const Amount = ({
 
       <TotalWrapper>
         <Font text="총 결제 금액" color={last ? "pink300" : "gray600"} kind="semi18" />
-        <Font text={`${orderAmount + deliveryAmount}원`} kind="medium20" color={last ? "pink300" : "black"} />
+        <Font text={`${formattedTotal}원`} kind="medium20" color={last ? "pink300" : "black"} />
       </TotalWrapper>
     </TotalAmountWrapper>
   )

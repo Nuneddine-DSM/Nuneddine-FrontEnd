@@ -1,39 +1,51 @@
 import { useState, useRef, useMemo, useCallback } from 'react';
 import styled from 'styled-components/native';
-import { TouchableOpacity, View } from 'react-native';
-import { TopBar, Dropdown } from '../../../components';
+import { TouchableOpacity } from 'react-native';
+import { TopBar, Dropdown, Button } from '../../../components';
 import { Arrow } from '../../../assets';
 import { Font, color } from '../../../styles';
-import {
-  GlassesLensTab,
-  CheckBox,
-  CartGlassesItem,
-  CartLensItem,
-  QuantitySelector
-} from '../../../components/Shopping/index';
-import {
-  BottomSheetModal,
-  BottomSheetModalProvider,
-  BottomSheetBackdrop
-} from '@gorhom/bottom-sheet';
-import { Button } from '../../../components/Button';
+import { Tab, CheckBox, QuantitySelector } from '../../../components/Shopping/index';
+import { BottomSheetModal, BottomSheetBackdrop } from '@gorhom/bottom-sheet';
 import Lens from './Lens';
 import Amount from '../../../components/Shopping/Amount';
+import { CategoryData } from '../../Main/Data';
+import { useQuery, useQueryClient } from "@tanstack/react-query";
+import { getCartGlassList, getCartLensList, deleteCartItem, updateOption } from '../../../apis/carts';
+import { productPurchase } from '../../../apis/shops';
+import { CartGlassesItem, CartLensItem } from '../../../components/Shopping/index';
+import { CartItemType, CartResponseType } from '../../../interface';
+import { AxiosResponse } from 'axios';
+import { useNavigation, NavigationProp } from '@react-navigation/native'
 
 const Cart = () => {
-  const [checkedGlassesItems, setCheckedGlassesItems] = useState<{
-    [id: string]: boolean;
-  }>({});
-  const [checkedLensItems, setCheckedLensItems] = useState<{
-    [id: string]: boolean;
-  }>({});
+  const navigation = useNavigation<NavigationProp<any>>();
+  const queryClient = useQueryClient();
+
   const [selectedTab, setSelectedTab] = useState<number>(1);
-  const [selectedOption, setSelectedOption] = useState('히히');
+  const [selectedDeleteIds, setSelectedDeleteIds] = useState<number[]>([]);
+  const [glassesCounts, setGlassesCounts] = useState<Record<number, number>>({});
+  const [lensPower, setLensPower] = useState<string>('0.00');
+  const [count, setCount] = useState<number>(1);
+  const [cartId, setCartId] = useState<number | null>(null);
+
+  const { data: glassesData } = useQuery<AxiosResponse<CartResponseType>>({
+    queryKey: ['cartGlassList'],
+    queryFn: getCartGlassList
+  })
+
+  const { data: lensData } = useQuery<AxiosResponse<CartResponseType>>({
+    queryKey: ['cartLensList'],
+    queryFn: getCartLensList
+  })
+
+  const selectedData = selectedTab === 1 ? glassesData?.data : lensData?.data;
 
   const bottomSheetModalRef = useRef<BottomSheetModal>(null);
   const snapPoints = useMemo(() => ['60%'], []);
 
-  const handlePresentModalPress = useCallback(() => {
+  const handlePresentModalPress = useCallback((id: number, selectedCount: number) => {
+    setCartId(id);
+    setCount(selectedCount);
     bottomSheetModalRef.current?.present();
   }, []);
 
@@ -53,143 +65,158 @@ const Cart = () => {
     []
   );
 
-  const currentCheckedItems =
-    selectedTab === 1 ? checkedGlassesItems : checkedLensItems;
-  const setCurrentCheckedItems =
-    selectedTab === 1 ? setCheckedGlassesItems : setCheckedLensItems;
+  const toggleSelected = (id: number) => {
+    setSelectedDeleteIds((prev) =>
+      prev.includes(id) ? prev.filter((i) => i !== id) : [...prev, id]
+    );
+  };
 
-  const allIds =
-    selectedTab === 1 ? ['glasses1', 'glasses2'] : ['lens1', 'lens2'];
-  const isAllChecked = allIds.every(id => currentCheckedItems[id]);
+  const updateCount = (id: number, newCount: number) => {
+    setGlassesCounts((prev) => ({ ...prev, [id]: newCount }));
+  };
 
-  const toggleAll = () => {
-    if (isAllChecked) {
-      setCurrentCheckedItems(prev => {
-        const newState = { ...prev };
-        allIds.forEach(id => delete newState[id]);
-        return newState;
-      });
-    } else {
-      const newState: { [id: string]: boolean } = {};
-      allIds.forEach(id => {
-        newState[id] = true;
-      });
-      setCurrentCheckedItems(prev => ({ ...prev, ...newState }));
+  const handleOptionUpdate = async () => {
+    try {
+      if (!cartId || !lensPower || !count) return;
+      await updateOption(cartId, parseFloat(lensPower), count);
+      bottomSheetModalRef.current?.close();
+    } catch (err) {
+      console.log("장바구니 옵션 변경 실패", err);
     }
   };
 
+  const handleSingleDelete = async (id: number) => {
+    try {
+      await deleteCartItem([id]);
+    } catch {
+      console.log("개별 삭제 실패");
+    }
+  };
+
+  const handleDeleteSelected = async () => {
+    try {
+      await deleteCartItem(selectedDeleteIds);
+      setSelectedDeleteIds([]);
+    } catch {
+      console.log("선택 삭제 실패");
+    }
+  };
+
+  const handleAllSelect = () => {
+    const currentList = selectedTab === 1 ? glassesData?.data.cart_list : lensData?.data.cart_list;
+    if (!currentList) return;
+    const allIds = currentList.map(item => item.cart_id);
+    setSelectedDeleteIds(prev => (
+      prev.length === allIds.length ? [] : allIds
+    ));
+  };
+
+  const handleBuyProduct = () => {
+    productPurchase()
+    navigation.navigate('Payment')
+  }
+
   return (
-    <BottomSheetModalProvider>
+    <>
       <TopBar
         text="장바구니"
         leftIcon={
-          <TouchableOpacity onPress={() => {}}>
+          <TouchableOpacity onPress={() => navigation.navigate('Main')}>
             <Arrow size={34} />
           </TouchableOpacity>
         }
       />
+
       <Container>
-        <CartTabSection
+        <Tab
           selectedTab={selectedTab}
           setSelectedTab={setSelectedTab}
+          tabData={CategoryData}
         />
-        <SelectSection checked={isAllChecked} toggleAll={toggleAll} />
-        <ProductCountSection
-          count={
-            selectedTab === 1
-              ? Object.keys(checkedGlassesItems).length
-              : Object.keys(checkedLensItems).length
-          }
-        />
-        {selectedTab === 1 && (
-          <CartGlassesItem
-            checkedItems={checkedGlassesItems}
-            setCheckedItems={setCheckedGlassesItems}
-          />
-        )}
 
-        <View>
-          {selectedTab === 2 && (
-            <CartLensItem
-              checkedItems={checkedLensItems}
-              setCheckedItems={setCheckedLensItems}
-              onPressOption={handlePresentModalPress}
+        <SelectWrapper>
+          <AllSelectWrapper>
+            <CheckBox
+              selected={selectedDeleteIds.length === selectedData?.carts_count}
+              onPress={handleAllSelect}
             />
-          )}
-          <BottomSheetModal
-            ref={bottomSheetModalRef}
-            index={0}
-            snapPoints={snapPoints}
-            backdropComponent={renderBackdrop}
-            onChange={handleSheetChanges}>
-            <OptionWrapper>
-              <Font
-                text="옵션 변경 / 모디쉬 1p 브라운"
-                kind="medium16"
-                color="gray600"
+            <Font text="전체 선택" kind="medium16" />
+          </AllSelectWrapper>
+          <TouchableOpacity onPress={handleDeleteSelected}>
+            <Font text="선택 삭제" kind="medium16" />
+          </TouchableOpacity>
+        </SelectWrapper>
+
+        <ProductCountWrapper>
+          <Font text={`${selectedData?.carts_count ?? 0}개의 상품이 있습니다.`} kind="medium16" />
+        </ProductCountWrapper>
+
+        {selectedTab === 1 &&
+          glassesData?.data.cart_list.map((item: CartItemType) => (
+            <CartGlassesItem
+              key={item.cart_id}
+              item={item}
+              isSelected={selectedDeleteIds.includes(item.cart_id)}
+              onToggleSelect={() => toggleSelected(item.cart_id)}
+              onDelete={() => handleSingleDelete(item.cart_id)}
+              count={glassesCounts[item.cart_id] ?? item.count}
+              onCountChange={(newCount) => updateCount(item.cart_id, newCount)}
+            />
+          ))
+        }
+
+        {selectedTab === 2 &&
+          lensData?.data.cart_list.map((item: CartItemType) => (
+            <CartLensItem
+              key={item.cart_id}
+              item={item}
+              isSelected={selectedDeleteIds.includes(item.cart_id)}
+              onToggleSelect={() => toggleSelected(item.cart_id)}
+              onDelete={() => handleSingleDelete(item.cart_id)}
+              count={glassesCounts[item.cart_id] ?? item.count}
+              onCountChange={(newCount) => updateCount(item.cart_id, newCount)}
+            />
+          ))
+        }
+
+        <BottomSheetModal
+          ref={bottomSheetModalRef}
+          index={0}
+          snapPoints={snapPoints}
+          backdropComponent={renderBackdrop}
+          onChange={handleSheetChanges}
+        >
+          <OptionWrapper>
+            <Font
+              text={`옵션 / ${selectedData?.cart_list.brand_name || ""}`}
+              kind="medium16"
+              color="gray600"
+            />
+            <InputWrapper>
+              <CountInputWrapper>
+                <Font text="수량" kind="medium16" />
+                <QuantitySelector count={count} onChange={setCount} />
+              </CountInputWrapper>
+              <Dropdown
+                value={lensPower}
+                setValue={setLensPower}
+                items={['0.00', '-2.25', '-5.00', '-7.25', '-10.00']}
               />
-              <InputWrapper>
-                <CountInputWrapper>
-                  <Font text="수량" kind="medium16" />
-                  <QuantitySelector count={0} />
-                </CountInputWrapper>
-                <Dropdown
-                  value={selectedOption}
-                  setValue={setSelectedOption}
-                  items={['0.00', '-2.25', '-5.00', '-7.25', '-10.00']}
-                />
-              </InputWrapper>
-            </OptionWrapper>
-          </BottomSheetModal>
-        </View>
+            </InputWrapper>
+          </OptionWrapper>
+        </BottomSheetModal>
 
         {selectedTab === 2 && <Lens />}
-        <Amount />
-        <PurchaseButton />
+
+        <Amount orderAmount={selectedData?.total_price ?? 0} />
+
+        <ButtonWrapper>
+          <Button text="상품 구매하기" onPress={handleBuyProduct} />
+        </ButtonWrapper>
       </Container>
-    </BottomSheetModalProvider>
+    </ >
   );
 };
-
-const CartTabSection = ({
-  selectedTab,
-  setSelectedTab
-}: {
-  selectedTab: number;
-  setSelectedTab: (tab: number) => void;
-}) => (
-  <>
-    <GlassesLensTab selectedTab={selectedTab} setSelectedTab={setSelectedTab} />
-  </>
-);
-
-const SelectSection = ({
-  checked,
-  toggleAll
-}: {
-  checked: boolean;
-  toggleAll: () => void;
-}) => (
-  <SelectWrapper>
-    <AllSelectWrapper>
-      <CheckBox selected={checked} onPress={toggleAll} />
-      <Font text="전체 선택" kind="medium16" />
-    </AllSelectWrapper>
-    <Font text="선택 삭제" kind="medium16" />
-  </SelectWrapper>
-);
-
-const ProductCountSection = ({ count }: { count: number }) => (
-  <ProductCountWrapper>
-    <Font text={`${count}개의 상품이 있습니다.`} kind="medium16" />
-  </ProductCountWrapper>
-);
-
-const PurchaseButton = () => (
-  <ButtonWrapper>
-    <Button text="상품 구매하기" buttonColor="black" />
-  </ButtonWrapper>
-);
 
 const Container = styled.ScrollView.attrs(() => ({
   contentContainerStyle: {
