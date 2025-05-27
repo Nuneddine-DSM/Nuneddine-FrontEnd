@@ -79,7 +79,11 @@ export const searchHandler = async (filters: FilterRequest) => {
 
 export const getDetail = async (shopId: number) => {
   try {
-    const response = await instance.get(`${shops}/${shopId}`);
+    const response = await instance.get(`${shops}/${shopId}`, {
+      headers: {
+        Authorization: `Bearer ${await getItem('accessToken')}`
+      }
+    });
     return response.data;
   } catch(err) {
     throw err;

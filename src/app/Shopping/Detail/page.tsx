@@ -1,7 +1,8 @@
 import styled from "styled-components/native";
+import { useEffect } from "react";
 import { color, Font } from "../../../styles"
 import { Header, Footer } from "../../../components/Main";
-import { Tab, ProductCardSmall, Tag } from "../../../components/Shopping";
+import { Tab, Tag } from "../../../components/Shopping";
 import { Button } from "../../../components";
 import { Heart } from "../../../assets";
 import { TabInfoData } from "./Data";
@@ -13,28 +14,36 @@ import {
   BottomSheetBackdrop
 } from '@gorhom/bottom-sheet';
 import OrderItem from "./OrderItem";
+import { getDetail } from "../../../apis/shops";
 import { addCartItem } from "../../../apis/carts";
 import { BottomButtonsProps } from "../../../interface";
+import { NavigationProp, RouteProp, useNavigation, useRoute } from '@react-navigation/native';
+import { useQuery } from "@tanstack/react-query";
+import { TouchableOpacity } from "react-native";
+import { FrameShapeMap } from "../../Data";
 
-const GlassDummy = require("../../../assets/GlassesDummy.png")
-
-const shopId = 1;
-const colorId = 1;
-
-const data = [
-  {
-    id: 1,
-    image: GlassDummy
-  }
-]
+type RootStackParamList = {
+  ShoppingDetail: { shopId: number };
+};
 
 const ShoppingDetail = () => {
+  const route = useRoute<RouteProp<RootStackParamList, 'ShoppingDetail'>>();
+  const { shopId } = route.params;
+
+  const navigation = useNavigation<NavigationProp<any>>();
+
   const [selectedTab, setSelectedTab] = useState<number>(1);
   const [selectedHeart, setSelectedHeart] = useState<boolean>(false);
   const [selectedColor, setSelectedColor] = useState<number>(1);
-  
+
   const [lensPower, setLensPower] = useState<number>(11.6);
-  const [count, setCount] = useState<number>(1)
+  const [count, setCount] = useState<number>(1);
+
+  const { data: detail } = useQuery({
+    queryKey: ["productDetail", shopId],
+    queryFn: () => getDetail(shopId),
+    enabled: shopId !== undefined,
+  })
 
   const heartHandler = async () => {
     try {
@@ -68,6 +77,12 @@ const ShoppingDetail = () => {
     []
   );
 
+  useEffect(() => {
+    if (detail?.is_liked !== undefined) {
+      setSelectedHeart(detail.is_liked);
+    }
+  }, [detail?.is_liked]);
+
   const handelAddCart = () => {
     handlePresentModalPress();
     addCartItem(shopId, lensPower, count);
@@ -78,35 +93,43 @@ const ShoppingDetail = () => {
       <Header />
       <Container showsVerticalScrollIndicator={false}>
 
-        <Banner data={data} />
+        <Banner data={detail?.image_urls} />
 
         <DetailContentWrapper>
 
           <ProductDetail>
             <ProductInfoSection>
               <ProductTitleWrapper>
-                <Font text="브랜드 Name" kind="regular18" color="gray600" />
+                <Font text={detail?.brand_name} kind="regular18" color="gray600" />
                 <Font
-                  text="베리스 레쥬렉션 선글라스 RESURER 어쩌고저쩌고 아무튼 대다 김"
+                  text={detail?.glasses_name}
                   kind="bold20"
                   numberOfLines={2}
                 />
               </ProductTitleWrapper>
               <TagWrapper>
-                <Tag text="굵은테" />
+                {detail?.frame_shape && (
+                  <Tag text={FrameShapeMap[detail.frame_shape as keyof typeof FrameShapeMap]} />
+                )}
               </TagWrapper>
             </ProductInfoSection>
 
             <ProductPriceWrapper>
               <Font text="구매가" kind="medium16" color="gray500" />
-              <Font text="99,000원" kind="bold24" />
+              <Font text={`${detail?.price?.toLocaleString()}원`} kind="bold24" />
             </ProductPriceWrapper>
           </ProductDetail>
 
           <AnotherColorWrapper>
             <Font text="다른 컬러 둘러보기" kind="semi24" />
             <ColorProductList>
-              <ColorProductItem selected={selectedColor === colorId}></ColorProductItem>
+              {detail?.related_shops.map((shop: any) =>
+                <TouchableOpacity
+                  onPress={() => navigation.navigate("ShoppingDetail", { shopId: shop.shop_id })}
+                >
+                  <ColorProductItem selected={selectedColor === shop.shop_id} />
+                </TouchableOpacity>
+              )}
             </ColorProductList>
           </AnotherColorWrapper>
 
@@ -116,15 +139,12 @@ const ShoppingDetail = () => {
               setSelectedTab={setSelectedTab}
               tabData={TabInfoData}
             />
-            <ProductImageBox></ProductImageBox>
+            <ProductImageBox>
+              {detail?.image_urls.map((image: string) => (
+                <ProductImage source={{ uri: image }} />
+              ))}
+            </ProductImageBox>
           </>
-
-          <SimilarProductSection>
-            <Font text="비슷한 상품 둘러보기" kind="semi24" />
-            <SimilarProductList>
-              {/* <ProductCardSmall /> */}
-            </SimilarProductList>
-          </SimilarProductSection>
         </DetailContentWrapper>
         <Footer />
       </Container >
@@ -141,7 +161,7 @@ const ShoppingDetail = () => {
             <OrderItem />
             <PriceWrapper>
               <Font text="결제 예상 금액" kind="semi18" />
-              <Font text="78,000원" kind="bold24" color="pink300" />
+              <Font text={detail?.price} kind="bold24" color="pink300" />
             </PriceWrapper>
           </ProductItemWrapper>
         </OptionWrapper>
@@ -167,7 +187,7 @@ const ShoppingDetail = () => {
           onPress={() => handlePresentModalPress()}
         />
       </BottomActionBar>
-      
+
       <BottomButtons
         hearted={selectedHeart}
         onHeartPress={heartHandler}
@@ -190,6 +210,8 @@ const BottomButtons = ({ hearted, onHeartPress, buttonText, onButtonPress }: Bot
       text={buttonText}
       width="90%"
       onPress={onButtonPress}
+      buttonColor="black"
+      textColor="white"
     />
   </BottomActionBar>
 );
@@ -202,12 +224,8 @@ const Container = styled.ScrollView.attrs(() => ({
   flex: 1;
   background-color: ${color.white};
 `
-
-const ProductBanner = styled.View`
+const ProductImage = styled.Image`
   width: 100%;
-  height: 430px;
-  background-color: ${color.gray200};
-  padding: 20px;
 `
 
 const AnotherColorWrapper = styled.View`
@@ -262,21 +280,6 @@ const ProductPriceWrapper = styled.View`
   flex-direction: row;
   justify-content: space-between;
   align-items: center;
-`
-
-const SimilarProductSection = styled.View`
-  flex-direction: column;
-  padding: 25px 20px 45px;
-  gap: 25px;
-  background-color: ${color.white};
-`
-
-const SimilarProductList = styled.ScrollView.attrs(() => ({
-  horizontal: true,
-  showsHorizontalScrollIndicator: false,
-}))`
-  flex-direction: row;
-  gap: 10px;
 `
 
 const BottomActionBar = styled.View`
