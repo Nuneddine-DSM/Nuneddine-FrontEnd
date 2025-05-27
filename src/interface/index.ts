@@ -3,13 +3,13 @@ import {
   FrameMaterialType,
   LensColorType,
   LensDateType
-} from "../app/Data";
+} from '../app/Data';
 
 export interface SvgPropsType {
-  size?: number,
-  color?: string,
-  fill?: string,
-  onPress?: () => void
+  size?: number;
+  color?: string;
+  fill?: string;
+  onPress?: () => void;
 }
 
 export interface ArrowPropsType extends SvgPropsType {
@@ -22,26 +22,26 @@ export interface SignUpPropsType {
 }
 
 export interface ProductType {
-  shop_id: number,
-  brand_name: string,
-  glasses_name: string,
-  description: string,
-  price: number,
-  frame_shape: FrameShapeType,
-  image_urls: Array<string>,
-  is_liked: boolean
+  shop_id: number;
+  brand_name: string;
+  glasses_name: string;
+  description: string;
+  price: number;
+  frame_shape: FrameShapeType;
+  image_urls: Array<string>;
+  is_liked: boolean;
 }
 
 export interface CartItemType {
-  cart_id: number,
-  shop_id: number,
-  brand_name: string,
-  image_urls: Array<string>,
-  date_type: LensDateType,
-  glass_name: string,
-  lens_power: number,
-  price: number,
-  count: number
+  cart_id: number;
+  shop_id: number;
+  brand_name: string;
+  image_urls: Array<string>;
+  date_type: LensDateType;
+  glass_name: string;
+  lens_power: number;
+  price: number;
+  count: number;
 }
 
 export interface CartResponseType {
@@ -51,17 +51,17 @@ export interface CartResponseType {
 }
 
 export interface GuideItemType {
-  id: number,
-  title: string,
-  content: string
+  id: number;
+  title: string;
+  content: string;
 }
 
 export interface FilterRequest {
-  keyword?: string,
-  lens_color?: Array<LensColorType>,
-  lens_date_type?: Array<LensDateType>,
-  frame_shape?: Array<FrameShapeType>,
-  frame_material?: Array<FrameMaterialType>
+  keyword?: string;
+  lens_color?: Array<LensColorType>;
+  lens_date_type?: Array<LensDateType>;
+  frame_shape?: Array<FrameShapeType>;
+  frame_material?: Array<FrameMaterialType>;
 }
 
 export interface BottomButtonsProps {

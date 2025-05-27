@@ -4,18 +4,30 @@ import { TouchableOpacity } from 'react-native';
 import { TopBar, Dropdown, Button } from '../../../components';
 import { Arrow } from '../../../assets';
 import { Font, color } from '../../../styles';
-import { Tab, CheckBox, QuantitySelector } from '../../../components/Shopping/index';
+import {
+  Tab,
+  CheckBox,
+  QuantitySelector
+} from '../../../components/Shopping/index';
 import { BottomSheetModal, BottomSheetBackdrop } from '@gorhom/bottom-sheet';
 import Lens from './Lens';
 import Amount from '../../../components/Shopping/Amount';
 import { CategoryData } from '../../Main/Data';
-import { useQuery, useQueryClient } from "@tanstack/react-query";
-import { getCartGlassList, getCartLensList, deleteCartItem, updateOption } from '../../../apis/carts';
+import { useQuery, useQueryClient } from '@tanstack/react-query';
+import {
+  getCartGlassList,
+  getCartLensList,
+  deleteCartItem,
+  updateOption
+} from '../../../apis/carts';
 import { productPurchase } from '../../../apis/shops';
-import { CartGlassesItem, CartLensItem } from '../../../components/Shopping/index';
+import {
+  CartGlassesItem,
+  CartLensItem
+} from '../../../components/Shopping/index';
 import { CartItemType, CartResponseType } from '../../../interface';
 import { AxiosResponse } from 'axios';
-import { useNavigation, NavigationProp } from '@react-navigation/native'
+import { useNavigation, NavigationProp } from '@react-navigation/native';
 
 const Cart = () => {
   const navigation = useNavigation<NavigationProp<any>>();
@@ -23,7 +35,9 @@ const Cart = () => {
 
   const [selectedTab, setSelectedTab] = useState<number>(1);
   const [selectedDeleteIds, setSelectedDeleteIds] = useState<number[]>([]);
-  const [glassesCounts, setGlassesCounts] = useState<Record<number, number>>({});
+  const [glassesCounts, setGlassesCounts] = useState<Record<number, number>>(
+    {}
+  );
   const [lensPower, setLensPower] = useState<string>('0.00');
   const [count, setCount] = useState<number>(1);
   const [cartId, setCartId] = useState<number | null>(null);
@@ -31,23 +45,26 @@ const Cart = () => {
   const { data: glassesData } = useQuery<AxiosResponse<CartResponseType>>({
     queryKey: ['cartGlassList'],
     queryFn: getCartGlassList
-  })
+  });
 
   const { data: lensData } = useQuery<AxiosResponse<CartResponseType>>({
     queryKey: ['cartLensList'],
     queryFn: getCartLensList
-  })
+  });
 
   const selectedData = selectedTab === 1 ? glassesData?.data : lensData?.data;
 
   const bottomSheetModalRef = useRef<BottomSheetModal>(null);
   const snapPoints = useMemo(() => ['60%'], []);
 
-  const handlePresentModalPress = useCallback((id: number, selectedCount: number) => {
-    setCartId(id);
-    setCount(selectedCount);
-    bottomSheetModalRef.current?.present();
-  }, []);
+  const handlePresentModalPress = useCallback(
+    (id: number, selectedCount: number) => {
+      setCartId(id);
+      setCount(selectedCount);
+      bottomSheetModalRef.current?.present();
+    },
+    []
+  );
 
   const handleSheetChanges = useCallback((index: number) => {
     console.log('handleSheetChanges', index);
@@ -66,13 +83,13 @@ const Cart = () => {
   );
 
   const toggleSelected = (id: number) => {
-    setSelectedDeleteIds((prev) =>
-      prev.includes(id) ? prev.filter((i) => i !== id) : [...prev, id]
+    setSelectedDeleteIds(prev =>
+      prev.includes(id) ? prev.filter(i => i !== id) : [...prev, id]
     );
   };
 
   const updateCount = (id: number, newCount: number) => {
-    setGlassesCounts((prev) => ({ ...prev, [id]: newCount }));
+    setGlassesCounts(prev => ({ ...prev, [id]: newCount }));
   };
 
   const handleOptionUpdate = async () => {
@@ -81,7 +98,7 @@ const Cart = () => {
       await updateOption(cartId, parseFloat(lensPower), count);
       bottomSheetModalRef.current?.close();
     } catch (err) {
-      console.log("장바구니 옵션 변경 실패", err);
+      console.log('장바구니 옵션 변경 실패', err);
     }
   };
 
@@ -89,7 +106,7 @@ const Cart = () => {
     try {
       await deleteCartItem([id]);
     } catch {
-      console.log("개별 삭제 실패");
+      console.log('개별 삭제 실패');
     }
   };
 
@@ -98,23 +115,24 @@ const Cart = () => {
       await deleteCartItem(selectedDeleteIds);
       setSelectedDeleteIds([]);
     } catch {
-      console.log("선택 삭제 실패");
+      console.log('선택 삭제 실패');
     }
   };
 
   const handleAllSelect = () => {
-    const currentList = selectedTab === 1 ? glassesData?.data.cart_list : lensData?.data.cart_list;
+    const currentList =
+      selectedTab === 1
+        ? glassesData?.data.cart_list
+        : lensData?.data.cart_list;
     if (!currentList) return;
     const allIds = currentList.map(item => item.cart_id);
-    setSelectedDeleteIds(prev => (
-      prev.length === allIds.length ? [] : allIds
-    ));
+    setSelectedDeleteIds(prev => (prev.length === allIds.length ? [] : allIds));
   };
 
   const handleBuyProduct = () => {
-    productPurchase()
-    navigation.navigate('Payment')
-  }
+    productPurchase();
+    navigation.navigate('Payment');
+  };
 
   return (
     <>
@@ -148,7 +166,10 @@ const Cart = () => {
         </SelectWrapper>
 
         <ProductCountWrapper>
-          <Font text={`${selectedData?.carts_count ?? 0}개의 상품이 있습니다.`} kind="medium16" />
+          <Font
+            text={`${selectedData?.carts_count ?? 0}개의 상품이 있습니다.`}
+            kind="medium16"
+          />
         </ProductCountWrapper>
 
         {selectedTab === 1 &&
@@ -160,10 +181,9 @@ const Cart = () => {
               onToggleSelect={() => toggleSelected(item.cart_id)}
               onDelete={() => handleSingleDelete(item.cart_id)}
               count={glassesCounts[item.cart_id] ?? item.count}
-              onCountChange={(newCount) => updateCount(item.cart_id, newCount)}
+              onCountChange={newCount => updateCount(item.cart_id, newCount)}
             />
-          ))
-        }
+          ))}
 
         {selectedTab === 2 &&
           lensData?.data.cart_list.map((item: CartItemType) => (
@@ -174,21 +194,19 @@ const Cart = () => {
               onToggleSelect={() => toggleSelected(item.cart_id)}
               onDelete={() => handleSingleDelete(item.cart_id)}
               count={glassesCounts[item.cart_id] ?? item.count}
-              onCountChange={(newCount) => updateCount(item.cart_id, newCount)}
+              onCountChange={newCount => updateCount(item.cart_id, newCount)}
             />
-          ))
-        }
+          ))}
 
         <BottomSheetModal
           ref={bottomSheetModalRef}
           index={0}
           snapPoints={snapPoints}
           backdropComponent={renderBackdrop}
-          onChange={handleSheetChanges}
-        >
+          onChange={handleSheetChanges}>
           <OptionWrapper>
             <Font
-              text={`옵션 / ${selectedData?.cart_list.brand_name || ""}`}
+              text={`옵션 / ${selectedData?.cart_list || ''}`}
               kind="medium16"
               color="gray600"
             />
@@ -214,7 +232,7 @@ const Cart = () => {
           <Button text="상품 구매하기" onPress={handleBuyProduct} />
         </ButtonWrapper>
       </Container>
-    </ >
+    </>
   );
 };
 
