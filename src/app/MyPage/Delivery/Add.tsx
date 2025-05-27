@@ -21,9 +21,11 @@ const Add = () => {
   const [addressName, setAddressName] = useState('');
   const [personName, setPersonName] = useState('');
   const [phone, setPhone] = useState('');
+  const [loading, setLoading] = useState(false);
 
   const postAddress = async () => {
     try {
+      setLoading(true);
       const formatPhone = formatPhoneNumber(phone);
       const requestData: AddAddressRequest = {
         address: address,
@@ -34,13 +36,16 @@ const Add = () => {
         phone_number: formatPhone
       };
       const response = await addAddress(requestData);
-      if (response.status == 200) {
+      if (response.status === 200) {
         navigation.goBack();
       } else {
         Alert.alert('배송지 등록 실패');
       }
     } catch (err) {
       console.error(err);
+      Alert.alert('배송지 등록 중 오류 발생');
+    } finally {
+      setLoading(false);
     }
   };
 
@@ -140,6 +145,7 @@ const Add = () => {
               postAddress();
             }
           }}
+          loading={loading}
         />
       </ButtonWrapper>
     </SafeAreaView>
