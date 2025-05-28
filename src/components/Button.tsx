@@ -25,7 +25,7 @@ export function Button({
       width={width}
       paddingValue={14}
       onPress={onPress}
-      buttonColor={buttonColor}
+      buttonColor={color[buttonColor]}
       disabled={loading}>
       {loading ? (
         <ActivityIndicator
