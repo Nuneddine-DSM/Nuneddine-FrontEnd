@@ -4,6 +4,7 @@ import { Font, color } from "../../styles"
 import styled, { ThemeProvider, DefaultTheme } from "styled-components/native";
 import { ShoppingContentType } from "../../app/Main/interface";
 import Tag from "./Tag"
+import { NavigationProp, useNavigation } from "@react-navigation/native";
 
 /**
  * 상품 카드 큰 버전
@@ -32,12 +33,14 @@ const ProductCardLarge = ({
   price,
   isDarkMode = false,
 }: CardPropsType) => {
+  const navigation = useNavigation<NavigationProp<any>>();
+
   const theme = isDarkMode ? darkTheme : lightTheme;
   const [selected, setSelected] = useState(false);
 
   return (
     <ThemeProvider theme={theme}>
-      <CardContainer key={shopId} background={theme.background}>
+      <CardContainer key={shopId} background={theme.background} onPress={() => navigation.navigate("ShoppingDetail", { shopId })}>
         <ImageWrapper>
           <ProductImage source={{ uri: image }} />
           <IconWrapper>
@@ -79,7 +82,7 @@ const ProductCardLarge = ({
   );
 };
 
-const CardContainer = styled.View<{ background: string }>`
+const CardContainer = styled.TouchableOpacity<{ background: string }>`
   width: 48%;
   flex-direction: column;
   gap: 12px;

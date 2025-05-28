@@ -25,7 +25,7 @@ export function Button({
       width={width}
       paddingValue={14}
       onPress={onPress}
-      buttonColor={buttonColor}
+      buttonColor={color[buttonColor]}
       disabled={loading}>
       {loading ? (
         <ActivityIndicator
@@ -41,7 +41,7 @@ export function Button({
 
 const BasedButton = styled.TouchableOpacity<{
   width?: string;
-  buttonColor?: string;
+  buttonColor: string;
   paddingValue?: number;
 }>`
   border-radius: 10px;

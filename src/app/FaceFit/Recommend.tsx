@@ -1,29 +1,82 @@
 import styled from 'styled-components/native';
 import { Font, color } from '../../styles';
 import { TopBar } from '../../components';
-import { TouchableOpacity, View } from 'react-native';
+import { TouchableOpacity } from 'react-native';
 import { Arrow } from '../../assets';
 import { useState } from 'react';
 import { ProductCardLarge } from '../../components/Shopping';
-import { RecommendData } from './Data';
 import { FlatList, ScrollView } from 'react-native-gesture-handler';
 import { useNavigation } from '@react-navigation/native';
 import { StackNavigationProp } from '@react-navigation/stack';
 import MyFaceCard from './MyFaceCard';
+import { useRoute } from '@react-navigation/native';
+import { searchHandler, glassesProduct } from '../../apis/shops';
+import { useQuery } from '@tanstack/react-query';
+import { FaceData } from './Data';
+import { FrameShapeMap, FrameShapeType } from '../Data';
 
 const FaceType = require('../../assets/FaceType.png');
 const BackgroundEffect = require('../../assets/BackgroundEffect.png');
 
-const SelectData = ['추천', '각진 안경테', '트렌드', '미니멀', '빈티지'];
-
 const Recommend = () => {
   const navigation = useNavigation<StackNavigationProp<any>>();
-  const [isSelected, setIsSelected] = useState<string>('추천');
+  const route = useRoute();
 
-  const filteredProducts =
-    RecommendData.find(data => data.category === isSelected)?.content || [];
+  const { selectedId } = route.params as { selectedId: string };
 
-  const loadMoreProducts = () => {};
+  const matchedData = FaceData.find(
+    (face) => face.id === Number(selectedId)
+  );
+
+  const {
+    name,
+    title,
+    subTitle,
+    tag,
+    describe,
+    recommend,
+    alert,
+    style
+  } = matchedData ?? {};
+
+  const selectedStyle = style?.[1];
+
+  const shapeKey = Object.entries(FrameShapeMap).find(
+    ([_, value]) => value === selectedStyle
+  )?.[0];
+
+  const filters = {
+    frame_shape: shapeKey ? [shapeKey as FrameShapeType] : undefined
+  }
+
+  const { data: shapeData, error, isLoading } = useQuery({
+    enabled: !!shapeKey,
+    queryKey: ["search", filters],
+    queryFn: () => searchHandler(filters),
+  });
+
+  const { data: glassesData } = useQuery({
+    queryKey: ["glassesProduct"],
+    queryFn: glassesProduct
+  })
+
+  const tabData = () => {
+    return [
+      {
+        name: "recommend",
+        list: [
+          ...(glassesData.trending_list ?? []),
+          ...(glassesData.hot_now_list ?? []),
+          ...(glassesData.classic_list ?? [])
+        ]
+      },
+      { name: "trend", list: glassesData.trending_list ?? [] },
+      { name: "minimal", list: glassesData.hot_now_list ?? [] },
+      { name: "classic_list", list: glassesData.classic_list ?? [] }
+    ];
+  };
+
+  const [isSelectedTab, setIsSelectedTab] = useState<number>(0);
 
   return (
     <Container>
@@ -39,7 +92,13 @@ const Recommend = () => {
         <FaceShapeDetails>
           <MyFaceCardWrapper>
             <SideCardImage source={FaceType} />
-            <MyFaceCard />
+            <MyFaceCard
+              name={name || ""}
+              title={title || ""}
+              subTitle={subTitle || ""}
+              tag={tag || []}
+              describe={describe || ""}
+            />
             <SideCardImage source={FaceType} />
           </MyFaceCardWrapper>
         </FaceShapeDetails>
@@ -56,28 +115,14 @@ const Recommend = () => {
             />
           </StyleTitleWrapper>
 
-          <View style={{ alignItems: 'center' }}>
-            <Font
-              text="라인이 위로 올라간 "
-              kind="regular18"
-              color="gray600"
-              style={{ lineHeight: 34 }}
-            />
-            <Font
-              text="캣아이, 브로우라인"
-              kind="bold18"
-              color="gray600"
-              style={{ lineHeight: 34 }}
-            />
-            <Font
-              text={`스타일이 잘 어울려요. 이런 프레임이\n얼굴에 구조감을 더해주고\n더 세련된 인상을 만들어줘요.`}
-              kind="regular18"
-              color="gray600"
-              style={{ textAlign: 'center', lineHeight: 34 }}
-            />
-          </View>
           <Font
-            text={`반대로, 얼굴형과 비슷한 동그란 테는\n얼굴을 더 둥글어 보이게 할 수 있어요.`}
+            text={recommend}
+            kind="regular18"
+            color="gray600"
+            style={{ textAlign: 'center', lineHeight: 34 }}
+          />
+          <Font
+            text={alert}
             kind="regular18"
             color="gray600"
             style={{ textAlign: 'center', lineHeight: 34 }}
@@ -101,15 +146,15 @@ const Recommend = () => {
 
           <ScrollView horizontal showsHorizontalScrollIndicator={false}>
             <CategoryTabList>
-              {SelectData.map(item => (
+              {style?.map((item, index) => (
                 <CategoryTabItem
                   key={item}
-                  onPress={() => setIsSelected(item)}
-                  isSelected={isSelected === item}>
+                  onPress={() => setIsSelectedTab(index)}
+                  isSelected={isSelectedTab === index}>
                   <Font
-                    text={item}
                     kind="medium18"
-                    color={isSelected === item ? 'white' : 'gray400'}
+                    text={item}
+                    color={isSelectedTab === index ? 'white' : 'gray400'}
                   />
                 </CategoryTabItem>
               ))}
@@ -117,19 +162,22 @@ const Recommend = () => {
           </ScrollView>
 
           <FlatList
-            data={filteredProducts}
+            data={isSelectedTab === 1 ? shapeData : tabData()[isSelectedTab]?.list ?? []}
             keyExtractor={(item, idx) => `${item.title}-${idx}`}
             renderItem={({ item }) => (
               <ProductCardLarge
                 isDarkMode={true}
-                shopId={1}
-                {...item}
+                shopId={item.shop_id}
+                image={item.image_urls[1]}
+                title={item.brand_name}
+                describe={item.glasses_name}
+                tag={FrameShapeMap[item.frame_shape as keyof typeof FrameShapeMap]}
+                price={item.price}
               />
             )}
             numColumns={2}
             columnWrapperStyle={{ justifyContent: 'space-between' }}
             contentContainerStyle={{ paddingHorizontal: 20, paddingTop: 32, paddingBottom: 48 }}
-            onEndReached={loadMoreProducts}
             onEndReachedThreshold={0.5}
           />
         </RecommendationSection>
@@ -181,7 +229,7 @@ const StyleTitleWrapper = styled.View`
 
 const FaceShapeDetails = styled.View`
   width: 100%;
-  padding: 88px 0 200px;
+  padding: 88px 0 110px;
   flex-direction: row;
   justify-content: center;
   align-items: center;
