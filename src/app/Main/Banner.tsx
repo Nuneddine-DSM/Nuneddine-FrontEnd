@@ -18,6 +18,8 @@ const Banner = ({ data }: { data: BannerDataType[] }) => {
   };
 
   useEffect(() => {
+    if (!data || data.length === 0) return;
+
     const interval = setInterval(() => {
       const nextIndex = (indexRef.current + 1) % (data?.length ?? 0);
       flatListRef.current?.scrollToOffset({
@@ -47,7 +49,7 @@ const Banner = ({ data }: { data: BannerDataType[] }) => {
     <BannerContainer>
       <FlatList
         ref={flatListRef}
-        data={data}
+        data={data ?? []}
         renderItem={renderBannerItem}
         horizontal
         pagingEnabled
@@ -58,7 +60,11 @@ const Banner = ({ data }: { data: BannerDataType[] }) => {
       />
       <BannerController>
         <Font
-          text={`${currentIndex + 1} | ${data?.length ?? 0}`}
+          text={
+            data?.length
+              ? `${currentIndex + 1} | ${data.length}`
+              : `0 | 0`
+          }
           kind="medium14"
           color="gray600"
         />
