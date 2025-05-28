@@ -117,6 +117,16 @@ const fonts: { [key: string]: TextStyle } = {
     lineHeight: 24,
     fontWeight: '800'
   },
+  medium22: {
+    fontSize: 22,
+    lineHeight: 30,
+    fontWeight: '500'
+  },
+  semi22: {
+    fontSize: 22,
+    lineHeight: 30,
+    fontWeight: '600'
+  },
   light24: {
     fontSize: 24,
     lineHeight: 24,
