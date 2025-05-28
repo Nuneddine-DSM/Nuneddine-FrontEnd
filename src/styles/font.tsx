@@ -156,5 +156,10 @@ const fonts: { [key: string]: TextStyle } = {
     fontSize: 28,
     lineHeight: 46,
     fontWeight: '900'
+  },
+  medium32: {
+    fontSize: 32,
+    lineHeight: 48,
+    fontWeight: '500'
   }
 };
