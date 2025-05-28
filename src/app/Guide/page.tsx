@@ -45,10 +45,10 @@ const Guide = () => {
       <ScrollView>
         <GuideListWrapper>
           {GuideListData?.guide_list.map((item: GuideItemType) => (
-            <GuideItem onPress={() => navigation.navigate("GuideDetail", { selectedId: item.guideId })}>
+            <GuideItem onPress={() => navigation.navigate("GuideDetail", { selectedId: item.guide_id })}>
               <GuideImage source={{ uri: item.image_url }} />
               <InfoWrapper>
-                <Font text={item.title} kind="medium16" color="gray400" />
+                <Font text="렌즈 기초 TIP" kind="medium16" color="gray400" />
                 <Font
                   text={item.title}
                   kind="bold24"
