@@ -3,14 +3,24 @@ import { Font, color } from '../../styles';
 import { TopBar } from '../../components';
 import { TouchableOpacity } from 'react-native';
 import { Arrow } from '../../assets';
-import { useNavigation } from '@react-navigation/native';
+import { useNavigation, useRoute } from '@react-navigation/native';
 import { StackNavigationProp } from '@react-navigation/stack';
 import { ScrollView } from 'react-native-gesture-handler';
+import { useQuery } from '@tanstack/react-query';
+import { getGuidesDetail } from '../../apis/guids';
 
 const QuestionIcon = require("../../assets/Question.png")
 
 const GuideDetail = () => {
   const navigation = useNavigation<StackNavigationProp<any>>();
+
+  const route = useRoute();
+  const { selectedId } = route.params as { selectedId: number }
+
+  const { data } = useQuery({
+    queryKey: ["guides", selectedId],
+    queryFn: () => getGuidesDetail(selectedId)
+  })
 
   return (
     <Container>
@@ -23,14 +33,16 @@ const GuideDetail = () => {
         }
       />
       <ScrollView>
-        <GuideImage></GuideImage>
+        <GuideImage source={{ uri: data.imageUrl }} />
 
         <GuideContent>
           <TitleWrapper>
             <QuestionImage source={QuestionIcon} resizeMode="cover" />
-            <Font text="안경 바꾸는 주기는 어떻게 될까?" kind="extraBold20" />
+            <Font text={data.title} kind="extraBold20" />
           </TitleWrapper>
-          <Description></Description>
+          <Description>
+            <Font text={data.content} />
+          </Description>
         </GuideContent>
       </ScrollView>
     </Container>
@@ -45,7 +57,7 @@ const Container = styled.View`
   background-color: ${color.white};
 `
 
-const GuideImage = styled.View`
+const GuideImage = styled.Image`
   width: 100%;
   height: 200px;
   background-color: ${color.gray100};

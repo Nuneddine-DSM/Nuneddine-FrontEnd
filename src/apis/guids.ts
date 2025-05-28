@@ -15,3 +15,16 @@ export const getGuides = async () => {
     throw err;
   }
 }
+
+export const getGuidesDetail = async (guideId: number) => {
+  try {
+    const response = await instance.get(`${guides}/${guideId}`, {
+      headers: {
+        Authorization: `Bearer ${await getItem('accessToken')}`
+      }
+    })
+    return response.data;
+  } catch (err) {
+    throw err;
+  }
+}
