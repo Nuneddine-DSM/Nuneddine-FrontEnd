@@ -1,7 +1,7 @@
-import styled from "styled-components/native";
-import { Font, color } from "../../styles";
-import Tag from "../../components/Shopping/Tag";
-import { OrderDataItemType } from "../../app/MyPage/Data"
+import styled from 'styled-components/native';
+import { Font, color } from '../../styles';
+import Tag from '../../components/Shopping/Tag';
+import { OrderDataItemType } from '../../app/MyPage/Data';
 
 const OrderDetails = ({ item }: { item: OrderDataItemType }) => {
   return (
@@ -15,14 +15,14 @@ const OrderDetails = ({ item }: { item: OrderDataItemType }) => {
             <Font
               text={item.description}
               kind="medium16"
-              style={{ flexWrap: "wrap" }}
+              style={{ flexWrap: 'wrap' }}
               numberOfLines={2}
               ellipsizeMode="tail"
             />
           </Section>
 
           <Section>
-            {item.type === "Lens" && <Tag text="한달용" height="32px" />}
+            {item.type === 'Lens' && <Tag text="한달용" height="32px" />}
             <Font text={`${item.price}원`} kind="bold16" />
           </Section>
         </Details>
@@ -30,7 +30,9 @@ const OrderDetails = ({ item }: { item: OrderDataItemType }) => {
 
       <OptionBox>
         <Font
-          text={`옵션 : ${1}개 ${item.type === "Lens" ? item.option[0].lensType : ""}`}
+          text={`옵션 : ${1}개 ${
+            item.type === 'Lens' ? item.option[0].lensType : ''
+          }`}
           kind="regular14"
           color="gray600"
         />
