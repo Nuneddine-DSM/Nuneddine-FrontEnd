@@ -53,7 +53,7 @@ export interface CartResponseType {
 export interface GuideItemType {
   guideId: number;
   title: string;
-  imageUrl: string;
+  image_url: string;
 }
 
 export interface TipItemType {

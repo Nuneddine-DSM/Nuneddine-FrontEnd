@@ -46,7 +46,7 @@ const Guide = () => {
         <GuideListWrapper>
           {GuideListData?.guide_list.map((item: GuideItemType) => (
             <GuideItem onPress={() => navigation.navigate("GuideDetail", { selectedId: item.guideId })}>
-              <GuideImage source={{ uri: item.imageUrl }} />
+              <GuideImage source={{ uri: item.image_url }} />
               <InfoWrapper>
                 <Font text={item.title} kind="medium16" color="gray400" />
                 <Font
@@ -67,8 +67,8 @@ const Guide = () => {
             {GuideListData?.tip_list.map((item: TipItemType, index: number) => {
               const isOpen = openIndexes.includes(index);
               return (
-                <QuestionItem key={index}>
-                  <QuestionWrap onPress={() => toggleOpen(index)}>
+                <QuestionItem key={index} onPress={() => toggleOpen(index)}>
+                  <QuestionWrap>
                     <TitleWrapper>
                       <Image source={QuestionIcon} />
                       <Font text={item.question} kind="medium16" color="gray600" />
