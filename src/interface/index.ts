@@ -51,9 +51,14 @@ export interface CartResponseType {
 }
 
 export interface GuideItemType {
-  id: number;
+  guide_id: number;
   title: string;
-  content: string;
+  image_url: string;
+}
+
+export interface TipItemType {
+  question: string,
+  answer: string
 }
 
 export interface FilterRequest {

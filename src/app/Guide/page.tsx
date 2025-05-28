@@ -1,4 +1,5 @@
 import styled from 'styled-components/native';
+import { useState } from 'react';
 import { Font, color } from '../../styles';
 import { TopBar } from '../../components';
 import { TouchableOpacity } from 'react-native';
@@ -8,14 +9,25 @@ import { StackNavigationProp } from '@react-navigation/stack';
 import { ScrollView } from 'react-native-gesture-handler';
 import { getGuides } from '../../apis/guids';
 import { useQuery } from "@tanstack/react-query";
-import { GuideItemType } from '../../interface';
+import { GuideItemType, TipItemType } from '../../interface';
 
 const QuestionIcon = require("../../assets/Question.png")
+const AnswerIcon = require("../../assets/AnswerImage.png")
 
 const Guide = () => {
   const navigation = useNavigation<StackNavigationProp<any>>();
 
-  const { data } = useQuery({
+  const [openIndexes, setOpenIndexes] = useState<number[]>([]);
+
+  const toggleOpen = (index: number) => {
+    setOpenIndexes((prev) =>
+      prev.includes(index)
+        ? prev.filter((i) => i !== index)
+        : [...prev, index]
+    );
+  };
+
+  const { data: GuideListData } = useQuery({
     queryKey: [getGuides],
     queryFn: getGuides
   })
@@ -32,11 +44,11 @@ const Guide = () => {
       />
       <ScrollView>
         <GuideListWrapper>
-          {data.map((item: GuideItemType) => (
-            <GuideItem onPress={() => navigation.navigate("GuideDetail")}>
-              <GuideImage></GuideImage>
+          {GuideListData?.guide_list.map((item: GuideItemType) => (
+            <GuideItem onPress={() => navigation.navigate("GuideDetail", { selectedId: item.guide_id })}>
+              <GuideImage source={{ uri: item.image_url }} />
               <InfoWrapper>
-                <Font text="기초 지식 안내 TIP" kind="medium16" color="gray400" />
+                <Font text="렌즈 기초 TIP" kind="medium16" color="gray400" />
                 <Font
                   text={item.title}
                   kind="bold24"
@@ -52,14 +64,29 @@ const Guide = () => {
           <Font text="자주 묻는 질문 (FAQ)" kind="bold24" />
 
           <QuestionListWrapper>
-            <QuestionItem>
-              <TitleWrapper>
-                <QuestionImage source={QuestionIcon} />
-                <Font text="렌즈를 잃어버렸을 때 대처 방법" kind="medium16" color="gray600" />
-              </TitleWrapper>
-              <Arrow size={20} color={color.gray600} rotate="bottom" />
-            </QuestionItem>
+            {GuideListData?.tip_list.map((item: TipItemType, index: number) => {
+              const isOpen = openIndexes.includes(index);
+              return (
+                <QuestionItem key={index} onPress={() => toggleOpen(index)}>
+                  <QuestionWrap>
+                    <TitleWrapper>
+                      <Image source={QuestionIcon} />
+                      <Font text={item.question} kind="medium16" color="gray600" />
+                    </TitleWrapper>
+                    <Arrow size={20} color={color.gray600} rotate={isOpen ? "top" : "bottom"} />
+                  </QuestionWrap>
+
+                  {isOpen && (
+                    <AnswerWrap>
+                      <Image source={AnswerIcon} />
+                      <Font text={item.answer} kind="medium16" color="gray600" />
+                    </AnswerWrap>
+                  )}
+                </QuestionItem>
+              );
+            })}
           </QuestionListWrapper>
+
 
         </QuestionContent>
       </ScrollView>
@@ -84,7 +111,7 @@ const GuideItem = styled.TouchableOpacity`
   padding: 14px 20px;
 `
 
-const GuideImage = styled.View`
+const GuideImage = styled.Image`
   width: 100%;
   height: 145px;
   border-radius: 20px;
@@ -104,15 +131,23 @@ const QuestionContent = styled.View`
   background-color: ${color.white};
 `
 
+const QuestionWrap = styled.TouchableOpacity`
+  width: 100%;
+  flex-direction: row;
+  justify-content: space-between;
+  align-items: center;
+`
+
 const QuestionListWrapper = styled.View`
   flex-direction: column;
   gap: 12px;
 `
 
 const QuestionItem = styled.TouchableOpacity`
-  flex-direction: row;
+  flex-direction: column;
   justify-content: space-between;
   align-items: center;
+  gap: 24px;
   padding: 18px;
   border-radius: 10px;
   border-width: 1px;
@@ -126,9 +161,16 @@ const TitleWrapper = styled.View`
   gap: 6px;
 `
 
-const QuestionImage = styled.Image`
+const Image = styled.Image`
   width: 24px;
   height: 18px;
 `
+
+const AnswerWrap = styled.View`
+  flex-direction: row;
+  gap: 6px;
+  padding: 0 18px;
+`
+
 
 export default Guide
