@@ -51,7 +51,7 @@ const SearchProduct = () => {
     <>
       <TopBar
         leftIcon={
-          <TouchableOpacity onPress={() => navigation.navigate('Search')}>
+          <TouchableOpacity onPress={() => navigation.goBack()}>
             <Arrow size={34} />
           </TouchableOpacity>
         }

@@ -11,7 +11,12 @@ const Header = () => {
 
   return (
     <Container>
-      <TouchableOpacity onPress={() => navigation.navigate('Main')}>
+      <TouchableOpacity onPress={() => {
+        navigation.reset({
+          index: 0,
+          routes: [{ name: 'Main' }]
+        })
+      }}>
         <LogoImage source={Logo} />
       </TouchableOpacity>
 
