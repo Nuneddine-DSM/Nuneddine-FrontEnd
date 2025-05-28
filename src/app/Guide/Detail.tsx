@@ -8,6 +8,7 @@ import { StackNavigationProp } from '@react-navigation/stack';
 import { ScrollView } from 'react-native-gesture-handler';
 import { useQuery } from '@tanstack/react-query';
 import { getGuidesDetail } from '../../apis/guids';
+import Markdown from 'react-native-markdown-display';
 
 const QuestionIcon = require("../../assets/Question.png")
 
@@ -41,7 +42,23 @@ const GuideDetail = () => {
             <Font text={data.title} kind="extraBold20" />
           </TitleWrapper>
           <Description>
-            <Font text={data.content} />
+            <Markdown
+              style={{
+                body: { color: "black", fontSize: 18 },
+                heading1: { fontSize: 22, fontWeight: 'bold' },
+                u: { textDecorationLine: 'underline', color: `${color.pink300}` },
+                blockquote: {
+                  backgroundColor: "white",
+                  paddingHorizontal: 20,
+                  borderLeftColor: "black",
+                  borderLeftWidth: 4,
+                },
+                bullet_list: { marginVertical: 8 },
+                list_item: { flexDirection: 'row', marginBottom: 15 },
+              }}
+            >
+              {data.content}
+            </Markdown>
           </Description>
         </GuideContent>
       </ScrollView>
