@@ -56,6 +56,11 @@ export interface GuideItemType {
   content: string;
 }
 
+export interface TipItemType {
+  question: string,
+  answer: string
+}
+
 export interface FilterRequest {
   keyword?: string;
   lens_color?: Array<LensColorType>;

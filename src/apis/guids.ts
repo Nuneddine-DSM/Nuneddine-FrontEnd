@@ -5,7 +5,7 @@ const guides = 'guides';
 
 export const getGuides = async () => {
   try {
-    const response = await instance.get(`${guides}`, {
+    const response = await instance.get(`${guides}/list`, {
       headers: {
         Authorization: `Bearer ${await getItem('accessToken')}`
       }
