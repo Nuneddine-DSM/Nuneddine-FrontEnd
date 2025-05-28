@@ -44,13 +44,13 @@ const Guide = () => {
       />
       <ScrollView>
         <GuideListWrapper>
-          {GuideListData.guide_list.map((item: GuideItemType) => (
-            <GuideItem onPress={() => navigation.navigate("GuideDetail", { selectedId: item.id })}>
-              <GuideImage></GuideImage>
+          {GuideListData?.guide_list.map((item: GuideItemType) => (
+            <GuideItem onPress={() => navigation.navigate("GuideDetail", { selectedId: item.guideId })}>
+              <GuideImage source={{ uri: item.imageUrl }} />
               <InfoWrapper>
                 <Font text={item.title} kind="medium16" color="gray400" />
                 <Font
-                  text={item.content}
+                  text={item.title}
                   kind="bold24"
                   numberOfLines={2}
                   ellipsizeMode="tail"
@@ -64,7 +64,7 @@ const Guide = () => {
           <Font text="자주 묻는 질문 (FAQ)" kind="bold24" />
 
           <QuestionListWrapper>
-            {GuideListData.tip_list.map((item: TipItemType, index: number) => {
+            {GuideListData?.tip_list.map((item: TipItemType, index: number) => {
               const isOpen = openIndexes.includes(index);
               return (
                 <QuestionItem key={index}>
@@ -111,7 +111,7 @@ const GuideItem = styled.TouchableOpacity`
   padding: 14px 20px;
 `
 
-const GuideImage = styled.View`
+const GuideImage = styled.Image`
   width: 100%;
   height: 145px;
   border-radius: 20px;

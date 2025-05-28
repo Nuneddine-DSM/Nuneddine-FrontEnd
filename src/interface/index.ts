@@ -51,9 +51,9 @@ export interface CartResponseType {
 }
 
 export interface GuideItemType {
-  id: number;
+  guideId: number;
   title: string;
-  content: string;
+  imageUrl: string;
 }
 
 export interface TipItemType {
