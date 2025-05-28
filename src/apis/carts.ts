@@ -29,20 +29,26 @@ export const getCartGlassList = async () => {
   }
 }
 
-export const addCartItem = async (shopId: number, lensPower: number, count: number) => {
+export const addCartItem = async (
+  shopId: number,
+  lensPower: number,
+  count: number
+) => {
   try {
-    const response = await instance.post(`${carts}/${shopId}`,
-    { lensPower, count },
-    {
-      headers: {
-        Authorization: `Bearer ${await getItem('accessToken')}`
-      },
-    })
+    const response = await instance.post(
+      `${carts}/${shopId}`,
+      { lensPower, count },
+      {
+        headers: {
+          Authorization: `Bearer ${await getItem('accessToken')}`,
+        },
+      }
+    );
     return response;
   } catch (err) {
     throw err;
   }
-}
+};
 
 export const deleteCartItem = async (cartIds: Array<number>) => {
   try {

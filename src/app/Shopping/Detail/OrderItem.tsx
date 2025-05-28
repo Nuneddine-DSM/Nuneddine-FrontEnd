@@ -2,14 +2,23 @@ import styled from "styled-components/native";
 import { Font, color } from "../../../styles"
 import { X } from "../../../assets"
 import { QuantitySelector } from "../../../components/Shopping";
+import { useOrderStore } from "../../../stores/useOrderStore";
 
-const OrderItem = () => {
+interface PropsType {
+  id?: number,
+  productName?: string,
+  price?: number
+}
+
+const OrderItem = ({ id, productName, price = 0 }: PropsType) => {
+  const { optionCount } = useOrderStore();
+
   return (
     <OrderItemContainer>
       <ProductInfoWrapper>
         <ProductNameBox>
           <Font
-            text="베리스 레쥬렉션 선글라스 RESURER 어쩌고저쩌고 아무튼 대다 김"
+            text={productName}
             kind="bold16"
             numberOfLines={2}
             ellipsizeMode="tail"
@@ -18,8 +27,8 @@ const OrderItem = () => {
         <X size={30} />
       </ProductInfoWrapper>
       <QuantityAndPriceWrapper>
-        <QuantitySelector />
-        <Font text="99,000원" kind="bold18" />
+        <QuantitySelector productId={id || 0} />
+        <Font text={`${(price * optionCount).toLocaleString()}원`} kind="bold18" />
       </QuantityAndPriceWrapper>
     </OrderItemContainer>
   )

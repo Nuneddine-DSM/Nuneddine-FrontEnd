@@ -21,6 +21,7 @@ import { NavigationProp, RouteProp, useNavigation, useRoute } from '@react-navig
 import { useQuery } from "@tanstack/react-query";
 import { TouchableOpacity } from "react-native";
 import { FrameShapeMap } from "../../Data";
+import { useOrderStore } from "../../../stores/useOrderStore";
 
 type RootStackParamList = {
   ShoppingDetail: { shopId: number };
@@ -30,14 +31,12 @@ const ShoppingDetail = () => {
   const route = useRoute<RouteProp<RootStackParamList, 'ShoppingDetail'>>();
   const { shopId } = route.params;
 
+  const { optionCount, lensPower } = useOrderStore();
+
   const navigation = useNavigation<NavigationProp<any>>();
 
   const [selectedTab, setSelectedTab] = useState<number>(1);
   const [selectedHeart, setSelectedHeart] = useState<boolean>(false);
-  const [selectedColor, setSelectedColor] = useState<number>(1);
-
-  const [lensPower, setLensPower] = useState<number>(11.6);
-  const [count, setCount] = useState<number>(1);
 
   const { data: detail } = useQuery({
     queryKey: ["productDetail", shopId],
@@ -84,8 +83,12 @@ const ShoppingDetail = () => {
   }, [detail?.is_liked]);
 
   const handelAddCart = () => {
-    handlePresentModalPress();
-    addCartItem(shopId, lensPower, count);
+    try {
+      addCartItem(shopId, lensPower, optionCount);
+      handlePresentModalPress();
+    } catch (err) {
+      console.error("장바구니 담기 오류");
+    }
   }
 
   return (
@@ -127,7 +130,7 @@ const ShoppingDetail = () => {
                 <TouchableOpacity
                   onPress={() => navigation.navigate("ShoppingDetail", { shopId: shop.shop_id })}
                 >
-                  <ColorProductItem selected={selectedColor === shop.shop_id} />
+                  <ColorProductItem source={{ uri: shop.image_urls[0] }} />
                 </TouchableOpacity>
               )}
             </ColorProductList>
@@ -158,10 +161,18 @@ const ShoppingDetail = () => {
         <OptionWrapper>
           <Font text="옵션 선택" kind="medium16" color="gray600" />
           <ProductItemWrapper>
-            <OrderItem />
+            <OrderItem
+              id={shopId}
+              productName={detail?.glasses_name}
+              price={detail?.price}
+            />
             <PriceWrapper>
               <Font text="결제 예상 금액" kind="semi18" />
-              <Font text={detail?.price} kind="bold24" color="pink300" />
+              <Font
+                text={`${((detail?.price) * optionCount).toLocaleString()}원`}
+                kind="bold24"
+                color="pink300"
+              />
             </PriceWrapper>
           </ProductItemWrapper>
         </OptionWrapper>
@@ -240,7 +251,7 @@ const ColorProductList = styled.ScrollView`
   gap: 12px;
 `
 
-const ColorProductItem = styled.ImageBackground<{ selected: boolean }>`
+const ColorProductItem = styled.ImageBackground`
   width: 100px;
   height: 100px;
   border-radius: 4px;
