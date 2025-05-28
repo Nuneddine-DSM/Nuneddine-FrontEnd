@@ -1,7 +1,7 @@
 import styled from 'styled-components/native';
 import { Font, color } from '../../styles';
 import { TopBar } from '../../components';
-import { TouchableOpacity } from 'react-native';
+import { TouchableOpacity, StyleSheet } from 'react-native';
 import { Arrow } from '../../assets';
 import { useNavigation, useRoute } from '@react-navigation/native';
 import { StackNavigationProp } from '@react-navigation/stack';
@@ -12,16 +12,39 @@ import Markdown from 'react-native-markdown-display';
 
 const QuestionIcon = require("../../assets/Question.png")
 
+const customStyle = StyleSheet.create({
+  body: {
+    color: "black",
+    fontSize: 18,
+    fontWeight: 500,
+    lineHeight: 28,
+    fontFamily: "Pretendard-Medium"
+  },
+  heading1: { fontSize: 22, fontWeight: 700 },
+  b: { fontSize: 18, fontWeight: 700 },
+  u: { textDecorationLine: 'underline', color: `${color.pink300}` },
+  blockquote: {
+    backgroundColor: "white",
+    paddingHorizontal: 20,
+    borderLeftColor: "black",
+    borderLeftWidth: 4,
+  },
+  bullet_list: { marginVertical: 8 },
+  list_item: { flexDirection: 'row', marginBottom: 15 },
+})
+
 const GuideDetail = () => {
   const navigation = useNavigation<StackNavigationProp<any>>();
 
   const route = useRoute();
   const { selectedId } = route.params as { selectedId: number }
 
-  const { data } = useQuery({
+  const {
+    data: guideData,
+  } = useQuery({
     queryKey: ["guides", selectedId],
-    queryFn: () => getGuidesDetail(selectedId)
-  })
+    queryFn: () => getGuidesDetail(selectedId),
+  });
 
   return (
     <Container>
@@ -34,30 +57,16 @@ const GuideDetail = () => {
         }
       />
       <ScrollView>
-        <GuideImage source={{ uri: data.imageUrl }} />
+        <GuideImage source={{ uri: guideData.image_url }} />
 
         <GuideContent>
           <TitleWrapper>
             <QuestionImage source={QuestionIcon} resizeMode="cover" />
-            <Font text={data.title} kind="extraBold20" />
+            <Font text={guideData.title} kind="extraBold20" />
           </TitleWrapper>
           <Description>
-            <Markdown
-              style={{
-                body: { color: "black", fontSize: 18 },
-                heading1: { fontSize: 22, fontWeight: 'bold' },
-                u: { textDecorationLine: 'underline', color: `${color.pink300}` },
-                blockquote: {
-                  backgroundColor: "white",
-                  paddingHorizontal: 20,
-                  borderLeftColor: "black",
-                  borderLeftWidth: 4,
-                },
-                bullet_list: { marginVertical: 8 },
-                list_item: { flexDirection: 'row', marginBottom: 15 },
-              }}
-            >
-              {data.content}
+            <Markdown style={customStyle}>
+              {guideData.content}
             </Markdown>
           </Description>
         </GuideContent>
@@ -99,7 +108,6 @@ const QuestionImage = styled.Image`
 const Description = styled.View`
   width: 100%;
   height: 500px;
-  background-color: ${color.gray100};
 `
 
 export default GuideDetail
