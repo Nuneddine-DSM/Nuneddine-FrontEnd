@@ -76,6 +76,16 @@ export interface BottomButtonsProps {
   onButtonPress: () => void;
 }
 
+export interface AddressResponse {
+  id: number,
+  address: string,
+  detail_address: string,
+  delivery_address_name: string,
+  post_code: string,
+  receiver: string,
+  phone_number: string
+}
+
 export interface ShopType {
   shop_id: number;
   brand_name: string;
@@ -86,3 +96,4 @@ export interface ShopType {
   is_liked: boolean;
   shop_type: string;
 };
+
