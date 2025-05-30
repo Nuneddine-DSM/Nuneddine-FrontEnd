@@ -29,7 +29,7 @@ export const useSearchStore = create<FilterState>((set) => ({
   lens_color: [],
   lens_date_type: [],
 
-  setKeyword: (keyword) => set({ keyword }),
+  setKeyword: (keyword: string) => set({ keyword }),
 
   toggleFilterValue: (filterName, value) =>
     set((state) => {

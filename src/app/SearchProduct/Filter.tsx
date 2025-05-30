@@ -61,12 +61,37 @@ const Filter = () => {
       <PageContainer>
         <ScrollView horizontal showsHorizontalScrollIndicator={false}>
           <SelectedFilterTagWrapper>
-            {allSelectedFilters.map((value, index) => (
-              <SelectedTag key={index}>
-                <Font text={value} kind="medium16" color="white" />
-                <X size={20} color={color.gray500} />
-              </SelectedTag>
-            ))}
+            {allSelectedFilters.map((value, index) => {
+              const translatedValue =
+                FrameShapeMap[value as keyof typeof FrameShapeMap] ||
+                FrameMaterialMap[value as keyof typeof FrameMaterialMap] ||
+                LensColorMap[value as keyof typeof LensColorMap] ||
+                LensDateTypeMap[value as keyof typeof LensDateTypeMap] ||
+                value;
+
+              const getFilterKey = () => {
+                if (frame_shape.includes(value as FrameShapeType)) return 'frame_shape';
+                if (frame_material.includes(value as FrameMaterialType)) return 'frame_material';
+                if (lens_color.includes(value as LensColorType)) return 'lens_color';
+                if (lens_date_type.includes(value as LensDateType)) return 'lens_date_type';
+                return null;
+              };
+
+              const filterKey = getFilterKey();
+
+              return (
+                <SelectedTag key={index}>
+                  <Font text={translatedValue} kind="medium16" color="white" />
+                  {filterKey && (
+                    <X
+                      size={20}
+                      color={color.gray500}
+                      onPress={() => toggleFilterValue(filterKey, value)}
+                    />
+                  )}
+                </SelectedTag>
+              );
+            })}
           </SelectedFilterTagWrapper>
         </ScrollView>
 
@@ -83,7 +108,10 @@ const Filter = () => {
                   <Font text="프레임 모양" kind="semi18" />
                   <TagList>
                     {Object.entries(FrameShapeMap).map(([key, value]) => (
-                      <TouchableOpacity key={key} onPress={() => toggleFilterValue('frame_shape', key)}>
+                      <TouchableOpacity
+                        key={key}
+                        onPress={() => toggleFilterValue('frame_shape', key as FrameShapeType)}
+                      >
                         <Tag isSelected={frame_shape.includes(key as FrameShapeType)}>
                           <Font
                             text={value}
@@ -100,7 +128,10 @@ const Filter = () => {
                   <Font text="프레임 형태" kind="semi18" />
                   <TagList>
                     {Object.entries(FrameMaterialMap).map(([key, value]) => (
-                      <TouchableOpacity key={key} onPress={() => toggleFilterValue('frame_material', key)}>
+                      <TouchableOpacity
+                        key={key}
+                        onPress={() => toggleFilterValue('frame_material', key as FrameMaterialType)}
+                      >
                         <Tag key={key} isSelected={frame_material.includes(key as FrameMaterialType)}>
                           <Font
                             text={value}
@@ -128,8 +159,11 @@ const Filter = () => {
                   <Font text="주기" kind="semi18" />
                   <TagList>
                     {Object.entries(LensDateTypeMap).map(([key, value]) => (
-                      <TouchableOpacity onPress={() => toggleFilterValue('lens_date_type', key)}>
-                        <Tag key={key} isSelected={lens_date_type.includes(key as LensDateType)}>
+                      <TouchableOpacity
+                        key={key}
+                        onPress={() => toggleFilterValue('lens_date_type', key as LensDateType)}
+                      >
+                        <Tag isSelected={lens_date_type.includes(key as LensDateType)}>
                           <Font
                             text={value}
                             kind="medium16"
@@ -175,7 +209,7 @@ const Filter = () => {
                     {Object.entries(LensColorMap).map(([key, label]) => (
                       <TouchableOpacity
                         key={key}
-                        onPress={() => toggleFilterValue('lens_color', key)}
+                        onPress={() => toggleFilterValue('lens_color', key as LensColorType)}
                       >
                         <Tag isSelected={lens_color.includes(key as LensColorType)}>
                           {key === 'OTHER' ? null : (
@@ -191,7 +225,7 @@ const Filter = () => {
                           <Font
                             text={label}
                             kind="semi16"
-                            color={lens_color.includes(key) ? "white" : "black"}
+                            color={lens_color.includes(key as LensColorType) ? "white" : "black"}
                           />
                         </Tag>
                       </TouchableOpacity>
