@@ -28,7 +28,6 @@ const SearchProduct = () => {
 
   const [searchText, setSearchText] = useState("");
   const [products, setProducts] = useState<ShopType[]>([]);
-  const [productCount, setProductCount] = useState(0);
 
   const {
     keyword,
@@ -36,8 +35,10 @@ const SearchProduct = () => {
     frame_material,
     lens_date_type,
     lens_color,
+    productCount,
+    setProductCount,
     toggleFilterValue,
-    setKeyword
+    setKeyword,
   } = useSearchStore();
 
   const allSelectedFilters = [

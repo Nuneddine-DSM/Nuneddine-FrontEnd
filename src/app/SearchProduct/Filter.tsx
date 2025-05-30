@@ -37,6 +37,7 @@ const Filter = () => {
     frame_material,
     lens_color,
     lens_date_type,
+    productCount,
     toggleFilterValue,
     resetFilters
   } = useSearchStore();
@@ -244,7 +245,11 @@ const Filter = () => {
           <Font text="선택 초기화" kind="semi16" />
         </ResetButton>
         <Button onPress={() => navigation.navigate("SearchProduct")}>
-          <Font text="29,000개의 상품보기" color="white" kind="semi16" />
+          <Font
+            text={`${productCount.toLocaleString()}개의 상품보기`}
+            color="white"
+            kind="semi16"
+          />
         </Button>
       </ControlBar>
     </>
