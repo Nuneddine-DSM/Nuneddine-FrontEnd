@@ -35,16 +35,18 @@ export const addCartItem = async (
   count: number
 ) => {
   try {
-    const response = await instance.post(
+    await instance.post(
       `${carts}/${shopId}`,
-      { lensPower, count },
+      {
+        lens_power: lensPower,
+        count
+      },
       {
         headers: {
           Authorization: `Bearer ${await getItem('accessToken')}`,
         },
       }
     );
-    return response;
   } catch (err) {
     throw err;
   }
