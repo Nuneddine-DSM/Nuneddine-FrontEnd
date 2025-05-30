@@ -4,37 +4,27 @@ import { TopBar } from '../../../components';
 import { TouchableOpacity } from 'react-native';
 import { Arrow } from '../../../assets';
 import DeliveryList from '../../../components/Shopping/Delivery';
-
-export interface DeliveryType {
-  selected?: boolean,
-  nickName?: string,
-  userName?: string,
-  phone?: string,
-  address?: string,
-  check?: boolean
-}
-
-const DeliveryData: DeliveryType[] = [
-  {
-    selected: true,
-    nickName: '제 2의 집',
-    name: '박예빈',
-    phone: '010-1234-1234',
-    address:
-      '대전광역시 유성구 가정북로 76 (장동, 대덕소프트웨어마이스터고등학교), 우정관 택배함(기숙사)'
-  },
-  {
-    selected: false,
-    nickName: '대마고',
-    name: '임다영',
-    phone: '010-1234-1234',
-    address:
-      '대전광역시 유성구 가정북로 76 (장동, 대덕소프트웨어마이스터고등학교), 우정관 택배함(기숙사)'
-  }
-];
+import { NavigationProp, useNavigation } from '@react-navigation/native';
+import { useQuery } from '@tanstack/react-query';
+import { getAddress } from '../../../apis/address';
+import { AddressResponse } from '../../../interface';
+import { useState, useEffect } from 'react';
 
 const Delivery = () => {
   const navigation = useNavigation<NavigationProp<any>>();
+
+  const { data: AddressData } = useQuery({
+    queryKey: ["Delivery"],
+    queryFn: getAddress
+  })
+
+  const [isSelected, setIsSelected] = useState<number>(AddressData?.data?.[0]?.id ?? 0);
+
+  useEffect(() => {
+    if (AddressData?.data?.[1]?.id) {
+      setIsSelected(AddressData.data[1].id);
+    }
+  }, [AddressData]);
 
   return (
     <Container>
@@ -47,10 +37,10 @@ const Delivery = () => {
         }
       />
       <DeliveryListWrapper>
-        {DeliveryData.map((item, index) => (
-          <DeliveryList key={index} item={item} />
+        {AddressData?.data?.addresses.map((item: AddressResponse) => (
+          <DeliveryList key={item.id} item={item} isSelected={isSelected} />
         ))}
-        <AddButton>
+        <AddButton onPress={() => navigation.navigate("DeliverAdd")}>
           <Font text="배송지 추가하러 가기" kind="medium16" color="gray500" />
           <Arrow size={20} color={color.gray500} rotate="right" />
         </AddButton>
