@@ -66,7 +66,6 @@ const SearchProduct = () => {
         console.error(err);
       }
     };
-
     fetchSearchedProducts();
   }, [keyword, frame_shape, frame_material, lens_color, lens_date_type]);
 
@@ -82,8 +81,8 @@ const SearchProduct = () => {
           <SearchInput
             value={searchText}
             onChangeText={(searchText) => {
-              setKeyword(searchText),
-                setSearchText(searchText)
+              setKeyword(searchText);
+              setSearchText(searchText);
             }}
           />
         }
