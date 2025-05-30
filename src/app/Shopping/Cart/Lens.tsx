@@ -1,6 +1,7 @@
 import styled from "styled-components/native";
 import { Font, color } from "../../../styles";
 import { Input } from "../../../components";
+import { useState } from "react";
 import Map from "./StoreMap";
 
 const Lens = () => {
@@ -26,19 +27,23 @@ const ReservationFormSection = () => (
   </ReservationFormWrapper>
 );
 
-const InputField = ({ label, placeholder }: { label: string; placeholder: string }) => (
-  <InputWrapper>
-    <Font text={label} kind="medium18" color="gray600" />
-    <Input
-      placeholder={placeholder}
-      value=""
-      borderRadius={50}
-      width="300px"
-      padding="18px 20px"
-      onChangeText={() => { }}
-    />
-  </InputWrapper>
-);
+const InputField = ({ label, placeholder }: { label: string; placeholder: string }) => {
+  const [text, setText] = useState('');
+
+  return (
+    <InputWrapper>
+      <Font text={label} kind="medium18" color="gray600" />
+      <Input
+        placeholder={placeholder}
+        value={text}
+        borderRadius={50}
+        width="300px"
+        padding="18px 20px"
+        onChangeText={setText}
+      />
+    </InputWrapper>
+  )
+};
 
 const NoticeBox = () => (
   <NoticeWrapper>

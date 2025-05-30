@@ -35,9 +35,7 @@ const Cart = () => {
 
   const [selectedTab, setSelectedTab] = useState<number>(1);
   const [selectedDeleteIds, setSelectedDeleteIds] = useState<number[]>([]);
-  const [glassesCounts, setGlassesCounts] = useState<Record<number, number>>(
-    {}
-  );
+  const [glassesCounts, setGlassesCounts] = useState<Record<number, number>>({});
   const [lensPower, setLensPower] = useState<string>('0.00');
   const [count, setCount] = useState<number>(1);
   const [cartId, setCartId] = useState<number | null>(null);
@@ -97,6 +95,9 @@ const Cart = () => {
       if (!cartId || !lensPower || !count) return;
       await updateOption(cartId, parseFloat(lensPower), count);
       bottomSheetModalRef.current?.close();
+      queryClient.invalidateQueries({
+        queryKey: selectedTab === 1 ? ['cartGlassList'] : ['cartLensList']
+      });
     } catch (err) {
       console.log('장바구니 옵션 변경 실패', err);
     }
@@ -105,17 +106,24 @@ const Cart = () => {
   const handleSingleDelete = async (id: number) => {
     try {
       await deleteCartItem([id]);
+      queryClient.invalidateQueries({
+        queryKey: selectedTab === 1 ? ['cartGlassList'] : ['cartLensList']
+      });
+      setSelectedDeleteIds(prev => prev.filter(itemId => itemId !== id));
     } catch {
-      console.log('개별 삭제 실패');
+      console.log('삭제 실패');
     }
   };
 
   const handleDeleteSelected = async () => {
     try {
       await deleteCartItem(selectedDeleteIds);
+      queryClient.invalidateQueries({
+        queryKey: selectedTab === 1 ? ['cartGlassList'] : ['cartLensList']
+      });
       setSelectedDeleteIds([]);
     } catch {
-      console.log('선택 삭제 실패');
+      console.log('삭제 실패');
     }
   };
 
@@ -132,6 +140,13 @@ const Cart = () => {
   const handleBuyProduct = () => {
     productPurchase();
     navigation.navigate('Payment');
+  };
+
+  const onCountChange = (newCount: number) => {
+    if (cartId !== null) {
+      setCount(newCount);
+      setGlassesCounts(prev => ({ ...prev, [cartId]: newCount }));
+    }
   };
 
   return (
@@ -151,7 +166,6 @@ const Cart = () => {
           setSelectedTab={setSelectedTab}
           tabData={CategoryData}
         />
-
         <SelectWrapper>
           <AllSelectWrapper>
             <CheckBox
@@ -213,7 +227,7 @@ const Cart = () => {
             <InputWrapper>
               <CountInputWrapper>
                 <Font text="수량" kind="medium16" />
-                <QuantitySelector count={count} onChange={setCount} />
+                <QuantitySelector count={count} onChange={onCountChange} />
               </CountInputWrapper>
               <Dropdown
                 value={lensPower}
@@ -246,6 +260,7 @@ const Container = styled.ScrollView.attrs(() => ({
   background-color: ${color.gray50};
   padding-top: 62px;
   gap: 15px;
+  position: relative;
 `;
 
 const SelectWrapper = styled.View`
@@ -270,6 +285,9 @@ const ProductCountWrapper = styled.View`
 `;
 
 const ButtonWrapper = styled.View`
+  width: 100%;
+  position: absolute;
+  bottom: 0;
   padding: 7px 20px;
   border-top-width: 1px;
   border-color: ${color.gray100};

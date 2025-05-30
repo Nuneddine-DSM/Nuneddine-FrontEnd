@@ -21,7 +21,6 @@ import { NavigationProp, RouteProp, useNavigation, useRoute } from '@react-navig
 import { useQuery } from "@tanstack/react-query";
 import { TouchableOpacity } from "react-native";
 import { FrameShapeMap } from "../../Data";
-import { useOrderStore } from "../../../stores/useOrderStore";
 
 type RootStackParamList = {
   ShoppingDetail: { shopId: number };
@@ -30,8 +29,6 @@ type RootStackParamList = {
 const ShoppingDetail = () => {
   const route = useRoute<RouteProp<RootStackParamList, 'ShoppingDetail'>>();
   const { shopId } = route.params;
-
-  const { optionCount, lensPower } = useOrderStore();
 
   const navigation = useNavigation<NavigationProp<any>>();
 
@@ -128,6 +125,7 @@ const ShoppingDetail = () => {
             <ColorProductList>
               {detail?.related_shops.map((shop: any) =>
                 <TouchableOpacity
+                  key={shop.shop_id}
                   onPress={() => navigation.navigate("ShoppingDetail", { shopId: shop.shop_id })}
                 >
                   <ColorProductItem source={{ uri: shop.image_urls[0] }} />
@@ -234,6 +232,7 @@ const Container = styled.ScrollView.attrs(() => ({
 }))`
   flex: 1;
   background-color: ${color.white};
+  position: relative; 
 `
 const ProductImage = styled.Image`
   width: 100%;

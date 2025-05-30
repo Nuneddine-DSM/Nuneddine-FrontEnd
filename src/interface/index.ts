@@ -75,3 +75,13 @@ export interface BottomButtonsProps {
   buttonText: string;
   onButtonPress: () => void;
 }
+
+export interface AddressResponse {
+  id: number,
+  address: string,
+  detail_address: string,
+  delivery_address_name: string,
+  post_code: string,
+  receiver: string,
+  phone_number: string
+}

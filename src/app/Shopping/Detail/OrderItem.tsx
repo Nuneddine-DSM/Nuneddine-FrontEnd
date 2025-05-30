@@ -2,7 +2,6 @@ import styled from "styled-components/native";
 import { Font, color } from "../../../styles"
 import { X } from "../../../assets"
 import { QuantitySelector } from "../../../components/Shopping";
-import { useOrderStore } from "../../../stores/useOrderStore";
 
 interface PropsType {
   id?: number,
@@ -11,8 +10,6 @@ interface PropsType {
 }
 
 const OrderItem = ({ id, productName, price = 0 }: PropsType) => {
-  const { optionCount } = useOrderStore();
-
   return (
     <OrderItemContainer>
       <ProductInfoWrapper>
