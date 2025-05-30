@@ -64,9 +64,12 @@ export const searchHandler = async (filters: FilterRequest) => {
     queryParams.append('lens_color', filters.lens_color.join(','));
   if (filters.lens_date_type?.length)
     queryParams.append('lens_date_type', filters.lens_date_type.join(','));
+
+  const queryString = queryParams.toString();
+  console.log(`쿼리 문자열: ${queryString}`);
   
   try {
-    const response = await instance.get(`${shops}/search?${queryParams.toString()}`, {
+    const response = await instance.get(`${shops}/search?${queryString}`, {
       headers: {
         Authorization: `Bearer ${await getItem('accessToken')}`
       }
