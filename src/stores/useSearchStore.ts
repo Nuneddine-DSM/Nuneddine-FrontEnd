@@ -20,6 +20,9 @@ interface FilterState {
   toggleFilterValue: <K extends FilterKey>(filterName: K, value: FilterValueMap[K]) => void;
   setSingleFilterValue: <K extends FilterKey>(filterName: K, value: FilterValueMap[K]) => void;
   resetFilters: () => void;
+  
+  productCount: number;
+  setProductCount: (productCount: number) => void
 }
 
 export const useSearchStore = create<FilterState>((set) => ({
@@ -29,7 +32,7 @@ export const useSearchStore = create<FilterState>((set) => ({
   lens_color: [],
   lens_date_type: [],
 
-  setKeyword: (keyword) => set({ keyword }),
+  setKeyword: (keyword: string) => set({ keyword }),
 
   toggleFilterValue: (filterName, value) =>
     set((state) => {
@@ -53,4 +56,7 @@ export const useSearchStore = create<FilterState>((set) => ({
       lens_color: [],
       lens_date_type: [],
     }),
+
+    productCount: 0,
+    setProductCount: (productCount: number) => set({ productCount }),
 }));

@@ -85,3 +85,15 @@ export interface AddressResponse {
   receiver: string,
   phone_number: string
 }
+
+export interface ShopType {
+  shop_id: number;
+  brand_name: string;
+  glasses_name: string;
+  description_image: string;
+  price: number;
+  image_urls: string[];
+  is_liked: boolean;
+  shop_type: string;
+};
+
