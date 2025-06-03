@@ -1,4 +1,4 @@
-import React, { memo, useMemo, useState } from 'react';
+import React, { memo, useState } from 'react';
 import styled from 'styled-components/native';
 import { Font, color } from '../styles';
 import { Eye, EyeClose } from '../assets';
