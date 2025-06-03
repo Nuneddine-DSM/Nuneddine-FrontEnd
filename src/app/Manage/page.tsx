@@ -173,7 +173,17 @@ const Manage = () => {
           </View>
         </BottomSheetWrapper>
         <AddButtonBox>
-          <Button onPress={() => {}} buttonColor="black" text="렌즈 추가하기" />
+          <Button
+            onPress={() => {
+              if (!lensName.trim()) {
+                Alert.alert('렌즈 이름을 입력해주세요');
+              } else {
+                // 렌즈 추가
+              }
+            }}
+            buttonColor="black"
+            text="렌즈 추가하기"
+          />
         </AddButtonBox>
       </BottomSheetModal>
     </SafeAreaView>
