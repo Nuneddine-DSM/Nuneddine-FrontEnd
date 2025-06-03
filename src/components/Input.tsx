@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { memo, useMemo, useState } from 'react';
 import styled from 'styled-components/native';
 import { Font, color } from '../styles';
 import { Eye, EyeClose } from '../assets';
@@ -18,58 +18,60 @@ interface InputProps {
   padding?: string;
 }
 
-export const Input = ({
-  label,
-  placeholder,
-  password,
-  autoFocus,
-  value,
-  multiline,
-  readonly = false,
-  width = '100%',
-  borderRadius = 10,
-  padding = '18px 16px',
-  onChangeText,
-  onKeyPress
-}: InputProps) => {
-  const [press, setPress] = useState<boolean>(false);
-  const [isFocused, setIsFocused] = useState<boolean>(false);
+export const Input = memo(
+  ({
+    label,
+    placeholder,
+    password,
+    autoFocus,
+    value,
+    multiline,
+    readonly = false,
+    width = '100%',
+    borderRadius = 10,
+    padding = '18px 16px',
+    onChangeText,
+    onKeyPress
+  }: InputProps) => {
+    const [press, setPress] = useState<boolean>(false);
+    const [isFocused, setIsFocused] = useState<boolean>(false);
 
-  return (
-    <Container width={width}>
-      {label && <Font kind="semi16" text={label} color="gray600" />}
-      <InputContainerBox
-        focused={isFocused}
-        readonly={readonly}
-        borderRadius={borderRadius}>
-        <InputBox
-          readOnly={readonly}
-          value={value}
-          autoFocus={autoFocus}
-          secureTextEntry={password && !press}
-          placeholder={placeholder}
-          placeholderTextColor={color.gray400}
-          padding={padding}
-          onFocus={() => setIsFocused(true)}
-          onBlur={() => setIsFocused(false)}
-          onChangeText={onChangeText}
-          onKeyPress={onKeyPress}
-          multiline={multiline}
-          enterKeyHint="go"
-        />
-        {password && (
-          <PwButton onPress={() => setPress(!press)}>
-            {press ? (
-              <Eye size={36} color={color.gray500} />
-            ) : (
-              <EyeClose size={36} color={color.gray500} />
-            )}
-          </PwButton>
-        )}
-      </InputContainerBox>
-    </Container>
-  );
-};
+    return (
+      <Container width={width}>
+        {label && <Font kind="semi16" text={label} color="gray600" />}
+        <InputContainerBox
+          focused={isFocused}
+          readonly={readonly}
+          borderRadius={borderRadius}>
+          <InputBox
+            readOnly={readonly}
+            value={value}
+            autoFocus={autoFocus}
+            secureTextEntry={password && !press}
+            placeholder={placeholder}
+            placeholderTextColor={color.gray400}
+            padding={padding}
+            onFocus={() => setIsFocused(true)}
+            onBlur={() => setIsFocused(false)}
+            onChangeText={onChangeText}
+            onKeyPress={onKeyPress}
+            multiline={multiline}
+            enterKeyHint="go"
+          />
+          {password && (
+            <PwButton onPress={() => setPress(!press)}>
+              {press ? (
+                <Eye size={36} color={color.gray500} />
+              ) : (
+                <EyeClose size={36} color={color.gray500} />
+              )}
+            </PwButton>
+          )}
+        </InputContainerBox>
+      </Container>
+    );
+  }
+);
 
 const Container = styled.View<{ width: string }>`
   width: ${({ width }) => width};
