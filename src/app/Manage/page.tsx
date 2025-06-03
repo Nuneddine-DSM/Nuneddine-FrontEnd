@@ -1,4 +1,4 @@
-import { View, SafeAreaView } from 'react-native';
+import { View, SafeAreaView, KeyboardAvoidingView, Alert } from 'react-native';
 import styled from 'styled-components/native';
 import { color, Font } from '../../styles';
 import { Header } from '../../components/Main';
@@ -8,9 +8,36 @@ import { useNavigation } from '@react-navigation/native';
 import { StackNavigationProp } from '@react-navigation/stack';
 import MyLensListItem from '../../components/Manage/MyLensListItem';
 import { SquarePlus } from '../../assets/SquarePlus';
+import { useCallback, useMemo, useRef, useState } from 'react';
+import { BottomSheetBackdrop, BottomSheetModal } from '@gorhom/bottom-sheet';
+import { Button, Input } from '../../components';
+import { LensDateType, LensDateTypeMap } from '../Data';
 
 const Manage = () => {
   const navigation = useNavigation<StackNavigationProp<any>>();
+
+  const [lensName, setLensName] = useState('');
+
+  const bottomSheetModalRef = useRef<BottomSheetModal>(null);
+  const snapPoints = useMemo(() => ['50%'], []);
+  const [selectedDuration, setSelectedDuration] =
+    useState<LensDateType>('DATE');
+
+  const modalPress = useCallback(() => {
+    bottomSheetModalRef.current?.present();
+  }, []);
+
+  const renderBackdrop = useCallback(
+    (props: any) => (
+      <BottomSheetBackdrop
+        {...props}
+        pressBehavior="close"
+        disappearsOnIndex={-1}
+        appearsOnIndex={0}
+      />
+    ),
+    []
+  );
 
   const lensList: MyLensItemData[] = [
     {
@@ -26,6 +53,13 @@ const Manage = () => {
       date_type: 'WEEK',
       start_time: null,
       end_time: null
+    },
+    {
+      alarm_id: 3,
+      name: '렌즈3',
+      date_type: 'MONTH',
+      start_time: '2025-05-28',
+      end_time: '2025-06-20'
     }
   ];
 
@@ -34,6 +68,15 @@ const Manage = () => {
 
   const totalLens = lensList.length;
   const totalUse = 2;
+
+  const [isExpendedList, setIsExpendedList] = useState<boolean[]>(
+    new Array(lensList.length).fill(false)
+  );
+  const setExpendedListItem = (index: number) => {
+    setIsExpendedList(prev =>
+      prev.map((item, i) => (i === index ? !item : item))
+    );
+  };
 
   return (
     <SafeAreaView style={{ flex: 1 }}>
@@ -62,24 +105,77 @@ const Manage = () => {
           </ExpiratedWrapper>
           <LensCountWrapper>
             <LensCountTextWrapper>
-              <Font text={totalUse} kind="medium32" />
+              <Font text={`${totalUse}`} kind="medium32" />
               <Font text="착용 렌즈" kind="medium16" color="gray400" />
             </LensCountTextWrapper>
             <LensCountLine />
             <LensCountTextWrapper>
-              <Font text={totalLens - totalUse} kind="medium32" />
+              <Font text={`${totalLens - totalUse}`} kind="medium32" />
               <Font text="보유 렌즈" kind="medium16" color="gray400" />
             </LensCountTextWrapper>
           </LensCountWrapper>
         </TotalInfoContainer>
-        {lensList.map(item => (
-          <MyLensListItem key={item.alarm_id} item={item} onPress={() => {}} />
+        {lensList.map((item, index) => (
+          <MyLensListItem
+            key={item.alarm_id}
+            item={item}
+            isExpended={isExpendedList[index]}
+            onButtonPress={() => {
+              // 사용 중인 렌즈 -> 렌즈 삭제
+              // 보유 중인 렌즈 -> 렌즈 사용 시작
+            }}
+            onExpendedPress={() => {
+              setExpendedListItem(index);
+            }}
+          />
         ))}
-        <PostLensBox onPress={() => {}}>
+        <PostLensBox onPress={modalPress}>
           <SquarePlus color={color.gray500} />
           <Font text="렌즈 추가하기" kind="semi16" color="gray500" />
         </PostLensBox>
       </Container>
+
+      <BottomSheetModal
+        ref={bottomSheetModalRef}
+        index={0}
+        snapPoints={snapPoints}
+        backdropComponent={renderBackdrop}
+        enableContentPanningGesture={false}
+        keyboardBehavior="extend"
+        keyboardBlurBehavior="restore">
+        <BottomSheetWrapper>
+          <Font text="렌즈 항목" kind="medium16" color="gray600" />
+          <Input
+            label="제품명"
+            placeholder="상품명을 입력하세요."
+            value={lensName}
+            multiline={true}
+            onChangeText={setLensName}
+          />
+          <View style={{ gap: 8 }}>
+            <Font text="주기" kind="semi16" color="gray600" />
+            <SwitchButtonBox>
+              {Object.entries(LensDateTypeMap).map(([key, value]) => (
+                <SwitchButton
+                  key={key}
+                  isSelected={selectedDuration === key}
+                  onPress={() => {
+                    setSelectedDuration(key as LensDateType);
+                  }}>
+                  <Font
+                    text={value}
+                    kind="medium16"
+                    color={selectedDuration === key ? 'white' : 'black'}
+                  />
+                </SwitchButton>
+              ))}
+            </SwitchButtonBox>
+          </View>
+        </BottomSheetWrapper>
+        <AddButtonBox>
+          <Button onPress={() => {}} buttonColor="black" text="렌즈 추가하기" />
+        </AddButtonBox>
+      </BottomSheetModal>
     </SafeAreaView>
   );
 };
@@ -180,6 +276,42 @@ const PostLensBox = styled.TouchableOpacity`
   border-color: ${color.gray300};
   border-width: 1px;
   margin-bottom: 40px;
+`;
+
+const BottomSheetWrapper = styled.View`
+  width: 100%;
+  padding: 20px 26px;
+  flex: 1;
+  flex-direction: column;
+  gap: 25px;
+  position: relative;
+`;
+
+const SwitchButtonBox = styled.View`
+  flex-direction: row;
+  gap: 10px;
+`;
+
+const SwitchButton = styled.TouchableOpacity<{
+  isSelected: boolean;
+}>`
+  padding: 10px 16px;
+  border-radius: 7.2px;
+  background-color: ${({ isSelected }) =>
+    isSelected ? color.black : color.white};
+  border-color: ${({ isSelected }) =>
+    isSelected ? color.black : color.gray300};
+  border-width: 1px;
+`;
+
+const AddButtonBox = styled.View`
+  width: 100%;
+  padding: 12px 20px;
+  border-width: 1px;
+  border-color: ${color.gray100};
+  position: absolute;
+  bottom: 0px;
+  right: 0px;
 `;
 
 export default Manage;
