@@ -128,13 +128,13 @@ const MyLensListItem = ({
 };
 
 const calculateDueDate = (endDate: string) => {
-  const targeDate = new Date(endDate);
+  const targetDate = new Date(endDate);
   const today = new Date();
 
-  targeDate.setHours(0, 0, 0, 0);
+  targetDate.setHours(0, 0, 0, 0);
   today.setHours(0, 0, 0, 0);
 
-  const diffTime = targeDate.getTime() - today.getTime();
+  const diffTime = targetDate.getTime() - today.getTime();
   const diffDay = Math.floor(diffTime / (1000 * 60 * 60 * 24));
 
   if (diffDay === 0) {
@@ -142,7 +142,7 @@ const calculateDueDate = (endDate: string) => {
   } else if (diffDay > 0) {
     return `D-${diffDay}`;
   } else {
-    `D+${Math.abs(diffDay)}`;
+    return `D+${Math.abs(diffDay)}`;
   }
 };
 
