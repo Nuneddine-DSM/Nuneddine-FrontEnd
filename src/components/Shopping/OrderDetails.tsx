@@ -1,19 +1,22 @@
-import styled from 'styled-components/native';
-import { Font, color } from '../../styles';
-import Tag from '../../components/Shopping/Tag';
-import { OrderDataItemType } from '../../app/MyPage/Data';
+import styled from "styled-components/native";
+import { useState } from "react"
+import { Font, color } from "../../styles";
+import { CartItemType } from "../../interface";
+import { QuantitySelector } from ".";
 
-const OrderDetails = ({ item }: { item: OrderDataItemType }) => {
+const OrderDetails = ({ item }: { item: CartItemType }) => {
+  const [count, setCount] = useState(item.count);
+
   return (
     <Container>
       <TopSection>
-        <Image source={{ uri: item.image }} resizeMode="cover" />
+        <Image source={{ uri: item.image_urls[0] }} resizeMode="cover" />
 
         <Details>
           <Section>
-            <Font text={item.name} kind="bold16" />
+            <Font text={item.brand_name} kind="bold16" />
             <Font
-              text={item.description}
+              text={item.glass_name}
               kind="medium16"
               style={{ flexWrap: 'wrap' }}
               numberOfLines={2}
@@ -21,22 +24,13 @@ const OrderDetails = ({ item }: { item: OrderDataItemType }) => {
             />
           </Section>
 
+          <QuantitySelector count={count} onChange={setCount} />
+
           <Section>
-            {item.type === 'Lens' && <Tag text="한달용" height="32px" />}
-            <Font text={`${item.price}원`} kind="bold16" />
+            <Font text={`${item.price.toLocaleString()}원`} kind="bold16" />
           </Section>
         </Details>
       </TopSection>
-
-      <OptionBox>
-        <Font
-          text={`옵션 : ${1}개 ${
-            item.type === 'Lens' ? item.option[0].lensType : ''
-          }`}
-          kind="regular14"
-          color="gray600"
-        />
-      </OptionBox>
     </Container>
   );
 };

@@ -1,31 +1,44 @@
-import { useState } from "react"
+import { useState, useEffect } from "react"
 import styled from "styled-components/native";
 import { color, Font } from "../../styles"
 import { Arrow, Filter, X } from "../../assets"
 import { TopBar } from "../../components"
 import { TouchableOpacity } from "react-native"
 import { useNavigation, NavigationProp } from '@react-navigation/native'
-import SearchInput from "../Search/component/SearchInput";
 import { FlatList, ScrollView } from "react-native-gesture-handler";
 import { ProductCardLarge } from "../../components/Shopping";
-import { ProductData } from "./Data";
 import { Footer } from "../../components/Main";
 import { useSearchStore } from "../../stores/useSearchStore";
 import { searchHandler } from "../../apis/shops";
-
-const productCount = 1000;
+import { ShopType } from "../../interface";
+import SearchInput from "../Search/component/SearchInput";
+import {
+  FrameShapeMap,
+  FrameMaterialMap,
+  LensColorMap,
+  LensDateTypeMap,
+  FrameShapeType,
+  FrameMaterialType,
+  LensColorType,
+  LensDateType
+} from "../Data";
 
 const SearchProduct = () => {
   const navigation = useNavigation<NavigationProp<any>>();
 
   const [searchText, setSearchText] = useState("");
+  const [products, setProducts] = useState<ShopType[]>([]);
 
   const {
     keyword,
     frame_shape,
     frame_material,
     lens_date_type,
-    lens_color
+    lens_color,
+    productCount,
+    setProductCount,
+    toggleFilterValue,
+    setKeyword,
   } = useSearchStore();
 
   const allSelectedFilters = [
@@ -43,28 +56,50 @@ const SearchProduct = () => {
     lens_date_type: [...lens_date_type]
   }
 
-  const Searched = () => {
-    searchHandler(filters)
-  }
+  useEffect(() => {
+    const fetchSearchedProducts = async () => {
+      try {
+        const result = await searchHandler(filters);
+        setProducts(result.shop_list);
+        setProductCount(result.shops_count);
+      } catch (err) {
+        console.error(err);
+      }
+    };
+    fetchSearchedProducts();
+  }, [keyword, frame_shape, frame_material, lens_color, lens_date_type]);
 
   return (
     <>
       <TopBar
         leftIcon={
-          <TouchableOpacity onPress={() => navigation.navigate('Search')}>
+          <TouchableOpacity onPress={() => navigation.goBack()}>
             <Arrow size={34} />
           </TouchableOpacity>
         }
         rightIcon={
-          <SearchInput value={searchText} onChangeText={setSearchText} />
+          <SearchInput
+            value={searchText}
+            onChangeText={(searchText) => {
+              setKeyword(searchText);
+              setSearchText(searchText);
+            }}
+          />
         }
       />
       <PageContainer>
         <FlatList
-          data={ProductData}
-          keyExtractor={(item, idx) => `${item.title}-${idx}`}
+          data={products}
+          keyExtractor={(item) => item.shop_id.toString()}
           renderItem={({ item }) => (
-            <ProductCardLarge {...item} />
+            <ProductCardLarge
+              shopId={item.shop_id}
+              image={item.image_urls[0]}
+              title={item.brand_name}
+              describe={item.glasses_name}
+              tag={item.shop_type}
+              price={item.price}
+            />
           )}
           numColumns={2}
           columnWrapperStyle={{
@@ -82,14 +117,38 @@ const SearchProduct = () => {
 
                 <ScrollView horizontal showsHorizontalScrollIndicator={false}>
                   <SelectedTagsWrapper>
-                    {allSelectedFilters.map((tag, index) =>
-                      <TagController key={index}>
-                        <Font text={tag} kind="medium14" color="gray600" />
-                        <X size={20} color={color.gray600} />
-                      </TagController>
-                    )}
+                    {allSelectedFilters.map((value, index) => {
+                      const translatedValue =
+                        FrameShapeMap[value as keyof typeof FrameShapeMap] ||
+                        FrameMaterialMap[value as keyof typeof FrameMaterialMap] ||
+                        LensColorMap[value as keyof typeof LensColorMap] ||
+                        LensDateTypeMap[value as keyof typeof LensDateTypeMap] ||
+                        value;
+
+                      const getFilterKey = () => {
+                        if (frame_shape.includes(value as FrameShapeType)) return 'frame_shape';
+                        if (frame_material.includes(value as FrameMaterialType)) return 'frame_material';
+                        if (lens_color.includes(value as LensColorType)) return 'lens_color';
+                        if (lens_date_type.includes(value as LensDateType)) return 'lens_date_type';
+                        return null;
+                      };
+
+                      const filterKey = getFilterKey();
+
+                      return (
+                        <TagController key={index}>
+                          <Font text={translatedValue} kind="medium14" color="gray600" />
+                          {filterKey && (
+                            <TouchableOpacity onPress={() => toggleFilterValue(filterKey, value)}>
+                              <X size={20} color={color.gray600} />
+                            </TouchableOpacity>
+                          )}
+                        </TagController>
+                      );
+                    })}
                   </SelectedTagsWrapper>
                 </ScrollView>
+
               </FilterWrapper>
 
               <ProductCountText>

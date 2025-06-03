@@ -41,7 +41,7 @@ export function Button({
 
 const BasedButton = styled.TouchableOpacity<{
   width?: string;
-  buttonColor?: string;
+  buttonColor: string;
   paddingValue?: number;
 }>`
   border-radius: 10px;

@@ -1,26 +1,19 @@
 import styled from "styled-components/native";
 import { Font, color } from "../../styles"
-import { DeliveryType } from "../../app/Shopping/Delivery/page"
+import { AddressResponse } from "../../interface";
 
-interface PropsType {
-  item?: DeliveryType;
-  onPress?: () => void;
-}
-
-const Delivery = ({ item }: PropsType) => {
-  const { selected, nickName, userName, phone, address } = item ?? {};
-
+const Delivery = ({ item, isSelected }: { item: AddressResponse, isSelected: number }) => {
   return (
-    <Wrapper selected={selected}>
+    <Wrapper selected={isSelected === item.id}>
       <HeaderSection>
         <UserDetails>
           <InfoWrapper>
-            <Font text={nickName} kind="semi20" />
+            <Font text={item.address} kind="semi20" />
 
             <UserInfoWrapper>
-              <Font text={userName} kind="medium18" />
+              <Font text={item.receiver} kind="medium18" />
               <Font text="･" kind="medium18" />
-              <Font text={phone} kind="medium18" />
+              <Font text={item.phone_number} kind="medium18" />
             </UserInfoWrapper>
           </InfoWrapper>
           <Tag>
@@ -29,7 +22,7 @@ const Delivery = ({ item }: PropsType) => {
         </UserDetails>
 
         <Font
-          text={address}
+          text={item.detail_address}
           kind="regular16"
           color="gray600"
         />
