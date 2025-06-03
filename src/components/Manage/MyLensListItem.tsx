@@ -7,7 +7,7 @@ import { LensDateTypeMap } from '../../app/Data';
 import { useState } from 'react';
 import { Animated, Easing, View } from 'react-native';
 
-interface MyLensListItmeProps {
+interface MyLensListItemProps {
   item: MyLensItemData;
   isExpended?: boolean;
   onButtonPress?: () => void;
@@ -19,7 +19,7 @@ const MyLensListItem = ({
   isExpended,
   onButtonPress,
   onExpendedPress
-}: MyLensListItmeProps) => {
+}: MyLensListItemProps) => {
   const [isOn, setIsOn] = useState(false);
   const [aniValue, setAniValue] = useState(new Animated.Value(0));
 
