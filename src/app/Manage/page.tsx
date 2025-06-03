@@ -63,8 +63,8 @@ const Manage = () => {
     }
   ];
 
-  const lateLensPersent = 10;
-  const { title, content } = getLensMention(lateLensPersent);
+  const lateLensPercent = 10;
+  const { title, content } = getLensMention(lateLensPercent);
 
   const totalLens = lensList.length;
   const totalUse = 2;
@@ -180,18 +180,18 @@ const Manage = () => {
   );
 };
 
-const getLensMention = (persent: number) => {
-  if (persent <= 30) {
+const getLensMention = (percent: number) => {
+  if (percent <= 30) {
     return {
       title: '렌즈 수명 넉넉!',
       content: '아직 여유 있어요'
     };
-  } else if (persent <= 60) {
+  } else if (percent <= 60) {
     return {
       title: '아직 괜찮지만,',
       content: '조금씩 피로해져요'
     };
-  } else if (persent <= 90) {
+  } else if (percent <= 90) {
     return {
       title: '거의 다 왔어요',
       content: '조심히 써주세요'
