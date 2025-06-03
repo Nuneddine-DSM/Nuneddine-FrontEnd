@@ -4,7 +4,7 @@ import { Button } from '../Button';
 import { MyLensItemData } from '../../apis/alarms';
 import LinearGradient from 'react-native-linear-gradient';
 import { LensDateTypeMap } from '../../app/Data';
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { Animated, Easing, View } from 'react-native';
 
 interface MyLensListItemProps {
@@ -28,12 +28,14 @@ const MyLensListItem = ({
     outputRange: [1, 26]
   });
 
-  Animated.timing(aniValue, {
-    toValue: isOn ? 1 : 0,
-    duration: 200,
-    easing: Easing.linear,
-    useNativeDriver: true
-  }).start();
+  useEffect(() => {
+    Animated.timing(aniValue, {
+      toValue: isOn ? 1 : 0,
+      duration: 200,
+      easing: Easing.linear,
+      useNativeDriver: true
+    }).start();
+  }, [isOn, aniValue]);
 
   return (
     <Container
