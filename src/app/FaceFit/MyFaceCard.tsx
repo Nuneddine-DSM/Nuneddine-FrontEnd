@@ -4,22 +4,27 @@ import { ImageBackground } from "react-native";
 
 const FaceType = require("../../assets/FaceType.png");
 
-const MyFaceCard = () => {
+interface PropsType {
+  subTitle: string,
+  title: string,
+  name: string,
+  tag: Array<string>,
+  describe: string
+}
+
+const MyFaceCard = ({ subTitle, title, name, tag, describe }: PropsType) => {
   return (
     <CardContainer source={FaceType} resizeMode="cover">
       <CardHeader>
-        <>
-          <Font text="부드러운 곡선이 매력적인" kind="regular16" color="white" />
-          <Font text="둥근(Round) 얼굴형" kind="semi28" color="white" />
-        </>
+        <Font text={subTitle} kind="regular16" color="white" />
+        <Font text={`${title}(${name}) 얼굴형`} kind="semi28" color="white" />
 
         <CardTagWrapper>
-          <Tag>
-            <Font text="#둥근매력" kind="semi12" color="white" />
-          </Tag>
-          <Tag>
-            <Font text="#부드러운 무드" kind="semi12" color="white" />
-          </Tag>
+          {tag.map((tagName) =>
+            <Tag>
+              <Font text={`#${tagName}`} kind="semi12" color="white" />
+            </Tag>
+          )}
         </CardTagWrapper>
       </CardHeader>
 
@@ -32,7 +37,7 @@ const MyFaceCard = () => {
           <Font text="FEATURE" kind="semi12" color="pink300" />
         </FeatureTitle>
         <Font
-          text="둥근 얼굴형은 전체적으로 부드럽고 귀여운 인상을 주고, 가로와 세로의 길이가 비슷하며, 턱선이 둥근 것이 특징이에요."
+          text={describe}
           kind="regular14"
           color="white"
           style={{ lineHeight: 26 }}
@@ -55,11 +60,12 @@ const CardHeader = styled.View`
   flex-direction: column;
   justify-content: flex-start;
   align-self: flex-start;
-  gap: 5px;
+  gap: 4px;
 `
 
 const CardTagWrapper = styled.View`
   flex-direction: row;
+  padding: 4px 0;
   gap: 8px;
 `
 

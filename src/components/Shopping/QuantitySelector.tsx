@@ -1,25 +1,19 @@
-import { useState } from "react";
 import styled from "styled-components/native";
 import { Font, color } from "../../styles"
 import { Minus, Plus } from "../../assets";
 
 interface QuantitySelectorProps {
-  count?: number;
   min?: number;
   max?: number;
-  onChange?: (count: number) => void;
+  count: number;
+  onChange: (count: number) => void;
 }
 
-const QuantitySelector = ({ count = 1, min = 1, max = 99, onChange }: QuantitySelectorProps) => {
-  const [currentCount, setCurrentCount] = useState(count);
-
+const QuantitySelector = ({ min = 1, max = 99, count, onChange }: QuantitySelectorProps) => {
   const updateCount = (delta: number) => {
-    const newCount = currentCount + delta;
-
+    const newCount = count + delta;
     if (newCount < min || newCount > max) return;
-
-    setCurrentCount(newCount);
-    onChange?.(newCount);
+    onChange(newCount);
   };
 
   return (
@@ -28,7 +22,7 @@ const QuantitySelector = ({ count = 1, min = 1, max = 99, onChange }: QuantitySe
         <Minus size={14} color={color.gray600} />
       </IconButton>
       <QuantityDisplay>
-        <Font text={currentCount} kind="medium14" />
+        <Font text={count.toString()} kind="medium14" />
       </QuantityDisplay>
       <IconButton onPress={() => updateCount(1)}>
         <Plus size={14} color={color.gray600} />

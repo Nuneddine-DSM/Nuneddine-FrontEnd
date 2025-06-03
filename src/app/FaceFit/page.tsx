@@ -68,6 +68,7 @@ const FaceFit = () => {
         <FaceOptionsContainer>
           {FaceData.map(({ id }) => (
             <SelectedFaceBox
+              key={id}
               onPress={() => setSelectFaceFit(id)}
               selected={id === selectFaceFit}>
               {id === selectFaceFit && (
@@ -101,9 +102,11 @@ const FaceFit = () => {
             text="확인하러가기"
             onPress={() => {
               if (selectFaceFit !== null) {
-                navigation.navigate('Recommend', { faceId: selectFaceFit });
+                navigation.navigate('Recommend', { selectedId: selectFaceFit });
               }
             }}
+            buttonColor='pink300'
+            textColor='white'
           />
         </ButtonWrapper>
       </BottomSection>

@@ -3,7 +3,6 @@ import {
   BannerDataType,
   CategoryDataType,
   FooterDataType,
-  MainShoppingDataType
 } from "./interface"
 import { Glasses, Lens } from "../../assets"
 import Banner1 from "../../assets/Banner1.png"
@@ -13,27 +12,43 @@ import Banner4 from "../../assets/Banner4.png"
 import Banner5 from "../../assets/Banner5.png"
 import Banner6 from "../../assets/Banner6.png"
 import Banner7 from "../../assets/Banner7.png"
+import GlassesTabIcon from "../../assets/GlassesTabIcon.png"
+import LensTabIcon from "../../assets/LensTabIcon.png"
+import FaceTabIcon from "../../assets/FaceTabIcon.png"
+import TipTabIcon from "../../assets/TipTabIcon.png"
 
 export const NavigationListData: NavigationListDataType[] = [
   {
     id: 1,
     name: "안경테 ALL",
-    href: "/"
+    href: "SearchProduct",
+    image: GlassesTabIcon,
+    imageHeight: 35,
+    imageWidth: 62
   },
   {
     id: 2,
     name: "렌즈 ALL",
-    href: "/"
+    href: "SearchProduct",
+    image: LensTabIcon,
+    imageHeight: 17,
+    imageWidth: 53
   },
   {
     id: 3,
     name: "얼굴형 추천",
-    href: "FaceFit"
+    href: "FaceFit",
+    image: FaceTabIcon,
+    imageHeight: 53,
+    imageWidth: 57
   },
   {
     id: 4,
     name: "가이드",
-    href: "Guide"
+    href: "Guide",
+    image: TipTabIcon,
+    imageHeight: 36,
+    imageWidth: 49
   },
 ]
 
@@ -111,15 +126,4 @@ export const FooterData: FooterDataType[] = [
     title: "사업자정보제공",
     info: "(주)소프트웨어공학",
   }
-]
-
-export const FramesTag = [
-  "둥근테",
-  "각진테",
-  "무테",
-  "반무테",
-  "굵은테",
-  "얇은테",
-  "투명테",
-  "안단테"
 ]

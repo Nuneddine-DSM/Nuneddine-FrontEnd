@@ -5,7 +5,20 @@ const guides = 'guides';
 
 export const getGuides = async () => {
   try {
-    const response = await instance.get(`${guides}`, {
+    const response = await instance.get(`${guides}/list`, {
+      headers: {
+        Authorization: `Bearer ${await getItem('accessToken')}`
+      }
+    })
+    return response.data;
+  } catch (err) {
+    throw err;
+  }
+}
+
+export const getGuidesDetail = async (guideId: number) => {
+  try {
+    const response = await instance.get(`${guides}/${guideId}`, {
       headers: {
         Authorization: `Bearer ${await getItem('accessToken')}`
       }

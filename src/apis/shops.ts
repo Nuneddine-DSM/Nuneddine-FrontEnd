@@ -64,11 +64,30 @@ export const searchHandler = async (filters: FilterRequest) => {
     queryParams.append('lens_color', filters.lens_color.join(','));
   if (filters.lens_date_type?.length)
     queryParams.append('lens_date_type', filters.lens_date_type.join(','));
+
+  const queryString = queryParams.toString();
   
   try {
-    const response = await instance.get(`${shops}/search?${queryParams.toString()}`)
+    const response = await instance.get(`${shops}/search?${queryString}`, {
+      headers: {
+        Authorization: `Bearer ${await getItem('accessToken')}`
+      }
+    })
     return response.data;
   } catch (err) {
     throw err
+  }
+}
+
+export const getDetail = async (shopId: number) => {
+  try {
+    const response = await instance.get(`${shops}/${shopId}`, {
+      headers: {
+        Authorization: `Bearer ${await getItem('accessToken')}`
+      }
+    });
+    return response.data;
+  } catch(err) {
+    throw err;
   }
 }

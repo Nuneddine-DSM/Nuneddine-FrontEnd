@@ -6,7 +6,7 @@ import { Font } from "../../styles"
 
 const { width } = Dimensions.get('window');
 
-const Banner = ({ data } : { data : BannerDataType[] }) => {
+const Banner = ({ data }: { data: BannerDataType[] }) => {
   const [currentIndex, setCurrentIndex] = useState(0);
   const flatListRef = useRef<FlatList<BannerDataType>>(null);
   const indexRef = useRef(0);
@@ -18,8 +18,10 @@ const Banner = ({ data } : { data : BannerDataType[] }) => {
   };
 
   useEffect(() => {
+    if (!data || data.length === 0) return;
+
     const interval = setInterval(() => {
-      const nextIndex = (indexRef.current + 1) % data.length;
+      const nextIndex = (indexRef.current + 1) % (data?.length ?? 0);
       flatListRef.current?.scrollToOffset({
         offset: nextIndex * width,
         animated: true,
@@ -34,10 +36,12 @@ const Banner = ({ data } : { data : BannerDataType[] }) => {
   const renderBannerItem = useCallback(({ item }: { item: BannerDataType }) => (
     <Slide>
       <BannerImage source={item.image} resizeMode="cover" />
-      <TextBox>
-        <Font text={item.title} kind="bold28" color="white" />
-        <Font text={item.subTitle} kind="medium18" color="white" />
-      </TextBox>
+      {(item.title || item.subTitle) && (
+        <TextBox>
+          {item.title && <Font text={item.title} kind="bold28" color="white" />}
+          {item.subTitle && <Font text={item.subTitle} kind="medium18" color="white" />}
+        </TextBox>
+      )}
     </Slide>
   ), []);
 
@@ -45,7 +49,7 @@ const Banner = ({ data } : { data : BannerDataType[] }) => {
     <BannerContainer>
       <FlatList
         ref={flatListRef}
-        data={data}
+        data={data ?? []}
         renderItem={renderBannerItem}
         horizontal
         pagingEnabled
@@ -56,7 +60,11 @@ const Banner = ({ data } : { data : BannerDataType[] }) => {
       />
       <BannerController>
         <Font
-          text={`${currentIndex + 1} | ${data.length}`}
+          text={
+            data?.length
+              ? `${currentIndex + 1} | ${data.length}`
+              : `0 | 0`
+          }
           kind="medium14"
           color="gray600"
         />

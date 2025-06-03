@@ -51,9 +51,14 @@ export interface CartResponseType {
 }
 
 export interface GuideItemType {
-  id: number;
+  guide_id: number;
   title: string;
-  content: string;
+  image_url: string;
+}
+
+export interface TipItemType {
+  question: string,
+  answer: string
 }
 
 export interface FilterRequest {
@@ -70,3 +75,25 @@ export interface BottomButtonsProps {
   buttonText: string;
   onButtonPress: () => void;
 }
+
+export interface AddressResponse {
+  id: number,
+  address: string,
+  detail_address: string,
+  delivery_address_name: string,
+  post_code: string,
+  receiver: string,
+  phone_number: string
+}
+
+export interface ShopType {
+  shop_id: number;
+  brand_name: string;
+  glasses_name: string;
+  description_image: string;
+  price: number;
+  image_urls: string[];
+  is_liked: boolean;
+  shop_type: string;
+};
+

@@ -6,25 +6,42 @@ import PaymentMethod from "./PaymentMethod";
 import OrderGlassesItem from "../../../components/Shopping/OrderDetails";
 import { TouchableOpacity } from "react-native"
 import { Arrow } from "../../../assets";
-import { OrderGlassesItems } from "./Data"
 import { NavigationProp, useNavigation } from "@react-navigation/native";
 import { useQuery } from "@tanstack/react-query";
 import { productPurchase } from "../../../apis/shops";
+import { getCartGlassList } from "../../../apis/carts";
+import { CartItemType } from "../../../interface";
+import { getAddress } from "../../../apis/address";
 
 const Payment = () => {
   const navigation = useNavigation<NavigationProp<any>>();
 
-  const { data } = useQuery({
-    queryKey: ["productPurchase"],
-    queryFn: productPurchase
+  const handlePurchase = () => {
+    try {
+      productPurchase();
+    } catch (err) {
+      console.error(err)
+    }
+  }
+
+  const { data: glassesData } = useQuery({
+    queryKey: ["glassesData"],
+    queryFn: getCartGlassList
   })
+
+  const { data: AddressData } = useQuery({
+    queryKey: ["Delivery"],
+    queryFn: getAddress
+  })
+
+  const address = AddressData?.data.addresses?.[0];
 
   return (
     <>
       <TopBar
         text="장바구니/결제"
         leftIcon={
-          <TouchableOpacity onPress={() => { }}>
+          <TouchableOpacity onPress={() => navigation.goBack()}>
             <Arrow size={34} />
           </TouchableOpacity>
         }
@@ -50,20 +67,22 @@ const Payment = () => {
             </TouchableOpacity>
           </DeliveryHeader>
 
-          <DeliverySection>
-            <Font text="기숙사" kind="bold20" />
-            <NamePhoneNumber>
-              <Font text="박예빈" kind="medium18" />
-              <Font text="･" kind="medium18" />
-              <Font text="010-1234-5678" kind="medium18" />
-            </NamePhoneNumber>
-            <Font
-              text="대전광역시 유성구 가정북로 76 (장동, 대덕소프트웨어마이스터고등학교), 우정관 택배함(기숙사)"
-              kind="regular16"
-              color="gray600"
-            />
-            <Input placeholder="배송시 요청사항을 입력해주세요" />
-          </DeliverySection>
+          {address && (
+            <DeliverySection>
+              <Font text={address.delivery_address_name} kind="bold20" />
+              <NamePhoneNumber>
+                <Font text={`${address.address} ${address.detail_address}`} kind="medium18" />
+                <Font text="･" kind="medium18" />
+                <Font text={address.phone_number} kind="medium18" />
+              </NamePhoneNumber>
+              <Font
+                text={address.detail_address}
+                kind="regular16"
+                color="gray600"
+              />
+              <Input placeholder="배송시 요청사항을 입력해주세요" />
+            </DeliverySection>
+          )}
         </DeliveryInfo>
 
         <OrderItemList>
@@ -71,8 +90,8 @@ const Payment = () => {
             <Font text="주문 상품" kind="bold20" />
           </ItemHeader>
           <OrderListWrapper>
-            {OrderGlassesItems.map(item => (
-              <OrderGlassesItem key={item.id} item={item} />
+            {glassesData?.data.cart_list.map((item: CartItemType) => (
+              <OrderGlassesItem key={item.cart_id} item={item} />
             ))}
           </OrderListWrapper>
         </OrderItemList>
@@ -82,7 +101,11 @@ const Payment = () => {
         <Amount last={true} />
 
         <ButtonWrapper>
-          <Button text="상품 구매하기" buttonColor="black" />
+          <Button
+            text="상품 구매하기"
+            buttonColor="black"
+            onPress={() => handlePurchase()}
+          />
         </ButtonWrapper>
       </Container>
     </>
