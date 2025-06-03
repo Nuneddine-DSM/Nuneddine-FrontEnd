@@ -21,7 +21,7 @@ const MyLensListItem = ({
   onExpendedPress
 }: MyLensListItemProps) => {
   const [isOn, setIsOn] = useState(false);
-  const [aniValue, setAniValue] = useState(new Animated.Value(0));
+  const [aniValue] = useState(new Animated.Value(0));
 
   const moveSwitchToggle = aniValue.interpolate({
     inputRange: [0, 1],
@@ -64,7 +64,7 @@ const MyLensListItem = ({
         />
       </LensInfoText>
       {item.start_time && item.end_time ? (
-        <UseLensPersentWrapper>
+        <UseLensPercentWrapper>
           <ProgressBarContainer>
             <ProgressBarFill
               width={`${calculateProgress(item.start_time, item.end_time)}%`}
@@ -85,7 +85,7 @@ const MyLensListItem = ({
               color="gray300"
             />
           </UseLensDate>
-        </UseLensPersentWrapper>
+        </UseLensPercentWrapper>
       ) : (
         <Button text="START" buttonColor="black" onPress={onButtonPress} />
       )}
@@ -201,7 +201,7 @@ const LensInfoText = styled.View`
   gap: 5px;
 `;
 
-const UseLensPersentWrapper = styled.View`
+const UseLensPercentWrapper = styled.View`
   flex: 1;
   gap: 8px;
   flex-direction: column;
