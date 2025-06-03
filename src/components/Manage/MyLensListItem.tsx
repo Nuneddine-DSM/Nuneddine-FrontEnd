@@ -37,7 +37,7 @@ const MyLensListItem = ({
 
   return (
     <Container
-      disabled={!Boolean(item.start_time && item.end_time)}
+      disabled={!(item.start_time && item.end_time)}
       onPress={onExpendedPress}>
       {item.end_time && (
         <DueDateWrapper>
@@ -169,7 +169,7 @@ const calculateProgress = (startDateStr: string, endDateStr: string) => {
 };
 
 const dateFormat = (date: string) => {
-  return date.replaceAll('-', '.');
+  return date.replace(/-/g, '.');
 };
 
 const Container = styled.TouchableOpacity`
