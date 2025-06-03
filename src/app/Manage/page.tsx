@@ -1,4 +1,4 @@
-import { View, SafeAreaView, KeyboardAvoidingView, Alert } from 'react-native';
+import { View, SafeAreaView, Alert } from 'react-native';
 import styled from 'styled-components/native';
 import { color, Font } from '../../styles';
 import { Header } from '../../components/Main';
