@@ -68,7 +68,9 @@ const Manage = () => {
   const { title, content } = getLensMention(lateLensPercent);
 
   const totalLens = lensList.length;
-  const totalUse = 2;
+  const totalUse = lensList.filter(
+    lens => lens.start_time && lens.end_time
+  ).length;
 
   const [isExpendedList, setIsExpendedList] = useState<boolean[]>(
     new Array(lensList.length).fill(false)
