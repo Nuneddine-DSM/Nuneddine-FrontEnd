@@ -49,13 +49,13 @@ export interface MyOrderDataType {
 }
 
 export type OrderDataItemType = {
-  cart_id: number,
-  shop_id: number,
-  brand_name: string,
-  image_urls: Array<string>,
-  frame_shape: FrameShapeType,
-  glass_name: string,
-  lens_power: number,
-  price: number,
-  count: number
+  cart_id: number;
+  shop_id: number;
+  brand_name: string;
+  image_urls: Array<string>;
+  frame_shape: FrameShapeType;
+  glass_name: string;
+  lens_power: number;
+  price: number;
+  count: number;
 };
