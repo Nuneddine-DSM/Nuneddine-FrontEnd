@@ -319,9 +319,7 @@ const AddButtonBox = styled.View`
   padding: 12px 20px;
   border-width: 1px;
   border-color: ${color.gray100};
-  position: absolute;
-  bottom: 0px;
-  right: 0px;
+  margin-top: auto;
 `;
 
 export default Manage;
