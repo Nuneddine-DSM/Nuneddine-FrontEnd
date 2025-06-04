@@ -7,7 +7,8 @@ import {
   AddLensRequest,
   addMyLens,
   getMyLens,
-  MyLensItemData
+  MyLensItemData,
+  removeMyLens
 } from '../../apis/alarms';
 import { useFocusEffect, useNavigation } from '@react-navigation/native';
 import { StackNavigationProp } from '@react-navigation/stack';
@@ -89,6 +90,29 @@ const Manage = () => {
     }
   };
 
+  const removeLens = async (alarmId: number) => {
+    try {
+      const response = await removeMyLens(alarmId);
+      if (response.status === 200) {
+        getLens();
+      } else {
+        console.log(response);
+        Alert.alert('렌즈 삭제 실패');
+      }
+    } catch (err) {
+      console.error(err);
+      Alert.alert('렌즈 삭제 중 오류 발생');
+    }
+  };
+
+  const startUseLens = async (alarmId: number) => {
+    try {
+    } catch (err) {
+      console.error(err);
+      Alert.alert('렌즈 시작 실패');
+    }
+  };
+
   const lateLensPercent = 10;
   const { title, content } = getLensMention(lateLensPercent);
 
@@ -151,8 +175,12 @@ const Manage = () => {
             item={item}
             isExpended={isExpendedList[index]}
             onButtonPress={() => {
-              // 사용 중인 렌즈 -> 렌즈 삭제
-              // 보유 중인 렌즈 -> 렌즈 사용 시작
+              if (item.start_time && item.end_time) {
+                removeLens(item.alarm_id);
+              } else {
+                startUseLens(item.alarm_id);
+              }
+              getLens();
             }}
             onExpendedPress={() => {
               setExpendedListItem(index);

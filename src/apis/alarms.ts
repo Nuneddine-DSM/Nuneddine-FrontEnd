@@ -41,3 +41,13 @@ export const addMyLens = async (data: AddLensRequest) => {
   });
   return response;
 };
+
+export const removeMyLens = async (alarmId: number) => {
+  const token = await authenticatedRequest();
+  const response = await instance.delete(`${alarms}/${alarmId}`, {
+    headers: {
+      Authorization: token
+    }
+  });
+  return response;
+};
