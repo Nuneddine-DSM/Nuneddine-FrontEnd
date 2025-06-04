@@ -51,3 +51,17 @@ export const removeMyLens = async (alarmId: number) => {
   });
   return response;
 };
+
+export const settingRepurchased = async (alarmId: number) => {
+  const token = await authenticatedRequest();
+  const response = await instance.patch(
+    `${alarms}/repurchase-toggle/${alarmId}`,
+    {},
+    {
+      headers: {
+        Authorization: token
+      }
+    }
+  );
+  return response;
+};

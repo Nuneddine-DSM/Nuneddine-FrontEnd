@@ -8,7 +8,8 @@ import {
   addMyLens,
   getMyLens,
   MyLensItemData,
-  removeMyLens
+  removeMyLens,
+  settingRepurchased
 } from '../../apis/alarms';
 import { useFocusEffect, useNavigation } from '@react-navigation/native';
 import { StackNavigationProp } from '@react-navigation/stack';
@@ -113,6 +114,16 @@ const Manage = () => {
     }
   };
 
+  const changeRepurchased = async (alarmId: number) => {
+    try {
+      const response = await settingRepurchased(alarmId);
+      return response.status;
+    } catch (err) {
+      console.error(err);
+      Alert.alert('재구매 알림 설정 변경 중 오류 발생');
+    }
+  };
+
   const lateLensPercent = 10;
   const { title, content } = getLensMention(lateLensPercent);
 
@@ -184,6 +195,14 @@ const Manage = () => {
             }}
             onExpendedPress={() => {
               setExpendedListItem(index);
+            }}
+            onTogglePress={async () => {
+              const status = await changeRepurchased(item.alarm_id);
+              if (status === 200) {
+                item.is_repurchased = !item.is_repurchased;
+              } else {
+                Alert.alert('재구매 알림 설정 실패');
+              }
             }}
           />
         ))}

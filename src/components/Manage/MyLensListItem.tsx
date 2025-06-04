@@ -12,15 +12,16 @@ interface MyLensListItemProps {
   isExpended?: boolean;
   onButtonPress?: () => void;
   onExpendedPress?: () => void;
+  onTogglePress?: () => void;
 }
 
 const MyLensListItem = ({
   item,
   isExpended,
   onButtonPress,
-  onExpendedPress
+  onExpendedPress,
+  onTogglePress
 }: MyLensListItemProps) => {
-  const [isOn, setIsOn] = useState(false);
   const [aniValue] = useState(new Animated.Value(0));
 
   const moveSwitchToggle = aniValue.interpolate({
@@ -30,12 +31,12 @@ const MyLensListItem = ({
 
   useEffect(() => {
     Animated.timing(aniValue, {
-      toValue: isOn ? 1 : 0,
+      toValue: item.is_repurchased ? 1 : 0,
       duration: 200,
       easing: Easing.linear,
       useNativeDriver: true
     }).start();
-  }, [isOn, aniValue]);
+  }, [item.is_repurchased, aniValue]);
 
   return (
     <Container
@@ -107,11 +108,8 @@ const MyLensListItem = ({
             <Font text="재구매 알림" kind="semi16" />
             <View style={{ flexDirection: 'row', alignItems: 'center' }}>
               <ToggleContainer
-                onPress={() => {
-                  // 재구매 알림 설정
-                  setIsOn(!isOn);
-                }}
-                isOn={isOn}>
+                onPress={onTogglePress}
+                isOn={item.is_repurchased}>
                 <ToggleWheel
                   style={[{ transform: [{ translateX: moveSwitchToggle }] }]}
                 />
