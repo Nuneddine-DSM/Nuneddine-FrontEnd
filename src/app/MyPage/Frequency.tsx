@@ -12,6 +12,7 @@ import {
   LensFrequency,
   setLensFrequency
 } from '../../apis/user';
+import { getLensFrequencyList } from '../../utils/lens';
 
 const Frequency = () => {
   const navigation = useNavigation<StackNavigationProp<any>>();
@@ -292,15 +293,6 @@ const WheelPicker = ({
       <FixedHighlightedBackground />
     </WheelPickerWrapper>
   );
-};
-
-const getLensFrequencyList = (): number[] => {
-  const frequency: number[] = [];
-  for (let i = 0; i <= 32; i++) {
-    const num = -(i * 0.25);
-    frequency.push(num);
-  }
-  return frequency;
 };
 
 const InfoBox = styled.View`

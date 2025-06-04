@@ -60,7 +60,7 @@ const Add = () => {
         }
       />
 
-      <KeyboardAwareScrollView enableOnAndroid={true} extraHeight={20}>
+      <KeyboardAwareScrollView enableOnAndroid={true} extraHeight={200}>
         <FormWrapper>
           <FormSection>
             <Font text="주소" kind="semi16" color="gray600" />

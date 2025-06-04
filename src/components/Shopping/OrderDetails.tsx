@@ -18,7 +18,7 @@ const OrderDetails = ({ item }: { item: CartItemType }) => {
             <Font
               text={item.glass_name}
               kind="medium16"
-              style={{ flexWrap: "wrap" }}
+              style={{ flexWrap: 'wrap' }}
               numberOfLines={2}
               ellipsizeMode="tail"
             />

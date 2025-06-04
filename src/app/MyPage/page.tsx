@@ -3,7 +3,7 @@ import { Font, color } from '../../styles';
 import { TopBar } from '../../components';
 import { ActivityIndicator, Alert, TouchableOpacity } from 'react-native';
 import { Arrow } from '../../assets';
-import NavigationData from './Data';
+import { NavigationData } from './Data';
 import { useNavigation, NavigationProp } from '@react-navigation/native';
 import { useEffect, useState } from 'react';
 import { myPage } from '../../apis/user';
@@ -11,7 +11,7 @@ import { myPage } from '../../apis/user';
 const MyPage = () => {
   const navigation = useNavigation<NavigationProp<any>>();
 
-  const [name, setName] = useState('');
+  const [nickname, setNickname] = useState('');
   const [accountId, setAccountId] = useState('');
   const [loading, setLoading] = useState(false);
 
@@ -21,7 +21,7 @@ const MyPage = () => {
         setLoading(true);
         const response = await myPage();
         const { name, account_id } = response.data;
-        setName(name);
+        setNickname(name);
         setAccountId(account_id);
       } catch (err) {
         console.error(err);
@@ -59,7 +59,7 @@ const MyPage = () => {
         <>
           <UserSection>
             <UserDetails>
-              <Font text={name} kind="semi28" />
+              <Font text={nickname} kind="semi28" />
               <Font text={accountId} kind="regular16" color="gray500" />
             </UserDetails>
             <ProfileImage />
@@ -71,7 +71,7 @@ const MyPage = () => {
                 key={id}
                 onPress={() => {
                   if (href === 'EditProfile') {
-                    navigation.navigate(href, { name, accountId });
+                    navigation.navigate(href, { name: nickname, accountId });
                   } else {
                     navigation.navigate(href);
                   }

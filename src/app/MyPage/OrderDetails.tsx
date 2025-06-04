@@ -9,7 +9,6 @@ import {
   getMyOrderHistory,
   MyOrderHistoryData
 } from '../../apis/purchaseHistories';
-import { CartGlassesItem } from '../../components/Shopping';
 import MyHistoryItem from '../../components/MyPage/OrderGlassItem';
 
 const OrderDetails = () => {
@@ -50,18 +49,19 @@ const OrderDetails = () => {
         <ActivityIndicator />
       ) : (
         <OrderWrapper>
-          {myOrderList.map((order, index) => (
-            <OrderSection key={`${order.date}-${index}`}>
-              <DateWrapper>
-                <Font text={order.date} kind="bold24" />
-              </DateWrapper>
-              <OrderList>
-                {order.histories.map(item => (
-                  <MyHistoryItem item={item} />
-                ))}
-              </OrderList>
-            </OrderSection>
-          ))}
+          {myOrderList &&
+            myOrderList.map((order, index) => (
+              <OrderSection key={`${order.date}-${index}`}>
+                <DateWrapper>
+                  <Font text={order.date} kind="bold24" />
+                </DateWrapper>
+                <OrderList>
+                  {order.histories.map(item => (
+                    <MyHistoryItem item={item} />
+                  ))}
+                </OrderList>
+              </OrderSection>
+            ))}
         </OrderWrapper>
       )}
     </Container>
