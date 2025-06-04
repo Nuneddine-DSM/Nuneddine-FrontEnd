@@ -15,3 +15,13 @@ export interface MyLensItemData {
   start_time: string | null;
   end_time: string | null;
 }
+
+export const getMyLens = async () => {
+  const token = await authenticatedRequest();
+  const response = await instance.get(`${alarms}`, {
+    headers: {
+      Authorization: token
+    }
+  });
+  return response;
+};

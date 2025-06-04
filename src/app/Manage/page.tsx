@@ -3,8 +3,8 @@ import styled from 'styled-components/native';
 import { color, Font } from '../../styles';
 import { Header } from '../../components/Main';
 import { SquareArrow } from '../../assets/SquareArrow';
-import { MyLensItemData } from '../../apis/alarms';
-import { useNavigation } from '@react-navigation/native';
+import { getMyLens, MyLensItemData } from '../../apis/alarms';
+import { useFocusEffect, useNavigation } from '@react-navigation/native';
 import { StackNavigationProp } from '@react-navigation/stack';
 import MyLensListItem from '../../components/Manage/MyLensListItem';
 import { SquarePlus } from '../../assets/SquarePlus';
@@ -17,7 +17,10 @@ import { getLensMention } from '../../utils/lens';
 const Manage = () => {
   const navigation = useNavigation<StackNavigationProp<any>>();
 
+  const [lensList, setLensList] = useState<MyLensItemData[]>([]);
   const [lensName, setLensName] = useState('');
+
+  const [loading, setLoading] = useState(false);
 
   const bottomSheetModalRef = useRef<BottomSheetModal>(null);
   const snapPoints = useMemo(() => ['50%'], []);
@@ -40,35 +43,29 @@ const Manage = () => {
     []
   );
 
-  const lensList: MyLensItemData[] = [
-    {
-      alarm_id: 1,
-      name: '렌즈1',
-      date_type: 'MONTH',
-      start_time: '2025-04-28',
-      end_time: '2025-06-28'
-    },
-    {
-      alarm_id: 2,
-      name: '렌즈2',
-      date_type: 'WEEK',
-      start_time: null,
-      end_time: null
-    },
-    {
-      alarm_id: 3,
-      name: '렌즈3',
-      date_type: 'MONTH',
-      start_time: '2025-05-28',
-      end_time: '2025-06-20'
-    }
-  ];
+  useFocusEffect(
+    useCallback(() => {
+      const myLens = async () => {
+        try {
+          setLoading(true);
+          const response = await getMyLens();
+          setLensList(response.data.alarm_list);
+        } catch (err) {
+          console.error(err);
+          Alert.alert('내 렌즈를 불러오는 데 실패했습니다');
+        } finally {
+          setLoading(false);
+        }
+      };
+
+      myLens();
+    }, [])
+  );
 
   const lateLensPercent = 10;
   const { title, content } = getLensMention(lateLensPercent);
 
-  const totalLens = lensList.length;
-  const totalUse = lensList.filter(
+  const useLensCount = lensList.filter(
     lens => lens.start_time && lens.end_time
   ).length;
 
@@ -108,12 +105,15 @@ const Manage = () => {
           </ExpiratedWrapper>
           <LensCountWrapper>
             <LensCountTextWrapper>
-              <Font text={`${totalUse}`} kind="medium32" />
+              <Font text={`${useLensCount}`} kind="medium32" />
               <Font text="착용 렌즈" kind="medium16" color="gray400" />
             </LensCountTextWrapper>
             <LensCountLine />
             <LensCountTextWrapper>
-              <Font text={`${totalLens - totalUse}`} kind="medium32" />
+              <Font
+                text={`${lensList.length - useLensCount}`}
+                kind="medium32"
+              />
               <Font text="보유 렌즈" kind="medium16" color="gray400" />
             </LensCountTextWrapper>
           </LensCountWrapper>
