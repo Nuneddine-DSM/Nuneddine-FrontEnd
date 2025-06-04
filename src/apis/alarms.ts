@@ -65,3 +65,13 @@ export const settingRepurchased = async (alarmId: number) => {
   );
   return response;
 };
+
+export const startLens = async (data: MyLensItemData) => {
+  const token = await authenticatedRequest();
+  const response = await instance.patch(`${alarms}/${data.alarm_id}`, data, {
+    headers: {
+      Authorization: token
+    }
+  });
+  return response;
+};

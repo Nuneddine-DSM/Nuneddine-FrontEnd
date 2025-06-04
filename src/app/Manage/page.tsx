@@ -9,7 +9,8 @@ import {
   getMyLens,
   MyLensItemData,
   removeMyLens,
-  settingRepurchased
+  settingRepurchased,
+  startLens
 } from '../../apis/alarms';
 import { useFocusEffect, useNavigation } from '@react-navigation/native';
 import { StackNavigationProp } from '@react-navigation/stack';
@@ -19,7 +20,12 @@ import { useCallback, useMemo, useRef, useState } from 'react';
 import { BottomSheetBackdrop, BottomSheetModal } from '@gorhom/bottom-sheet';
 import { Button, Input } from '../../components';
 import { LensDateType, LensDateTypeMap } from '../Data';
-import { getLensMention } from '../../utils/lens';
+import {
+  calculateEndTime,
+  calculateStartTime,
+  getLensMention
+} from '../../utils/lens';
+import { setItem } from '../../utils/asyncStorage';
 
 const Manage = () => {
   const navigation = useNavigation<StackNavigationProp<any>>();
@@ -51,6 +57,10 @@ const Manage = () => {
   );
 
   const getLens = async () => {
+    await setItem(
+      'accessToken',
+      'eyJ0eXAiOiJhY2Nlc3NfdG9rZW4iLCJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJxd2VyMTIzNCIsImlhdCI6MTc0OTAxMTg3MSwiZXhwIjoxNzQ5NjExODcxfQ.779LNc36gANM_kwlbUl-8387-aV-oQxR7nNlJW8plrk'
+    );
     try {
       setLoading(true);
       const response = await getMyLens();
@@ -106,11 +116,25 @@ const Manage = () => {
     }
   };
 
-  const startUseLens = async (alarmId: number) => {
+  const startUseLens = async (item: MyLensItemData) => {
     try {
+      const requestData: MyLensItemData = {
+        alarm_id: item.alarm_id,
+        name: item.name,
+        date_type: item.date_type,
+        start_time: calculateStartTime(),
+        end_time: calculateEndTime(item.date_type),
+        is_repurchased: item.is_repurchased
+      };
+      const response = await startLens(requestData);
+      if (response.status === 200) {
+        getLens();
+      } else {
+        Alert.alert('렌즈 사용 시작 실패');
+      }
     } catch (err) {
       console.error(err);
-      Alert.alert('렌즈 시작 실패');
+      Alert.alert('렌즈 시작 중 오류 발생');
     }
   };
 
@@ -189,7 +213,7 @@ const Manage = () => {
               if (item.start_time && item.end_time) {
                 removeLens(item.alarm_id);
               } else {
-                startUseLens(item.alarm_id);
+                startUseLens(item);
               }
               getLens();
             }}

@@ -76,6 +76,13 @@ export const getLensMention = (percent: number) => {
   }
 };
 
+export const calculateStartTime = () => {
+  const today = new Date();
+  return `${today.getFullYear()}-${
+    today.getMonth() + 1
+  }-${today.getDate()}T00:00:00`;
+};
+
 export const calculateEndTime = (dateType: LensDateType) => {
   const targetDate = new Date();
   targetDate.setHours(0, 0, 0, 0);
@@ -92,5 +99,5 @@ export const calculateEndTime = (dateType: LensDateType) => {
 
   return `${targetDate.getFullYear()}-${
     targetDate.getMonth() + 1
-  }-${targetDate.getDate()}`;
+  }-${targetDate.getDate()}T00:00:00`;
 };
