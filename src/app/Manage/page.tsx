@@ -3,7 +3,12 @@ import styled from 'styled-components/native';
 import { color, Font } from '../../styles';
 import { Header } from '../../components/Main';
 import { SquareArrow } from '../../assets/SquareArrow';
-import { getMyLens, MyLensItemData } from '../../apis/alarms';
+import {
+  AddLensRequest,
+  addMyLens,
+  getMyLens,
+  MyLensItemData
+} from '../../apis/alarms';
 import { useFocusEffect, useNavigation } from '@react-navigation/native';
 import { StackNavigationProp } from '@react-navigation/stack';
 import MyLensListItem from '../../components/Manage/MyLensListItem';
@@ -43,24 +48,46 @@ const Manage = () => {
     []
   );
 
+  const getLens = async () => {
+    try {
+      setLoading(true);
+      const response = await getMyLens();
+      setLensList(response.data.alarm_list);
+    } catch (err) {
+      console.error(err);
+      Alert.alert('내 렌즈를 불러오는 데 실패했습니다');
+    } finally {
+      setLoading(false);
+    }
+  };
+
   useFocusEffect(
     useCallback(() => {
-      const myLens = async () => {
-        try {
-          setLoading(true);
-          const response = await getMyLens();
-          setLensList(response.data.alarm_list);
-        } catch (err) {
-          console.error(err);
-          Alert.alert('내 렌즈를 불러오는 데 실패했습니다');
-        } finally {
-          setLoading(false);
-        }
-      };
-
-      myLens();
+      getLens();
     }, [])
   );
+
+  const addLens = async () => {
+    try {
+      setLoading(true);
+      const requestData: AddLensRequest = {
+        name: lensName,
+        dateType: selectedDuration
+      };
+      const response = await addMyLens(requestData);
+      if (response.status === 200) {
+        bottomSheetModalRef.current?.dismiss();
+        getLens();
+      } else {
+        Alert.alert('렌즈 등록 실패');
+      }
+    } catch (err) {
+      console.error(err);
+      Alert.alert('렌즈 등록 중 오류 발생');
+    } finally {
+      setLoading(false);
+    }
+  };
 
   const lateLensPercent = 10;
   const { title, content } = getLensMention(lateLensPercent);
@@ -181,11 +208,12 @@ const Manage = () => {
               if (!lensName.trim()) {
                 Alert.alert('렌즈 이름을 입력해주세요');
               } else {
-                // 렌즈 추가
+                addLens();
               }
             }}
             buttonColor="black"
             text="렌즈 추가하기"
+            loading={loading}
           />
         </AddButtonBox>
       </BottomSheetModal>
