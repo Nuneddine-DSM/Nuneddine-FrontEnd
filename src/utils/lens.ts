@@ -1,3 +1,5 @@
+import { LensDateType } from '../app/Data';
+
 export const getLensFrequencyList = (): number[] => {
   const frequency: number[] = [];
   for (let i = 0; i <= 32; i++) {
@@ -5,6 +7,49 @@ export const getLensFrequencyList = (): number[] => {
     frequency.push(num);
   }
   return frequency;
+};
+
+export const calculateDueDate = (endDate: string) => {
+  const targetDate = new Date(endDate);
+  const today = new Date();
+
+  targetDate.setHours(0, 0, 0, 0);
+  today.setHours(0, 0, 0, 0);
+
+  const diffTime = targetDate.getTime() - today.getTime();
+  const diffDay = Math.floor(diffTime / (1000 * 60 * 60 * 24));
+
+  if (diffDay === 0) {
+    return 'D-Day';
+  } else if (diffDay > 0) {
+    return `D-${diffDay}`;
+  } else {
+    return `D+${Math.abs(diffDay)}`;
+  }
+};
+
+export const calculateProgress = (startDateStr: string, endDateStr: string) => {
+  const startDate = new Date(startDateStr);
+  const endDate = new Date(endDateStr);
+  const today = new Date();
+
+  startDate.setHours(0, 0, 0, 0);
+  endDate.setHours(0, 0, 0, 0);
+  today.setHours(0, 0, 0, 0);
+
+  const totalDuration = endDate.getTime() - startDate.getTime();
+  const elapsed = today.getTime() - startDate.getTime();
+
+  if (totalDuration <= 0) {
+    return 100;
+  }
+  if (elapsed <= 0) {
+    return 0;
+  }
+
+  const progress = (elapsed / totalDuration) * 100;
+
+  return Math.min(100, Math.floor(progress));
 };
 
 export const getLensMention = (percent: number) => {
@@ -29,4 +74,23 @@ export const getLensMention = (percent: number) => {
       content: '교체는 지금!'
     };
   }
+};
+
+export const calculateEndTime = (dateType: LensDateType) => {
+  const targetDate = new Date();
+  targetDate.setHours(0, 0, 0, 0);
+
+  if (dateType === 'DATE') {
+    targetDate.setDate(targetDate.getDate() + 1);
+  } else if (dateType === 'WEEK') {
+    targetDate.setDate(targetDate.getDate() + 7);
+  } else if (dateType === 'MONTH') {
+    targetDate.setMonth(targetDate.getMonth() + 1);
+  } else {
+    targetDate.setFullYear(targetDate.getFullYear() + 1);
+  }
+
+  return `${targetDate.getFullYear()}-${
+    targetDate.getMonth() + 1
+  }-${targetDate.getDate()}`;
 };

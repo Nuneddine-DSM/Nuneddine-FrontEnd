@@ -6,6 +6,7 @@ import LinearGradient from 'react-native-linear-gradient';
 import { LensDateTypeMap } from '../../app/Data';
 import { useEffect, useState } from 'react';
 import { Animated, Easing, View } from 'react-native';
+import { calculateDueDate, calculateProgress } from '../../utils/lens';
 
 interface MyLensListItemProps {
   item: MyLensItemData;
@@ -123,49 +124,6 @@ const MyLensListItem = ({
       )}
     </Container>
   );
-};
-
-const calculateDueDate = (endDate: string) => {
-  const targetDate = new Date(endDate);
-  const today = new Date();
-
-  targetDate.setHours(0, 0, 0, 0);
-  today.setHours(0, 0, 0, 0);
-
-  const diffTime = targetDate.getTime() - today.getTime();
-  const diffDay = Math.floor(diffTime / (1000 * 60 * 60 * 24));
-
-  if (diffDay === 0) {
-    return 'D-Day';
-  } else if (diffDay > 0) {
-    return `D-${diffDay}`;
-  } else {
-    return `D+${Math.abs(diffDay)}`;
-  }
-};
-
-const calculateProgress = (startDateStr: string, endDateStr: string) => {
-  const startDate = new Date(startDateStr);
-  const endDate = new Date(endDateStr);
-  const today = new Date();
-
-  startDate.setHours(0, 0, 0, 0);
-  endDate.setHours(0, 0, 0, 0);
-  today.setHours(0, 0, 0, 0);
-
-  const totalDuration = endDate.getTime() - startDate.getTime();
-  const elapsed = today.getTime() - startDate.getTime();
-
-  if (totalDuration <= 0) {
-    return 100;
-  }
-  if (elapsed <= 0) {
-    return 0;
-  }
-
-  const progress = (elapsed / totalDuration) * 100;
-
-  return Math.min(100, Math.floor(progress));
 };
 
 const dateFormat = (date: string) => {
