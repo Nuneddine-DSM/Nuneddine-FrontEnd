@@ -29,15 +29,16 @@ const MyLensListItem = ({
     inputRange: [0, 1],
     outputRange: [1, 26]
   });
+  const [isOn, setIsOn] = useState(item.is_repurchased);
 
   useEffect(() => {
     Animated.timing(aniValue, {
-      toValue: item.is_repurchased ? 1 : 0,
+      toValue: item.is_repurchased ? 0 : 1,
       duration: 200,
       easing: Easing.linear,
       useNativeDriver: true
     }).start();
-  }, [item.is_repurchased, aniValue]);
+  }, [isOn]);
 
   return (
     <Container
@@ -109,8 +110,11 @@ const MyLensListItem = ({
             <Font text="재구매 알림" kind="semi16" />
             <View style={{ flexDirection: 'row', alignItems: 'center' }}>
               <ToggleContainer
-                onPress={onTogglePress}
-                isOn={item.is_repurchased}>
+                onPress={() => {
+                  onTogglePress?.();
+                  setIsOn(!isOn);
+                }}
+                isOn={isOn}>
                 <ToggleWheel
                   style={[{ transform: [{ translateX: moveSwitchToggle }] }]}
                 />
@@ -127,7 +131,8 @@ const MyLensListItem = ({
 };
 
 const dateFormat = (date: string) => {
-  return date.replace(/-/g, '.');
+  const target = date.includes('T') ? date.split('T')[0] : date;
+  return target.replace(/-/g, '.');
 };
 
 const Container = styled.TouchableOpacity`

@@ -10,7 +10,8 @@ import {
   MyLensItemData,
   removeMyLens,
   settingRepurchased,
-  startLens
+  startLens,
+  StartLensRequest
 } from '../../apis/alarms';
 import { useFocusEffect, useNavigation } from '@react-navigation/native';
 import { StackNavigationProp } from '@react-navigation/stack';
@@ -22,6 +23,7 @@ import { Button, Input } from '../../components';
 import { LensDateType, LensDateTypeMap } from '../Data';
 import {
   calculateEndTime,
+  calculateProgress,
   calculateStartTime,
   getLensMention
 } from '../../utils/lens';
@@ -32,8 +34,22 @@ const Manage = () => {
 
   const [lensList, setLensList] = useState<MyLensItemData[]>([]);
   const [lensName, setLensName] = useState('');
+  const [lateLensPercent, setLateLensPercent] = useState(0);
 
   const [loading, setLoading] = useState(false);
+
+  const { title, content } = getLensMention(lateLensPercent);
+
+  const useLensCount = lensList.filter(
+    lens => lens.start_time && lens.end_time
+  ).length;
+
+  const [isExpendedList, setIsExpendedList] = useState<boolean[]>([]);
+  const setExpendedListItem = (index: number) => {
+    setIsExpendedList(prev =>
+      prev.map((item, i) => (i === index ? !item : item))
+    );
+  };
 
   const bottomSheetModalRef = useRef<BottomSheetModal>(null);
   const snapPoints = useMemo(() => ['50%'], []);
@@ -57,14 +73,18 @@ const Manage = () => {
   );
 
   const getLens = async () => {
-    await setItem(
-      'accessToken',
-      'eyJ0eXAiOiJhY2Nlc3NfdG9rZW4iLCJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJxd2VyMTIzNCIsImlhdCI6MTc0OTAxMTg3MSwiZXhwIjoxNzQ5NjExODcxfQ.779LNc36gANM_kwlbUl-8387-aV-oQxR7nNlJW8plrk'
-    );
     try {
       setLoading(true);
       const response = await getMyLens();
-      setLensList(response.data.alarm_list);
+      const list = [...response.data.alarm_list].sort((a, b) => {
+        if (a.end_time === null && b.end_time === null) return 0;
+        if (a.end_time === null) return 1;
+        if (b.end_time === null) return -1;
+
+        return new Date(a.end_time).getTime() - new Date(b.end_time).getTime();
+      });
+      setLensList(list);
+      setIsExpendedList(new Array(lensList.length).fill(false));
     } catch (err) {
       console.error(err);
       Alert.alert('내 렌즈를 불러오는 데 실패했습니다');
@@ -76,6 +96,14 @@ const Manage = () => {
   useFocusEffect(
     useCallback(() => {
       getLens();
+      setIsExpendedList(new Array(lensList.length).fill(false));
+
+      const lateLens = lensList[0];
+      if (lateLens.start_time && lateLens.end_time) {
+        setLateLensPercent(
+          calculateProgress(lateLens.start_time, lateLens.end_time)
+        );
+      }
     }, [])
   );
 
@@ -84,12 +112,17 @@ const Manage = () => {
       setLoading(true);
       const requestData: AddLensRequest = {
         name: lensName,
-        dateType: selectedDuration
+        date_type: selectedDuration
       };
       const response = await addMyLens(requestData);
       if (response.status === 200) {
         bottomSheetModalRef.current?.dismiss();
         getLens();
+        setLensName('');
+
+        const updatedList = [...isExpendedList];
+        updatedList.push(false);
+        setIsExpendedList(updatedList);
       } else {
         Alert.alert('렌즈 등록 실패');
       }
@@ -101,11 +134,15 @@ const Manage = () => {
     }
   };
 
-  const removeLens = async (alarmId: number) => {
+  const removeLens = async (alarmId: number, index: number) => {
     try {
       const response = await removeMyLens(alarmId);
       if (response.status === 200) {
         getLens();
+
+        const updatedList = [...isExpendedList];
+        updatedList.splice(index, 1);
+        setIsExpendedList(updatedList);
       } else {
         console.log(response);
         Alert.alert('렌즈 삭제 실패');
@@ -118,15 +155,13 @@ const Manage = () => {
 
   const startUseLens = async (item: MyLensItemData) => {
     try {
-      const requestData: MyLensItemData = {
-        alarm_id: item.alarm_id,
+      const requestData: StartLensRequest = {
         name: item.name,
         date_type: item.date_type,
         start_time: calculateStartTime(),
-        end_time: calculateEndTime(item.date_type),
-        is_repurchased: item.is_repurchased
+        end_time: calculateEndTime(item.date_type)
       };
-      const response = await startLens(requestData);
+      const response = await startLens(item.alarm_id, requestData);
       if (response.status === 200) {
         getLens();
       } else {
@@ -146,22 +181,6 @@ const Manage = () => {
       console.error(err);
       Alert.alert('재구매 알림 설정 변경 중 오류 발생');
     }
-  };
-
-  const lateLensPercent = 10;
-  const { title, content } = getLensMention(lateLensPercent);
-
-  const useLensCount = lensList.filter(
-    lens => lens.start_time && lens.end_time
-  ).length;
-
-  const [isExpendedList, setIsExpendedList] = useState<boolean[]>(
-    new Array(lensList.length).fill(false)
-  );
-  const setExpendedListItem = (index: number) => {
-    setIsExpendedList(prev =>
-      prev.map((item, i) => (i === index ? !item : item))
-    );
   };
 
   return (
@@ -211,11 +230,10 @@ const Manage = () => {
             isExpended={isExpendedList[index]}
             onButtonPress={() => {
               if (item.start_time && item.end_time) {
-                removeLens(item.alarm_id);
+                removeLens(item.alarm_id, index);
               } else {
                 startUseLens(item);
               }
-              getLens();
             }}
             onExpendedPress={() => {
               setExpendedListItem(index);
@@ -280,6 +298,7 @@ const Manage = () => {
                 Alert.alert('렌즈 이름을 입력해주세요');
               } else {
                 addLens();
+                setLensName('');
               }
             }}
             buttonColor="black"

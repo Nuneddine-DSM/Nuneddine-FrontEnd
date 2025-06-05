@@ -29,7 +29,7 @@ export const getMyLens = async () => {
 
 export interface AddLensRequest {
   name: string;
-  dateType: LensDateType;
+  date_type: LensDateType;
 }
 
 export const addMyLens = async (data: AddLensRequest) => {
@@ -66,9 +66,16 @@ export const settingRepurchased = async (alarmId: number) => {
   return response;
 };
 
-export const startLens = async (data: MyLensItemData) => {
+export interface StartLensRequest {
+  name: string;
+  date_type: LensDateType;
+  start_time: string;
+  end_time: string;
+}
+
+export const startLens = async (alarmId: number, data: StartLensRequest) => {
   const token = await authenticatedRequest();
-  const response = await instance.patch(`${alarms}/${data.alarm_id}`, data, {
+  const response = await instance.patch(`${alarms}/${alarmId}`, data, {
     headers: {
       Authorization: token
     }
