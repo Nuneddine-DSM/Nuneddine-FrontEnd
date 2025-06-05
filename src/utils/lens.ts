@@ -76,11 +76,13 @@ export const getLensMention = (percent: number) => {
   }
 };
 
+const pad = (num: number) => num.toString().padStart(2, '0');
+
 export const calculateStartTime = () => {
   const today = new Date();
-  return `${today.getFullYear()}-${
-    today.getMonth() + 1
-  }-${today.getDate()}T00:00:00`;
+  return `${today.getFullYear()}-${pad(today.getMonth() + 1)}-${pad(
+    today.getDate()
+  )}T00:00:00`;
 };
 
 export const calculateEndTime = (dateType: LensDateType) => {
@@ -97,7 +99,7 @@ export const calculateEndTime = (dateType: LensDateType) => {
     targetDate.setFullYear(targetDate.getFullYear() + 1);
   }
 
-  return `${targetDate.getFullYear()}-${
-    targetDate.getMonth() + 1
-  }-${targetDate.getDate()}T00:00:00`;
+  return `${targetDate.getFullYear()}-${pad(targetDate.getMonth() + 1)}-${pad(
+    targetDate.getDate()
+  )}T00:00:00`;
 };
