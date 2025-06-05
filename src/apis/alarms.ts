@@ -14,4 +14,71 @@ export interface MyLensItemData {
   date_type: LensDateType;
   start_time: string | null;
   end_time: string | null;
+  is_repurchased: boolean;
 }
+
+export const getMyLens = async () => {
+  const token = await authenticatedRequest();
+  const response = await instance.get(`${alarms}`, {
+    headers: {
+      Authorization: token
+    }
+  });
+  return response;
+};
+
+export interface AddLensRequest {
+  name: string;
+  date_type: LensDateType;
+}
+
+export const addMyLens = async (data: AddLensRequest) => {
+  const token = await authenticatedRequest();
+  const response = await instance.post(`${alarms}`, data, {
+    headers: {
+      Authorization: token
+    }
+  });
+  return response;
+};
+
+export const removeMyLens = async (alarmId: number) => {
+  const token = await authenticatedRequest();
+  const response = await instance.delete(`${alarms}/${alarmId}`, {
+    headers: {
+      Authorization: token
+    }
+  });
+  return response;
+};
+
+export const settingRepurchased = async (alarmId: number) => {
+  const token = await authenticatedRequest();
+  const response = await instance.patch(
+    `${alarms}/repurchase-toggle/${alarmId}`,
+    {},
+    {
+      headers: {
+        Authorization: token
+      }
+    }
+  );
+  return response;
+};
+
+export interface StartLensRequest {
+  name: string;
+  date_type: LensDateType;
+  start_time: string;
+  end_time: string;
+}
+
+export const startLens = async (alarmId: number, data: StartLensRequest) => {
+  const token = await authenticatedRequest();
+  const response = await instance.patch(`${alarms}/${alarmId}`, data, {
+    headers: {
+      Authorization: token
+    }
+  });
+  return response;
+};
