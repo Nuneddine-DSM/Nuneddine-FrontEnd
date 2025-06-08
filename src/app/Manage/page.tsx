@@ -298,7 +298,6 @@ const Manage = () => {
                 Alert.alert('렌즈 이름을 입력해주세요');
               } else {
                 addLens();
-                setLensName('');
               }
             }}
             buttonColor="black"
