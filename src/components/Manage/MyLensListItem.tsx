@@ -33,7 +33,7 @@ const MyLensListItem = ({
 
   useEffect(() => {
     Animated.timing(aniValue, {
-      toValue: item.is_repurchased ? 0 : 1,
+      toValue: isOn ? 0 : 1,
       duration: 200,
       easing: Easing.linear,
       useNativeDriver: true
