@@ -84,7 +84,7 @@ const Manage = () => {
         return new Date(a.end_time).getTime() - new Date(b.end_time).getTime();
       });
       setLensList(list);
-      setIsExpendedList(new Array(lensList.length).fill(false));
+      setIsExpendedList(new Array(list.length).fill(false));
     } catch (err) {
       console.error(err);
       Alert.alert('내 렌즈를 불러오는 데 실패했습니다');
