@@ -6,36 +6,39 @@ import LinearGradient from 'react-native-linear-gradient';
 import { LensDateTypeMap } from '../../app/Data';
 import { useEffect, useState } from 'react';
 import { Animated, Easing, View } from 'react-native';
+import { calculateDueDate, calculateProgress } from '../../utils/lens';
 
 interface MyLensListItemProps {
   item: MyLensItemData;
   isExpended?: boolean;
   onButtonPress?: () => void;
   onExpendedPress?: () => void;
+  onTogglePress?: () => void;
 }
 
 const MyLensListItem = ({
   item,
   isExpended,
   onButtonPress,
-  onExpendedPress
+  onExpendedPress,
+  onTogglePress
 }: MyLensListItemProps) => {
-  const [isOn, setIsOn] = useState(false);
   const [aniValue] = useState(new Animated.Value(0));
 
   const moveSwitchToggle = aniValue.interpolate({
     inputRange: [0, 1],
     outputRange: [1, 26]
   });
+  const [isOn, setIsOn] = useState(item.is_repurchased);
 
   useEffect(() => {
     Animated.timing(aniValue, {
-      toValue: isOn ? 1 : 0,
+      toValue: isOn ? 0 : 1,
       duration: 200,
       easing: Easing.linear,
       useNativeDriver: true
     }).start();
-  }, [isOn, aniValue]);
+  }, [isOn]);
 
   return (
     <Container
@@ -108,7 +111,7 @@ const MyLensListItem = ({
             <View style={{ flexDirection: 'row', alignItems: 'center' }}>
               <ToggleContainer
                 onPress={() => {
-                  // 재구매 알림 설정
+                  onTogglePress?.();
                   setIsOn(!isOn);
                 }}
                 isOn={isOn}>
@@ -127,51 +130,9 @@ const MyLensListItem = ({
   );
 };
 
-const calculateDueDate = (endDate: string) => {
-  const targetDate = new Date(endDate);
-  const today = new Date();
-
-  targetDate.setHours(0, 0, 0, 0);
-  today.setHours(0, 0, 0, 0);
-
-  const diffTime = targetDate.getTime() - today.getTime();
-  const diffDay = Math.floor(diffTime / (1000 * 60 * 60 * 24));
-
-  if (diffDay === 0) {
-    return 'D-Day';
-  } else if (diffDay > 0) {
-    return `D-${diffDay}`;
-  } else {
-    return `D+${Math.abs(diffDay)}`;
-  }
-};
-
-const calculateProgress = (startDateStr: string, endDateStr: string) => {
-  const startDate = new Date(startDateStr);
-  const endDate = new Date(endDateStr);
-  const today = new Date();
-
-  startDate.setHours(0, 0, 0, 0);
-  endDate.setHours(0, 0, 0, 0);
-  today.setHours(0, 0, 0, 0);
-
-  const totalDuration = endDate.getTime() - startDate.getTime();
-  const elapsed = today.getTime() - startDate.getTime();
-
-  if (totalDuration <= 0) {
-    return 100;
-  }
-  if (elapsed <= 0) {
-    return 0;
-  }
-
-  const progress = (elapsed / totalDuration) * 100;
-
-  return Math.min(100, Math.floor(progress));
-};
-
 const dateFormat = (date: string) => {
-  return date.replace(/-/g, '.');
+  const target = date.includes('T') ? date.split('T')[0] : date;
+  return target.replace(/-/g, '.');
 };
 
 const Container = styled.TouchableOpacity`

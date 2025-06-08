@@ -3,8 +3,17 @@ import styled from 'styled-components/native';
 import { color, Font } from '../../styles';
 import { Header } from '../../components/Main';
 import { SquareArrow } from '../../assets/SquareArrow';
-import { MyLensItemData } from '../../apis/alarms';
-import { useNavigation } from '@react-navigation/native';
+import {
+  AddLensRequest,
+  addMyLens,
+  getMyLens,
+  MyLensItemData,
+  removeMyLens,
+  settingRepurchased,
+  startLens,
+  StartLensRequest
+} from '../../apis/alarms';
+import { useFocusEffect, useNavigation } from '@react-navigation/native';
 import { StackNavigationProp } from '@react-navigation/stack';
 import MyLensListItem from '../../components/Manage/MyLensListItem';
 import { SquarePlus } from '../../assets/SquarePlus';
@@ -12,12 +21,35 @@ import { useCallback, useMemo, useRef, useState } from 'react';
 import { BottomSheetBackdrop, BottomSheetModal } from '@gorhom/bottom-sheet';
 import { Button, Input } from '../../components';
 import { LensDateType, LensDateTypeMap } from '../Data';
-import { getLensMention } from '../../utils/lens';
+import {
+  calculateEndTime,
+  calculateProgress,
+  calculateStartTime,
+  getLensMention
+} from '../../utils/lens';
+import { setItem } from '../../utils/asyncStorage';
 
 const Manage = () => {
   const navigation = useNavigation<StackNavigationProp<any>>();
 
+  const [lensList, setLensList] = useState<MyLensItemData[]>([]);
   const [lensName, setLensName] = useState('');
+  const [lateLensPercent, setLateLensPercent] = useState(0);
+
+  const [loading, setLoading] = useState(false);
+
+  const { title, content } = getLensMention(lateLensPercent);
+
+  const useLensCount = lensList.filter(
+    lens => lens.start_time && lens.end_time
+  ).length;
+
+  const [isExpendedList, setIsExpendedList] = useState<boolean[]>([]);
+  const setExpendedListItem = (index: number) => {
+    setIsExpendedList(prev =>
+      prev.map((item, i) => (i === index ? !item : item))
+    );
+  };
 
   const bottomSheetModalRef = useRef<BottomSheetModal>(null);
   const snapPoints = useMemo(() => ['50%'], []);
@@ -40,45 +72,114 @@ const Manage = () => {
     []
   );
 
-  const lensList: MyLensItemData[] = [
-    {
-      alarm_id: 1,
-      name: '렌즈1',
-      date_type: 'MONTH',
-      start_time: '2025-04-28',
-      end_time: '2025-06-28'
-    },
-    {
-      alarm_id: 2,
-      name: '렌즈2',
-      date_type: 'WEEK',
-      start_time: null,
-      end_time: null
-    },
-    {
-      alarm_id: 3,
-      name: '렌즈3',
-      date_type: 'MONTH',
-      start_time: '2025-05-28',
-      end_time: '2025-06-20'
+  const getLens = async () => {
+    try {
+      setLoading(true);
+      const response = await getMyLens();
+      const list = [...response.data.alarm_list].sort((a, b) => {
+        if (a.end_time === null && b.end_time === null) return 0;
+        if (a.end_time === null) return 1;
+        if (b.end_time === null) return -1;
+
+        return new Date(a.end_time).getTime() - new Date(b.end_time).getTime();
+      });
+
+      setLensList(list);
+      setIsExpendedList(new Array(list.length).fill(false));
+      if (list.length && list[0].start_time && list[0].end_time) {
+        setLateLensPercent(
+          calculateProgress(list[0].start_time, list[0].end_time)
+        );
+      }
+    } catch (err) {
+      console.error(err);
+      Alert.alert('내 렌즈를 불러오는 데 실패했습니다');
+    } finally {
+      setLoading(false);
     }
-  ];
+  };
 
-  const lateLensPercent = 10;
-  const { title, content } = getLensMention(lateLensPercent);
-
-  const totalLens = lensList.length;
-  const totalUse = lensList.filter(
-    lens => lens.start_time && lens.end_time
-  ).length;
-
-  const [isExpendedList, setIsExpendedList] = useState<boolean[]>(
-    new Array(lensList.length).fill(false)
+  useFocusEffect(
+    useCallback(() => {
+      getLens();
+      setIsExpendedList(new Array(lensList.length).fill(false));
+    }, [])
   );
-  const setExpendedListItem = (index: number) => {
-    setIsExpendedList(prev =>
-      prev.map((item, i) => (i === index ? !item : item))
-    );
+
+  const addLens = async () => {
+    try {
+      setLoading(true);
+      const requestData: AddLensRequest = {
+        name: lensName,
+        date_type: selectedDuration
+      };
+      const response = await addMyLens(requestData);
+      if (response.status === 200) {
+        bottomSheetModalRef.current?.dismiss();
+        getLens();
+        setLensName('');
+
+        const updatedList = [...isExpendedList];
+        updatedList.push(false);
+        setIsExpendedList(updatedList);
+      } else {
+        Alert.alert('렌즈 등록 실패');
+      }
+    } catch (err) {
+      console.error(err);
+      Alert.alert('렌즈 등록 중 오류 발생');
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  const removeLens = async (alarmId: number, index: number) => {
+    try {
+      const response = await removeMyLens(alarmId);
+      if (response.status === 200) {
+        getLens();
+
+        const updatedList = [...isExpendedList];
+        updatedList.splice(index, 1);
+        setIsExpendedList(updatedList);
+      } else {
+        console.log(response);
+        Alert.alert('렌즈 삭제 실패');
+      }
+    } catch (err) {
+      console.error(err);
+      Alert.alert('렌즈 삭제 중 오류 발생');
+    }
+  };
+
+  const startUseLens = async (item: MyLensItemData) => {
+    try {
+      const requestData: StartLensRequest = {
+        name: item.name,
+        date_type: item.date_type,
+        start_time: calculateStartTime(),
+        end_time: calculateEndTime(item.date_type)
+      };
+      const response = await startLens(item.alarm_id, requestData);
+      if (response.status === 200) {
+        getLens();
+      } else {
+        Alert.alert('렌즈 사용 시작 실패');
+      }
+    } catch (err) {
+      console.error(err);
+      Alert.alert('렌즈 시작 중 오류 발생');
+    }
+  };
+
+  const changeRepurchased = async (alarmId: number) => {
+    try {
+      const response = await settingRepurchased(alarmId);
+      return response.status;
+    } catch (err) {
+      console.error(err);
+      Alert.alert('재구매 알림 설정 변경 중 오류 발생');
+    }
   };
 
   return (
@@ -108,12 +209,15 @@ const Manage = () => {
           </ExpiratedWrapper>
           <LensCountWrapper>
             <LensCountTextWrapper>
-              <Font text={`${totalUse}`} kind="medium32" />
+              <Font text={`${useLensCount}`} kind="medium32" />
               <Font text="착용 렌즈" kind="medium16" color="gray400" />
             </LensCountTextWrapper>
             <LensCountLine />
             <LensCountTextWrapper>
-              <Font text={`${totalLens - totalUse}`} kind="medium32" />
+              <Font
+                text={`${lensList.length - useLensCount}`}
+                kind="medium32"
+              />
               <Font text="보유 렌즈" kind="medium16" color="gray400" />
             </LensCountTextWrapper>
           </LensCountWrapper>
@@ -124,11 +228,22 @@ const Manage = () => {
             item={item}
             isExpended={isExpendedList[index]}
             onButtonPress={() => {
-              // 사용 중인 렌즈 -> 렌즈 삭제
-              // 보유 중인 렌즈 -> 렌즈 사용 시작
+              if (item.start_time && item.end_time) {
+                removeLens(item.alarm_id, index);
+              } else {
+                startUseLens(item);
+              }
             }}
             onExpendedPress={() => {
               setExpendedListItem(index);
+            }}
+            onTogglePress={async () => {
+              const status = await changeRepurchased(item.alarm_id);
+              if (status === 200) {
+                item.is_repurchased = !item.is_repurchased;
+              } else {
+                Alert.alert('재구매 알림 설정 실패');
+              }
             }}
           />
         ))}
@@ -181,11 +296,12 @@ const Manage = () => {
               if (!lensName.trim()) {
                 Alert.alert('렌즈 이름을 입력해주세요');
               } else {
-                // 렌즈 추가
+                addLens();
               }
             }}
             buttonColor="black"
             text="렌즈 추가하기"
+            loading={loading}
           />
         </AddButtonBox>
       </BottomSheetModal>
