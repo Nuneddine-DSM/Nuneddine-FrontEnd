@@ -4,7 +4,7 @@ import { color, Font } from "../../../styles"
 import { Header, Footer } from "../../../components/Main";
 import { Tab, Tag } from "../../../components/Shopping";
 import { Button } from "../../../components";
-import { Heart } from "../../../assets";
+import { Heart, X } from "../../../assets";
 import { TabInfoData } from "./Data";
 import { useState, useCallback, useRef, useMemo } from "react";
 import { likeHandler } from "../../../apis/heart";
@@ -13,7 +13,6 @@ import {
   BottomSheetModal,
   BottomSheetBackdrop
 } from '@gorhom/bottom-sheet';
-import OrderItem from "./OrderItem";
 import { getDetail } from "../../../apis/shops";
 import { addCartItem } from "../../../apis/carts";
 import { BottomButtonsProps } from "../../../interface";
@@ -21,6 +20,7 @@ import { NavigationProp, RouteProp, useNavigation, useRoute } from '@react-navig
 import { useQuery } from "@tanstack/react-query";
 import { TouchableOpacity } from "react-native";
 import { FrameShapeMap } from "../../Data";
+import { QuantitySelector } from "../../../components/Shopping";
 
 type RootStackParamList = {
   ShoppingDetail: { shopId: number };
@@ -34,6 +34,9 @@ const ShoppingDetail = () => {
 
   const [selectedTab, setSelectedTab] = useState<number>(1);
   const [selectedHeart, setSelectedHeart] = useState<boolean>(false);
+
+  const [lensPower, setLensPower] = useState<number>(0);
+  const [optionCount, setOptionCount] = useState<number>(0);
 
   const { data: detail } = useQuery({
     queryKey: ["productDetail", shopId],
@@ -141,8 +144,8 @@ const ShoppingDetail = () => {
               tabData={TabInfoData}
             />
             <ProductImageBox>
-              {detail?.image_urls.map((image: string) => (
-                <ProductImage source={{ uri: image }} />
+              {detail?.image_urls.map((image: string, index: number) => (
+                <ProductImage key={index} source={{ uri: image }} />
               ))}
             </ProductImageBox>
           </>
@@ -159,11 +162,25 @@ const ShoppingDetail = () => {
         <OptionWrapper>
           <Font text="옵션 선택" kind="medium16" color="gray600" />
           <ProductItemWrapper>
-            <OrderItem
-              id={shopId}
-              productName={detail?.glasses_name}
-              price={detail?.price}
-            />
+
+            <OrderItemContainer>
+              <ProductInfoWrapper>
+                <ProductNameBox>
+                  <Font
+                    text={detail?.glasses_name}
+                    kind="bold16"
+                    numberOfLines={2}
+                    ellipsizeMode="tail"
+                  />
+                </ProductNameBox>
+                <X size={30} />
+              </ProductInfoWrapper>
+              <QuantityAndPriceWrapper>
+                <QuantitySelector count={optionCount} onChange={setOptionCount} />
+                <Font text={`${(detail?.price * optionCount).toLocaleString()}원`} kind="bold18" />
+              </QuantityAndPriceWrapper>
+            </OrderItemContainer>
+
             <PriceWrapper>
               <Font text="결제 예상 금액" kind="semi18" />
               <Font
@@ -329,6 +346,31 @@ const PriceWrapper = styled.View`
   padding: 24px 0 12px;
   border-top-width: 1px;
   border-color: ${color.gray300};
+`
+
+const OrderItemContainer = styled.View`
+  width: 100%;
+  flex-direction: column;
+  padding: 20px;
+  gap: 22px;
+  border-radius: 8px;
+  background-color: ${color.gray50};
+`
+
+const ProductInfoWrapper = styled.View`
+  flex-direction: row;
+  justify-content: space-between;
+  gap: 7px;
+`
+
+const ProductNameBox = styled.View`
+  flex: 1;
+`
+
+const QuantityAndPriceWrapper = styled.View`
+  flex-direction: row;
+  justify-content: space-between;
+  align-items: center;
 `
 
 export default ShoppingDetail;
