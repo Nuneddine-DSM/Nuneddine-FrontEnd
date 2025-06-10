@@ -1,10 +1,11 @@
 import React from "react";
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
-import { Home, Optician, Browser, Copy, User } from "../assets";
+import { Home, Browser, Copy, User } from "../assets";
 import Main from "../app/Main/page";
 import Manage from "../app/Manage/page";
 import Guide from "../app/Guide/page";
 import MyPage from "../app/MyPage/page";
+import { color } from "../styles"
 
 const Tab = createBottomTabNavigator();
 
@@ -13,16 +14,17 @@ const NavBar = () => {
     <Tab.Navigator
       initialRouteName="Main"
       screenOptions={{
-        tabBarActiveTintColor: `black`,
-        tabBarInactiveTintColor: `gray`,
+        tabBarActiveTintColor: `${color.pink300}`,
+        tabBarInactiveTintColor: `${color.gray500}`,
         tabBarShowLabel: true,
         tabBarStyle: {
           height: 68,
-          paddingTop: 8,
+          paddingTop: 6,
+          paddingBottom: 6
         },
         tabBarLabelStyle: {
           fontSize: 14,
-          fontWeight: 600,
+          fontWeight: 600
         }
       }}
     >
