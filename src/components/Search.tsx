@@ -2,19 +2,22 @@ import styled from "styled-components/native";
 import { Search as SearchIcon } from "../assets";
 import { color, Font } from "../styles"
 import { useState } from "react";
+import { TouchableOpacity } from "react-native";
 
 interface SearchProps {
   value?: string;
   item?: Array<string>;
   onChangeText?: (i: string) => void;
   onKeyPress?: (i: any) => void;
+  onPressItem?: (text: string) => void;
 }
 
 const Search = ({
   value,
   item = [],
   onChangeText,
-  onKeyPress
+  onKeyPress,
+  onPressItem
 }: SearchProps) => {
   const [isFocused, setIsFocused] = useState<boolean>(false);
   const [isFind, setIsFind] = useState<boolean>(false);
@@ -46,12 +49,17 @@ const Search = ({
           <SearchResultList>
             <SearchResultScroll>
               {item?.map((value, index) => (
-                <SearchItem
+                <TouchableOpacity
                   key={index}
-                  backgroundColor={index % 2 == 0}
+                  onPress={() => {
+                    onPressItem?.(value);
+                    setIsFind(false);
+                  }}
                 >
-                  <Font text={value} kind="medium16" />
-                </SearchItem>
+                  <SearchItem backgroundColor={index % 2 === 0}>
+                    <Font text={value} kind="medium16" />
+                  </SearchItem>
+                </TouchableOpacity>
               ))}
             </SearchResultScroll>
           </SearchResultList>
@@ -98,7 +106,9 @@ const SearchResultList = styled.View`
   overflow: scroll;
 `
 
-const SearchResultScroll = styled.ScrollView`
+const SearchResultScroll = styled.ScrollView.attrs(() => ({
+  keyboardShouldPersistTaps: 'handled',
+}))`
   flex: 1;
   height: 172px;
   padding: 0 16px 10px;
