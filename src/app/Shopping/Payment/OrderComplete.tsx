@@ -13,7 +13,11 @@ const OrderComplete = () => {
         <Font text="주문이 완료되었습니다!" kind="semi20" />
       </CompleteContent>
       <ButtonWrapper>
-        <Button text="확인" onPress={() => navigation.navigate("Main")} />
+        <Button
+          text="확인"
+          onPress={() => navigation.navigate("Main")}
+          buttonColor="black"
+        />
       </ButtonWrapper>
     </Container>
   )
