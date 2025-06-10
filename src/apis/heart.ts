@@ -1,11 +1,10 @@
 import { instance } from "./axios";
 
-const heart = '/heart';
+const heart = '/hearts';
 
 export const likeHandler = async (shopId : number) => {
   try {
-    const response = await instance.post(`${heart}/${shopId}`)
-    return response;
+    await instance.post(`${heart}/${shopId}`)
   } catch (err) {
     throw err;
   }
