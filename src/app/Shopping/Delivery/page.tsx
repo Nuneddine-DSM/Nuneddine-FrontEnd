@@ -2,13 +2,12 @@ import styled from 'styled-components/native';
 import { Font, color } from '../../../styles';
 import { TopBar } from '../../../components';
 import { TouchableOpacity } from 'react-native';
-import { Arrow } from '../../../assets';
-import DeliveryList from '../../../components/Shopping/Delivery';
+import { Arrow, Check } from '../../../assets';
 import { NavigationProp, useNavigation } from '@react-navigation/native';
 import { useQuery } from '@tanstack/react-query';
 import { getAddress } from '../../../apis/address';
 import { AddressResponse } from '../../../interface';
-import { useState, useEffect } from 'react';
+import { useAddressStore } from '../../../stores/addressStore';
 
 const Delivery = () => {
   const navigation = useNavigation<NavigationProp<any>>();
@@ -18,28 +17,55 @@ const Delivery = () => {
     queryFn: getAddress
   })
 
-  const [isSelected, setIsSelected] = useState<number>(AddressData?.data?.[0]?.id ?? 0);
+  const selectedAddressId = useAddressStore((state) => state.selectedAddressId);
+  const setSelectedAddressId = useAddressStore((state) => state.setSelectedAddressId);
 
-  useEffect(() => {
-    if (AddressData?.data?.[1]?.id) {
-      setIsSelected(AddressData.data[1].id);
-    }
-  }, [AddressData]);
+  const onPress = (id: number) => {
+    setSelectedAddressId(id);
+  };
 
   return (
     <Container>
       <TopBar
         text="배송지 목록"
         leftIcon={
-          <TouchableOpacity onPress={() => navigation.navigate("Payment")}>
+          <TouchableOpacity onPress={() => navigation.goBack()}>
             <Arrow size={34} />
           </TouchableOpacity>
         }
       />
       <DeliveryListWrapper>
-        {AddressData?.data?.addresses.map((item: AddressResponse) => (
-          <DeliveryList key={item.id} item={item} isSelected={isSelected} />
-        ))}
+        {AddressData?.data?.addresses.map((item: AddressResponse) => {
+          const isChecked = item.id === selectedAddressId;
+
+          return (
+            <Wrapper key={item.id} selected={isChecked} onPress={() => onPress(item.id)}>
+              <HeaderSection>
+                <UserDetails>
+                  <InfoWrapper>
+                    <Font text={item.address} kind="semi20" />
+
+                    <UserInfoWrapper>
+                      <Font text={item.receiver} kind="medium18" />
+                      <Font text="･" kind="medium18" />
+                      <Font text={item.phone_number} kind="medium18" />
+                    </UserInfoWrapper>
+                  </InfoWrapper>
+                  <CheckButton selected={isChecked}>
+                    {isChecked && <Check size={19} color={color.white} />}
+                  </CheckButton>
+                </UserDetails>
+
+                <Font
+                  text={item.detail_address}
+                  kind="regular16"
+                  color="gray600"
+                />
+              </HeaderSection>
+            </Wrapper>
+          )
+        })}
+
         <AddButton onPress={() => navigation.navigate("DeliverAdd")}>
           <Font text="배송지 추가하러 가기" kind="medium16" color="gray500" />
           <Arrow size={20} color={color.gray500} rotate="right" />
@@ -74,5 +100,46 @@ const AddButton = styled.TouchableOpacity`
   border-width: 1px;
   border-color: ${color.gray300};
 `;
+
+const Wrapper = styled.TouchableOpacity<{ selected?: boolean }>`
+  flex-direction: column;
+  padding: 20px;
+  gap: 12px;
+  border-radius: 10px;
+  border-width: 1px;
+  border-color: ${({ selected }) => (selected ? color.pink200 : color.gray300)};
+`;
+
+const HeaderSection = styled.View`
+  flex-direction: column;
+  gap: 12px;
+`;
+
+const InfoWrapper = styled.View`
+  flex-direction: column;
+  gap: 12px;
+`;
+
+const UserDetails = styled.View`
+  flex-direction: row;
+  justify-content: space-between;
+  align-items: flex-start;
+`;
+
+const UserInfoWrapper = styled.View`
+  flex-direction: row;
+  align-items: center;
+`;
+
+const CheckButton = styled.View<{ selected?: boolean }>`
+  width: 24px;
+  height: 24px;
+  justify-content: center;
+  align-items: center;
+  border-radius: 1000px;
+  border-width: 1px;
+  border-color: ${({ selected }) => selected ? color.pink300 : color.gray400};
+  background-color: ${({ selected }) => selected ? color.pink300 : color.white};
+`
 
 export default Delivery;
