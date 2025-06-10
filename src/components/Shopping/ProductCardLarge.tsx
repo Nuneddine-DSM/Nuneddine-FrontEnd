@@ -32,13 +32,14 @@ const ProductCardLarge = ({
   describe,
   tag,
   price,
+  isLiked,
   isDarkMode = false,
 }: CardPropsType) => {
   const navigation = useNavigation<NavigationProp<any>>();
 
   const theme = isDarkMode ? darkTheme : lightTheme;
 
-  const [selected, setSelected] = useState(false);
+  const [selected, setSelected] = useState(isLiked);
 
   const clickHeart = async () => {
     try {
