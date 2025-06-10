@@ -5,6 +5,7 @@ import styled, { ThemeProvider, DefaultTheme } from "styled-components/native";
 import { ShoppingContentType } from "../../app/Main/interface";
 import Tag from "./Tag"
 import { NavigationProp, useNavigation } from "@react-navigation/native";
+import { likeHandler } from "../../apis/heart";
 
 /**
  * 상품 카드 큰 버전
@@ -36,7 +37,17 @@ const ProductCardLarge = ({
   const navigation = useNavigation<NavigationProp<any>>();
 
   const theme = isDarkMode ? darkTheme : lightTheme;
+
   const [selected, setSelected] = useState(false);
+
+  const clickHeart = async () => {
+    try {
+      await likeHandler(shopId);
+      setSelected(prev => !prev);
+    } catch (error) {
+      console.error("좋아요 요청 실패:", error);
+    }
+  }
 
   return (
     <ThemeProvider theme={theme}>
@@ -46,9 +57,9 @@ const ProductCardLarge = ({
           <IconWrapper>
             <Heart
               size={30}
-              color={color.gray500}
+              color={selected ? color.pink300 : color.gray500}
               fill={selected ? color.pink300 : "none"}
-              onPress={() => setSelected(prev => !prev)}
+              onPress={clickHeart}
             />
           </IconWrapper>
         </ImageWrapper>
