@@ -22,7 +22,7 @@ const MyFaceCard = ({ subTitle, title, name, tag, describe }: PropsType) => {
         <CardTagWrapper>
           {tag.map((tagName) =>
             <Tag>
-              <Font text={`#${tagName}`} kind="semi12" color="white" />
+              <Font key={tagName} text={`#${tagName}`} kind="semi12" color="white" />
             </Tag>
           )}
         </CardTagWrapper>
