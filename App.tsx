@@ -9,10 +9,7 @@ import React from 'react';
 import { NavigationContainer } from '@react-navigation/native';
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
 import NavBar from './src/components/NavBar';
-import Main from './src/app/Main/page';
-import Guide from './src/app/Guide/page';
-import MyPage from './src/app/MyPage/page';
-import Manage from './src/app/Manage/page';
+import MainTabs from './src/navigation/MainTabs'
 import Onboarding from './src/app/Onboarding/page';
 import Login from './src/app/Login/page';
 import SignUp from './src/app/SignUp/page';
@@ -54,6 +51,7 @@ function App(): React.JSX.Element {
               <Stack.Screen name="Onboarding" component={Onboarding} />
               <Stack.Screen name="Login" component={Login} />
               <Stack.Screen name="SignUp" component={SignUp} />
+              <Stack.Screen name="MainTabs" component={MainTabs} />
               <Stack.Screen name="Cart" component={Cart} />
               <Stack.Screen name="Payment" component={Payment} />
               <Stack.Screen name="Delivery" component={Delivery} />
