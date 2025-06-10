@@ -88,3 +88,29 @@ export const getDetail = async (shopId: number) => {
     throw err;
   }
 }
+
+export const getLikeLens = async () => {
+  try {
+    const response = await instance.get(`${shops}/liked/lens`, {
+      headers: {
+        Authorization: `Bearer ${await getItem('accessToken')}`
+      }
+    });
+    return response.data
+  } catch (err) {
+    throw err;
+  }
+}
+
+export const getLikeGlasses = async () => {
+  try {
+    const response = await instance.get(`${shops}/liked/glasses`, {
+      headers: {
+        Authorization: `Bearer ${await getItem('accessToken')}`
+      }
+    });
+    return response.data;
+  } catch (err) {
+    throw err;
+  }
+}

@@ -4,34 +4,31 @@ import { TopBar } from "../../components";
 import { TouchableOpacity } from "react-native";
 import { Arrow } from "../../assets";
 import { Tab } from "../../components/Shopping";
-import { useState, useEffect } from "react";
+import { useState } from "react";
 import ProductCardLarge from "../../components/Shopping/ProductCardLarge";
 import { FlatList, ScrollView } from "react-native-gesture-handler";
 import { useNavigation } from "@react-navigation/native";
 import { CategoryData } from "../Main/Data";
-import { wishlistHandler } from "../../apis/shops";
+import { getLikeGlasses, getLikeLens } from "../../apis/shops";
+import { useQuery } from "@tanstack/react-query";
+import { mapFrameShape } from "../Data";
 
 const Like = () => {
   const navigation = useNavigation();
 
-  const [wishlist, setWishlist] = useState([]);
-  const [loading, setLoading] = useState(true);
   const [selectedTab, setSelectedTab] = useState<number>(1);
 
-  useEffect(() => {
-    const fetchWishlist = async () => {
-      try {
-        const response = await wishlistHandler();
-        setWishlist(response.data.shop_list);
-      } catch (err) {
-        console.error(err);
-      } finally {
-        setLoading(false);
-      }
-    };
+  const { data: GlassesData } = useQuery({
+    queryKey: ["glasses"],
+    queryFn: getLikeGlasses
+  })
 
-    fetchWishlist();
-  }, []);
+  const { data: LensData } = useQuery({
+    queryKey: ["lens"],
+    queryFn: getLikeLens
+  })
+
+  const selected = selectedTab === 1 ? GlassesData : LensData;
 
   return (
     <Container>
@@ -51,14 +48,22 @@ const Like = () => {
 
       <ScrollView>
         <ProductCounter>
-          <Font text={`상품 ${wishlistHandler.length}개`} kind="semi18" />
+          <Font text={`상품 ${selected?.shops_count}개`} kind="semi18" />
         </ProductCounter>
 
         <FlatList
-          data={wishlist}
-          keyExtractor={(idx) => `${idx}`}
+          data={selected?.shop_list ?? []}
+          keyExtractor={(_, idx) => `${idx}`}
           renderItem={({ item }) => (
-            <ProductCardLarge {...item} />
+            <ProductCardLarge
+              shopId={item.shop_id}
+              image={item.image_urls?.[0]}
+              title={item.brand_name}
+              describe={item.glass_name}
+              tag={mapFrameShape(item.frame_shape)}
+              price={item.price}
+              isLiked={true}
+            />
           )}
           numColumns={2}
           columnWrapperStyle={{ justifyContent: 'space-between' }}

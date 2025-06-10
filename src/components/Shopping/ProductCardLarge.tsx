@@ -42,7 +42,7 @@ const ProductCardLarge = ({
     <ThemeProvider theme={theme}>
       <CardContainer key={shopId} background={theme.background} onPress={() => navigation.navigate("ShoppingDetail", { shopId })}>
         <ImageWrapper>
-          <ProductImage source={{ uri: image }} />
+          <ProductImage source={{ uri: image }} resizeMode="cover" />
           <IconWrapper>
             <Heart
               size={30}
@@ -72,7 +72,7 @@ const ProductCardLarge = ({
           <Tag text={tag} isDark={isDarkMode} />
 
           <Font
-            text={`${price ? Number(price).toLocaleString() : "0"}원`}
+            text={`${price.toLocaleString()}원`}
             kind="bold18"
             color={theme.text}
           />
