@@ -42,5 +42,6 @@ export interface ShoppingContentType {
   title: string,
   describe: string,
   tag: string,
-  price: number
+  price: number,
+  isLiked: boolean
 }

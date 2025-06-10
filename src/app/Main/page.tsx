@@ -150,6 +150,7 @@ const Main = () => {
                   describe={item.glasses_name}
                   tag={mapFrameShape(item.frame_shape)}
                   price={item.price}
+                  isLiked={item.isLiked}
                 />
               )}
               ItemSeparatorComponent={() => <View style={{ width: 10 }} />}
@@ -172,6 +173,7 @@ const Main = () => {
               describe={item.glasses_name}
               tag={mapFrameShape(item.frame_shape)}
               price={item.price}
+              isLiked={item.isLiked}
             />
           )}
           ItemSeparatorComponent={() => <View style={{ width: 10 }} />}
