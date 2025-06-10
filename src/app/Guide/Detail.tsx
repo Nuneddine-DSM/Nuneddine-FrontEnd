@@ -41,10 +41,15 @@ const GuideDetail = () => {
 
   const {
     data: guideData,
+    isLoading,
+    isError
   } = useQuery({
     queryKey: ["guides", selectedId],
     queryFn: () => getGuidesDetail(selectedId),
   });
+
+  if (isLoading) return <><Font text="로딩중" /></>
+  if (isError || !guideData) return <></>
 
   return (
     <Container>
@@ -58,7 +63,7 @@ const GuideDetail = () => {
       />
       <ScrollView>
         <GuideImage source={{ uri: guideData.image_url }} />
-
+        
         <GuideContent>
           <TitleWrapper>
             <QuestionImage source={QuestionIcon} resizeMode="cover" />
