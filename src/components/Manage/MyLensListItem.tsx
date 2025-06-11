@@ -205,7 +205,7 @@ const ToggleContainer = styled.TouchableOpacity<{ isOn: boolean }>`
   height: 20px;
   border-radius: 10px;
   justify-content: center;
-  background-color: ${({ isOn }) => (isOn ? color.black : color.gray300)};
+  background-color: ${({ isOn }) => (isOn ? color.gray300 : color.black)};
   padding: 1px;
 `;
 
