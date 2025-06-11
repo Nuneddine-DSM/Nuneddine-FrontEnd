@@ -27,7 +27,6 @@ import {
   calculateStartTime,
   getLensMention
 } from '../../utils/lens';
-import { setItem } from '../../utils/asyncStorage';
 
 const Manage = () => {
   const navigation = useNavigation<StackNavigationProp<any>>();
