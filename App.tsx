@@ -5,7 +5,7 @@
  * @format
  */
 
-import React from 'react';
+import React, { useEffect } from 'react';
 import { NavigationContainer } from '@react-navigation/native';
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
 import NavBar from './src/components/NavBar';
@@ -37,11 +37,66 @@ import AddressWebview from './src/app/MyPage/Delivery/Address';
 import { GestureHandlerRootView } from 'react-native-gesture-handler';
 import { BottomSheetModalProvider } from '@gorhom/bottom-sheet';
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
+import messaging from '@react-native-firebase/messaging';
+import notifee, { AndroidImportance } from '@notifee/react-native';
+import { Platform } from 'react-native';
 
 const queryClient = new QueryClient();
 
 function App(): React.JSX.Element {
   const Stack = createNativeStackNavigator();
+
+  useEffect(() => {
+    const requestPermission = async () => {
+      if (Platform.OS === 'android' && Platform.Version >= 33) {
+        const settings = await notifee.requestPermission();
+
+        if (settings.authorizationStatus >= 1) {
+          console.log('Notification permission granted');
+        } else {
+          console.log('Notification permission denied');
+        }
+      }
+
+      await messaging().requestPermission();
+    };
+
+    requestPermission();
+
+    const unsubscribe = messaging().onMessage(async remoteMessage => {
+      console.log(
+        'Message Handled in the foreground',
+        JSON.stringify(remoteMessage)
+      );
+
+      const { title, body } = remoteMessage.data as {
+        title: string;
+        body: string;
+      };
+
+      if (!title && !body) {
+        return;
+      }
+
+      const channelId = await notifee.createChannel({
+        id: 'default',
+        name: '기본 채널',
+        importance: AndroidImportance.HIGH
+      });
+
+      await notifee.displayNotification({
+        title: title || '알림 제목',
+        body: body || '알림 내용',
+        android: {
+          channelId,
+          smallIcon: 'rn_edit_text_material'
+        }
+      });
+    });
+
+    return unsubscribe;
+  }, []);
+
   return (
     <GestureHandlerRootView style={{ flex: 1 }}>
       <QueryClientProvider client={queryClient}>
