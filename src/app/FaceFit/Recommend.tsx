@@ -146,22 +146,20 @@ const Recommend = () => {
             />
           </RecommendationHeader>
 
-          <ScrollView horizontal showsHorizontalScrollIndicator={false}>
-            <CategoryTabList>
-              {style?.map((item, index) => (
-                <CategoryTabItem
-                  key={item}
-                  onPress={() => setIsSelectedTab(index)}
-                  isSelected={isSelectedTab === index}>
-                  <Font
-                    kind="medium18"
-                    text={item}
-                    color={isSelectedTab === index ? 'white' : 'gray400'}
-                  />
-                </CategoryTabItem>
-              ))}
-            </CategoryTabList>
-          </ScrollView>
+          <CategoryTabList>
+            {style?.map((item, index) => (
+              <CategoryTabItem
+                key={item}
+                onPress={() => setIsSelectedTab(index)}
+                isSelected={isSelectedTab === index}>
+                <Font
+                  kind="medium18"
+                  text={item}
+                  color={isSelectedTab === index ? 'white' : 'gray400'}
+                />
+              </CategoryTabItem>
+            ))}
+          </CategoryTabList>
 
           <FlatList
             data={isSelectedTab === 1 ? shapeData : tabData()[isSelectedTab]?.list ?? []}
@@ -170,7 +168,7 @@ const Recommend = () => {
               <ProductCardLarge
                 isDarkMode={true}
                 shopId={item.shop_id}
-                image={item.image_urls[1]}
+                image={item.image_urls[0]}
                 title={item.brand_name}
                 describe={item.glasses_name}
                 tag={FrameShapeMap[item.frame_shape as keyof typeof FrameShapeMap]}
@@ -266,10 +264,13 @@ const RecommendationHeader = styled.View`
 
 const CategoryTabList = styled.View`
   flex-direction: row;
+  justify-content: center;
+  align-items: center;
+  padding: 0 32px;
 `;
 
 const CategoryTabItem = styled.TouchableOpacity<{ isSelected: boolean }>`
-  padding: 18px 20px;
+  padding: 18px 24px;
   border-bottom-width: ${({ isSelected }) => (isSelected ? 3 : 0)}px;
   border-color: ${({ isSelected }) => (isSelected ? color.white : 'none')};
 `;
