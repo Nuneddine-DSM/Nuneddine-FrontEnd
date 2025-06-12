@@ -29,7 +29,6 @@ import ShoppingDetail from './src/app/Shopping/Detail/page';
 import Search from './src/app/Search/page';
 import SearchProduct from './src/app/SearchProduct/page';
 import Filter from './src/app/SearchProduct/Filter';
-import OrderComplete from './src/app/Shopping/Payment/OrderComplete';
 import AddressWebview from './src/app/MyPage/Delivery/Address';
 import { GestureHandlerRootView } from 'react-native-gesture-handler';
 import { BottomSheetModalProvider } from '@gorhom/bottom-sheet';
@@ -69,7 +68,6 @@ function App(): React.JSX.Element {
               <Stack.Screen name="Search" component={Search} />
               <Stack.Screen name="SearchProduct" component={SearchProduct} />
               <Stack.Screen name="Filter" component={Filter} />
-              <Stack.Screen name="OrderComplete" component={OrderComplete} />
             </Stack.Navigator>
           </NavigationContainer>
         </BottomSheetModalProvider>
