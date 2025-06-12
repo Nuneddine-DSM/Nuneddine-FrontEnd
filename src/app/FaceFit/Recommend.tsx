@@ -66,14 +66,14 @@ const Recommend = () => {
       {
         name: "recommend",
         list: [
-          ...(glassesData.trending_list ?? []),
-          ...(glassesData.hot_now_list ?? []),
-          ...(glassesData.classic_list ?? [])
+          ...(glassesData?.trending_list ?? []),
+          ...(glassesData?.hot_now_list ?? []),
+          ...(glassesData?.classic_list ?? [])
         ]
       },
-      { name: "trend", list: glassesData.trending_list ?? [] },
-      { name: "minimal", list: glassesData.hot_now_list ?? [] },
-      { name: "classic_list", list: glassesData.classic_list ?? [] }
+      { name: "trend", list: glassesData?.trending_list ?? [] },
+      { name: "minimal", list: glassesData?.hot_now_list ?? [] },
+      { name: "classic_list", list: glassesData?.classic_list ?? [] }
     ];
   };
 
