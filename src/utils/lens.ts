@@ -2,7 +2,7 @@ import { LensDateType } from '../app/Data';
 import LensFine from '../assets/LensFine.png';
 import LensSave from '../assets/LensSave.png';
 import LensWarning from '../assets/LensWarning.png';
-import LensDangger from '../assets/LensDagger.png';
+import LensDangger from '../assets/LensDanger.png';
 
 export const getLensFrequencyList = (): number[] => {
   const frequency: number[] = [];
