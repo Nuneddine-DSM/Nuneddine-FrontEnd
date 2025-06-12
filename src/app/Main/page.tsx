@@ -15,6 +15,7 @@ import { useQuery } from "@tanstack/react-query";
 import { NavigationListData, CategoryData, BannerData } from "./Data";
 import { FrameShapeMap, FrameShapeType, mapFrameShape, LensColorMap, LensColorType } from "../Data";
 import { useSearchStore } from "../../stores/useSearchStore";
+import { getDetail } from "../../apis/shops";
 
 const Main = () => {
   const navigation = useNavigation<StackNavigationProp<any>>();
