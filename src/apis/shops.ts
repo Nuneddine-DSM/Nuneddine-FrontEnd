@@ -30,27 +30,24 @@ export const lensProduct = async () => {
   }
 }
 
-export const wishlistHandler = async () => {
-  try {
-    const response = await instance.get(`${shops}/liked`);
-    return response;
-  } catch (err) {
-    throw err;
-  }
-}
-
 export const productPurchase = async () => {
   try {
-    const response = await instance.post(`${shops}`, {
-      headers: {
-        Authorization: `Bearer ${await getItem('accessToken')}`
+    const token = await getItem('accessToken');
+    const response = await instance.post(
+      shops,
+      {},
+      {
+        headers: {
+          Authorization: `Bearer ${token}`
+        }
       }
-    });
+    );
     return response.data;
   } catch (err) {
+    console.error('purchase error:', err);
     throw err;
   }
-}
+};
 
 export const searchHandler = async (filters: FilterRequest) => {
   const queryParams = new URLSearchParams();
@@ -88,6 +85,32 @@ export const getDetail = async (shopId: number) => {
     });
     return response.data;
   } catch(err) {
+    throw err;
+  }
+}
+
+export const getLikeLens = async () => {
+  try {
+    const response = await instance.get(`${shops}/liked/lens`, {
+      headers: {
+        Authorization: `Bearer ${await getItem('accessToken')}`
+      }
+    });
+    return response.data
+  } catch (err) {
+    throw err;
+  }
+}
+
+export const getLikeGlasses = async () => {
+  try {
+    const response = await instance.get(`${shops}/liked/glasses`, {
+      headers: {
+        Authorization: `Bearer ${await getItem('accessToken')}`
+      }
+    });
+    return response.data;
+  } catch (err) {
     throw err;
   }
 }

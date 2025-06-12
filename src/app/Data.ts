@@ -79,3 +79,7 @@ export const mapFrameShape = (shape: FrameShapeType): string => {
       return "기타";
   }
 };
+
+export const mapDate = (date: LensDateType): string => {
+  return LensDateTypeMap[date];
+};

@@ -15,6 +15,7 @@ import { useQuery } from "@tanstack/react-query";
 import { NavigationListData, CategoryData, BannerData } from "./Data";
 import { FrameShapeMap, FrameShapeType, mapFrameShape, LensColorMap, LensColorType } from "../Data";
 import { useSearchStore } from "../../stores/useSearchStore";
+import { getDetail } from "../../apis/shops";
 
 const Main = () => {
   const navigation = useNavigation<StackNavigationProp<any>>();
@@ -150,6 +151,7 @@ const Main = () => {
                   describe={item.glasses_name}
                   tag={mapFrameShape(item.frame_shape)}
                   price={item.price}
+                  isLiked={item.isLiked}
                 />
               )}
               ItemSeparatorComponent={() => <View style={{ width: 10 }} />}
@@ -172,6 +174,7 @@ const Main = () => {
               describe={item.glasses_name}
               tag={mapFrameShape(item.frame_shape)}
               price={item.price}
+              isLiked={item.isLiked}
             />
           )}
           ItemSeparatorComponent={() => <View style={{ width: 10 }} />}

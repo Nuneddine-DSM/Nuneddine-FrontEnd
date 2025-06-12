@@ -1,27 +1,32 @@
 import styled from "styled-components/native";
 import Tag from "./Tag";
 import { Heart } from "../../assets";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { ShoppingContentType } from "../../app/Main/interface";
 import { Font, color } from "../../styles";
 import { likeHandler } from "../../apis/heart";
 import { NavigationProp, useNavigation } from "@react-navigation/native";
+import { TouchableOpacity } from "react-native";
 
 /**
  * 상품 카드 작은 버전
  */
 
-const ProductCardSmall = ({ shopId, image, title, describe, tag, price }: ShoppingContentType) => {
+const ProductCardSmall = ({ shopId, image, title, describe, tag, price, isLiked }: ShoppingContentType) => {
   const navigation = useNavigation<NavigationProp<any>>();
+  const [selected, setSelected] = useState(isLiked);
 
-  const [selected, setSelected] = useState<boolean>(false);
+  useEffect(() => {
+    setSelected(isLiked);
+    console.log("isLiked:", isLiked);
+  }, [isLiked]);
 
   const heartHandler = async () => {
     try {
       await likeHandler(shopId);
       setSelected(prev => !prev);
     } catch (error) {
-      console.log(error);
+      console.log('좋아요 실패', error);
     }
   }
 
@@ -31,10 +36,10 @@ const ProductCardSmall = ({ shopId, image, title, describe, tag, price }: Shoppi
         <ProductImage source={{ uri: image }} resizeMode="cover" />
         <IconWrapper>
           <Heart
-            onPress={heartHandler}
             size={20}
             color={selected ? color.pink300 : color.gray500}
             fill={selected ? color.pink300 : 'none'}
+            onPress={heartHandler}
           />
         </IconWrapper>
       </ImageWrapper>
@@ -51,7 +56,6 @@ const ProductCardSmall = ({ shopId, image, title, describe, tag, price }: Shoppi
         </TitleBox>
 
         <Tag text={tag} />
-
         <Font text={`${price.toLocaleString()}원`} kind="bold16" />
       </InfoWrapper>
     </CardContainer>

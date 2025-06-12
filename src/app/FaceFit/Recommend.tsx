@@ -36,7 +36,8 @@ const Recommend = () => {
     describe,
     recommend,
     alert,
-    style
+    style,
+    image
   } = matchedData ?? {};
 
   const selectedStyle = style?.[1];
@@ -49,7 +50,7 @@ const Recommend = () => {
     frame_shape: shapeKey ? [shapeKey as FrameShapeType] : undefined
   }
 
-  const { data: shapeData, error, isLoading } = useQuery({
+  const { data: shapeData } = useQuery({
     enabled: !!shapeKey,
     queryKey: ["search", filters],
     queryFn: () => searchHandler(filters),
@@ -65,14 +66,14 @@ const Recommend = () => {
       {
         name: "recommend",
         list: [
-          ...(glassesData.trending_list ?? []),
-          ...(glassesData.hot_now_list ?? []),
-          ...(glassesData.classic_list ?? [])
+          ...(glassesData?.trending_list ?? []),
+          ...(glassesData?.hot_now_list ?? []),
+          ...(glassesData?.classic_list ?? [])
         ]
       },
-      { name: "trend", list: glassesData.trending_list ?? [] },
-      { name: "minimal", list: glassesData.hot_now_list ?? [] },
-      { name: "classic_list", list: glassesData.classic_list ?? [] }
+      { name: "trend", list: glassesData?.trending_list ?? [] },
+      { name: "minimal", list: glassesData?.hot_now_list ?? [] },
+      { name: "classic_list", list: glassesData?.classic_list ?? [] }
     ];
   };
 
@@ -98,6 +99,7 @@ const Recommend = () => {
               subTitle={subTitle || ""}
               tag={tag || []}
               describe={describe || ""}
+              image={image}
             />
             <SideCardImage source={FaceType} />
           </MyFaceCardWrapper>
@@ -144,22 +146,20 @@ const Recommend = () => {
             />
           </RecommendationHeader>
 
-          <ScrollView horizontal showsHorizontalScrollIndicator={false}>
-            <CategoryTabList>
-              {style?.map((item, index) => (
-                <CategoryTabItem
-                  key={item}
-                  onPress={() => setIsSelectedTab(index)}
-                  isSelected={isSelectedTab === index}>
-                  <Font
-                    kind="medium18"
-                    text={item}
-                    color={isSelectedTab === index ? 'white' : 'gray400'}
-                  />
-                </CategoryTabItem>
-              ))}
-            </CategoryTabList>
-          </ScrollView>
+          <CategoryTabList>
+            {style?.map((item, index) => (
+              <CategoryTabItem
+                key={item}
+                onPress={() => setIsSelectedTab(index)}
+                isSelected={isSelectedTab === index}>
+                <Font
+                  kind="medium18"
+                  text={item}
+                  color={isSelectedTab === index ? 'white' : 'gray400'}
+                />
+              </CategoryTabItem>
+            ))}
+          </CategoryTabList>
 
           <FlatList
             data={isSelectedTab === 1 ? shapeData : tabData()[isSelectedTab]?.list ?? []}
@@ -168,11 +168,12 @@ const Recommend = () => {
               <ProductCardLarge
                 isDarkMode={true}
                 shopId={item.shop_id}
-                image={item.image_urls[1]}
+                image={item.image_urls[0]}
                 title={item.brand_name}
                 describe={item.glasses_name}
                 tag={FrameShapeMap[item.frame_shape as keyof typeof FrameShapeMap]}
                 price={item.price}
+                isLiked={item.isLiked}
               />
             )}
             numColumns={2}
@@ -263,10 +264,13 @@ const RecommendationHeader = styled.View`
 
 const CategoryTabList = styled.View`
   flex-direction: row;
+  justify-content: center;
+  align-items: center;
+  padding: 0 32px;
 `;
 
 const CategoryTabItem = styled.TouchableOpacity<{ isSelected: boolean }>`
-  padding: 18px 20px;
+  padding: 18px 24px;
   border-bottom-width: ${({ isSelected }) => (isSelected ? 3 : 0)}px;
   border-color: ${({ isSelected }) => (isSelected ? color.white : 'none')};
 `;

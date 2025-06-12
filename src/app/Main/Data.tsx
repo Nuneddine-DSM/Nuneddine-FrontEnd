@@ -21,7 +21,7 @@ export const NavigationListData: NavigationListDataType[] = [
   {
     id: 1,
     name: "안경테 ALL",
-    href: "SearchProduct",
+    href: "GlassesData",
     image: GlassesTabIcon,
     imageHeight: 35,
     imageWidth: 62
@@ -29,7 +29,7 @@ export const NavigationListData: NavigationListDataType[] = [
   {
     id: 2,
     name: "렌즈 ALL",
-    href: "SearchProduct",
+    href: "LensData",
     image: LensTabIcon,
     imageHeight: 17,
     imageWidth: 53

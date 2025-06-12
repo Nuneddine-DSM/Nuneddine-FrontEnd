@@ -37,10 +37,7 @@ export const addCartItem = async (
   try {
     await instance.post(
       `${carts}/${shopId}`,
-      {
-        lens_power: lensPower,
-        count
-      },
+      { lens_power: lensPower, count },
       {
         headers: {
           Authorization: `Bearer ${await getItem('accessToken')}`,
@@ -71,7 +68,10 @@ export const deleteCartItem = async (cartIds: Array<number>) => {
 export const updateOption = async (cartId: number, lensPower: number, count: number) => {
   try {
     const response = await instance.patch(`${carts}/${cartId}`,
-    { lensPower, count },
+    {
+      lens_power: lensPower,
+      count
+    },
     {
       headers: {
         Authorization: `Bearer ${await getItem('accessToken')}`

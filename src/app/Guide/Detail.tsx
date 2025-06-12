@@ -1,50 +1,46 @@
 import styled from 'styled-components/native';
 import { Font, color } from '../../styles';
 import { TopBar } from '../../components';
-import { TouchableOpacity, StyleSheet } from 'react-native';
+import { TouchableOpacity } from 'react-native';
 import { Arrow } from '../../assets';
-import { useNavigation, useRoute } from '@react-navigation/native';
+import { useNavigation, useRoute, } from '@react-navigation/native';
 import { StackNavigationProp } from '@react-navigation/stack';
 import { ScrollView } from 'react-native-gesture-handler';
 import { useQuery } from '@tanstack/react-query';
 import { getGuidesDetail } from '../../apis/guids';
-import Markdown from 'react-native-markdown-display';
+import { marked } from 'marked';
+import RenderHTML from 'react-native-render-html';
+import { Dimensions } from 'react-native';
+import { useState, useEffect } from 'react';
 
-const QuestionIcon = require("../../assets/Question.png")
-
-const customStyle = StyleSheet.create({
-  body: {
-    color: "black",
-    fontSize: 18,
-    fontWeight: 500,
-    lineHeight: 28,
-    fontFamily: "Pretendard-Medium"
-  },
-  heading1: { fontSize: 22, fontWeight: 700 },
-  b: { fontSize: 18, fontWeight: 700 },
-  u: { textDecorationLine: 'underline', color: `${color.pink300}` },
-  blockquote: {
-    backgroundColor: "white",
-    paddingHorizontal: 20,
-    borderLeftColor: "black",
-    borderLeftWidth: 4,
-  },
-  bullet_list: { marginVertical: 8 },
-  list_item: { flexDirection: 'row', marginBottom: 15 },
-})
+const contentWidth = Dimensions.get('window').width;
 
 const GuideDetail = () => {
   const navigation = useNavigation<StackNavigationProp<any>>();
-
   const route = useRoute();
   const { selectedId } = route.params as { selectedId: number }
 
   const {
     data: guideData,
+    isLoading,
+    isError
   } = useQuery({
     queryKey: ["guides", selectedId],
     queryFn: () => getGuidesDetail(selectedId),
   });
+
+  const [html, setHtml] = useState('');
+
+  useEffect(() => {
+    const convertMarkdown = async () => {
+      const result = await marked.parse(guideData.content);
+      setHtml(result);
+    };
+    convertMarkdown();
+  }, [guideData?.content]);
+
+  if (isLoading) return <><Font text="로딩중" /></>
+  if (isError || !guideData) return <></>
 
   return (
     <Container>
@@ -61,13 +57,47 @@ const GuideDetail = () => {
 
         <GuideContent>
           <TitleWrapper>
-            <QuestionImage source={QuestionIcon} resizeMode="cover" />
-            <Font text={guideData.title} kind="extraBold20" />
+            <Font text={guideData.title} kind="semi24" />
           </TitleWrapper>
           <Description>
-            <Markdown style={customStyle}>
-              {guideData.content}
-            </Markdown>
+            <RenderHTML
+              contentWidth={contentWidth}
+              source={{ html }}
+              baseStyle={{
+                fontSize: 18,
+                lineHeight: 28,
+                fontFamily: 'Pretendard-Medium',
+                color: '#000'
+              }}
+              tagsStyles={{
+                h1: { fontSize: 24, fontWeight: 'bold' },
+                h2: { fontSize: 20, fontWeight: 'bold' },
+                h3: { fontSize: 18, fontWeight: 'bold' },
+                a: { color: color.gray500, textDecorationLine: 'underline' },
+                strong: { fontSize: 22, fontWeight: '600' },
+                ul: { paddingLeft: 20, marginBottom: 10 },
+                li: { marginBottom: 6 },
+                table: {
+                  overflow: 'hidden',
+                },
+                th: {
+                  padding: 10,
+                  borderBottomWidth: 1,
+                  borderColor: color.black,
+                  fontSize: 16,
+                  fontWeight: '600',
+                },
+                td: {
+                  paddingTop: 16,
+                  paddingBottom: 16,
+                  paddingLeft: 10,
+                  paddingRight: 10,
+                  borderBottomWidth: 1,
+                  borderColor: color.black,
+                },
+                br: { height: 10 },
+              }}
+            />
           </Description>
         </GuideContent>
       </ScrollView>
@@ -106,8 +136,7 @@ const QuestionImage = styled.Image`
 `
 
 const Description = styled.View`
-  width: 100%;
-  height: 500px;
+  flex: 1;
 `
 
 export default GuideDetail

@@ -22,7 +22,7 @@ const QuantitySelector = ({ min = 1, max = 99, count, onChange }: QuantitySelect
         <Minus size={14} color={color.gray600} />
       </IconButton>
       <QuantityDisplay>
-        <Font text={count.toString()} kind="medium14" />
+        <Font text={(count ?? 1).toString()} kind="medium14" />
       </QuantityDisplay>
       <IconButton onPress={() => updateCount(1)}>
         <Plus size={14} color={color.gray600} />

@@ -2,6 +2,7 @@ import styled from "styled-components/native";
 import { color, Font } from "../../../styles"
 import { Button } from "../../../components";
 import { NavigationProp, useNavigation } from "@react-navigation/native";
+import OrderCompleteIcon from "../../../assets/OrderCompleteIcon.png"
 
 const OrderComplete = () => {
   const navigation = useNavigation<NavigationProp<any>>();
@@ -9,11 +10,26 @@ const OrderComplete = () => {
   return (
     <Container>
       <CompleteContent>
-        <Image />
+        <Image source={OrderCompleteIcon} />
         <Font text="주문이 완료되었습니다!" kind="semi20" />
       </CompleteContent>
       <ButtonWrapper>
-        <Button text="확인" onPress={() => navigation.navigate("Main")} />
+        <Button
+          text="확인"
+          onPress={() => {
+            navigation.reset({
+              index: 0,
+              routes: [
+                {
+                  name: 'MainTabs',
+                  state: {
+                    index: 0,
+                    routes: [{ name: 'Main' }]
+                  }
+                }
+              ]
+            });
+          }} />
       </ButtonWrapper>
     </Container>
   )
@@ -34,7 +50,6 @@ const CompleteContent = styled.View`
 const Image = styled.Image`
   width: 140px;
   height: 140px;
-  background-color: ${color.gray300};
 `
 
 const ButtonWrapper = styled.View`

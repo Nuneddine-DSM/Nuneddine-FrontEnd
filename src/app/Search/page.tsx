@@ -8,17 +8,14 @@ import { useNavigation, NavigationProp } from '@react-navigation/native'
 import SearchInput from "./component/SearchInput";
 import Tag from "./component/Tag"
 import Rank from "./component/Rank"
-import RecentSearches from "./component/RecentSearches"
 import { useSearchStore } from "../../stores/useSearchStore"
 
-const recently = ["투명렌즈"];
-const recommend = ["힙한", "렌즈", "추천", "검색어", "힙한", "검색어"];
-const searchKeyword = ["키워드", "키워드", "키워드"];
+const recommend = ["투명", "가벼운", "패션 안경", "안경테", "블루라이트 차단", "원데이"];
 
 const rankValue = [
-  { id: 1, rank: 1, brandName: "브랜드" },
-  { id: 2, rank: 2, brandName: "브랜드" },
-  { id: 3, rank: 3, brandName: "브랜드" },
+  { id: 1, rank: 1, brandName: "TART OPTICAL" },
+  { id: 2, rank: 2, brandName: "CLICCLAC" },
+  { id: 3, rank: 3, brandName: "NIRO" },
 ]
 
 const Search = () => {
@@ -38,7 +35,7 @@ const Search = () => {
     <>
       <TopBar
         leftIcon={
-          <TouchableOpacity onPress={() => navigation.navigate('Main')}>
+          <TouchableOpacity onPress={() => navigation.goBack()}>
             <Arrow size={34} />
           </TouchableOpacity>
         }
@@ -51,43 +48,21 @@ const Search = () => {
         }
       />
       <Content>
-        {searchText ? (
-          <RecentSearchWrapper>
-            {searchKeyword.map((keyword, index) => (
-              <RecentSearches key={index} keyword={keyword} />
-            ))}
-          </RecentSearchWrapper>
-        ) : (
-          <>
-            <Section>
-              <SectionHeader>
-                <Font text="최근 검색어" kind="semi18" />
-                <Font text="지우기" kind="medium16" color="gray500" />
-              </SectionHeader>
-              <HorizontalTagList>
-                {recently.map((item, index) =>
-                  <Tag key={index} text={item} />
-                )}
-              </HorizontalTagList>
-            </Section>
+        <Section>
+          <Font text="추천 검색어" kind="semi18" />
+          <WrapTagList>
+            {recommend.map((item, index) =>
+              <Tag key={index} text={item} />
+            )}
+          </WrapTagList>
+        </Section>
 
-            <Section>
-              <Font text="추천 검색어" kind="semi18" />
-              <WrapTagList>
-                {recommend.map((item, index) =>
-                  <Tag key={index} text={item} />
-                )}
-              </WrapTagList>
-            </Section>
-
-            <BrandList>
-              <Font text="인기 브랜드" kind="semi18" />
-              {rankValue.map(({ id, rank, brandName }) => (
-                <Rank key={id} id={id} rank={rank} brandName={brandName} />
-              ))}
-            </BrandList>
-          </>
-        )}
+        <BrandList>
+          <Font text="인기 브랜드" kind="semi18" />
+          {rankValue.map(({ id, rank, brandName }) => (
+            <Rank key={id} id={id} rank={rank} brandName={brandName} />
+          ))}
+        </BrandList>
       </Content>
     </>
   )

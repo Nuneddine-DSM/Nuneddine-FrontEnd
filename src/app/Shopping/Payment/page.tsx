@@ -12,17 +12,23 @@ import { productPurchase } from "../../../apis/shops";
 import { getCartGlassList } from "../../../apis/carts";
 import { CartItemType } from "../../../interface";
 import { getAddress } from "../../../apis/address";
+import { useAddressStore } from "../../../stores/addressStore";
+import { useEffect } from "react";
 
 const Payment = () => {
   const navigation = useNavigation<NavigationProp<any>>();
 
-  const handlePurchase = () => {
+  const selectedId = useAddressStore((state) => state.selectedAddressId);
+  const setSelectedId = useAddressStore((state) => state.setSelectedAddressId);
+
+  const handlePurchase = async () => {
     try {
-      productPurchase();
+      await productPurchase();
+      navigation.navigate("OrderComplete");
     } catch (err) {
-      console.error(err)
+      console.error(err);
     }
-  }
+  };
 
   const { data: glassesData } = useQuery({
     queryKey: ["glassesData"],
@@ -34,7 +40,15 @@ const Payment = () => {
     queryFn: getAddress
   })
 
-  const address = AddressData?.data.addresses?.[0];
+  useEffect(() => {
+    if (!selectedId && AddressData?.data.addresses.length > 0) {
+      setSelectedId(AddressData?.data.addresses[0].id);
+    }
+  }, [AddressData]);
+
+  const address = AddressData?.data.addresses.find(
+    (addr: { id: number }) => addr.id === selectedId
+  );
 
   return (
     <>
@@ -98,7 +112,7 @@ const Payment = () => {
 
         <PaymentMethod />
 
-        <Amount last={true} />
+        <Amount orderAmount={glassesData?.data?.total_price ?? 0} />
 
         <ButtonWrapper>
           <Button

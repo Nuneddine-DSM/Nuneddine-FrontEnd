@@ -4,23 +4,24 @@ import { color, Font } from "../../../styles"
 import { Header, Footer } from "../../../components/Main";
 import { Tab, Tag } from "../../../components/Shopping";
 import { Button } from "../../../components";
-import { Heart } from "../../../assets";
-import { TabInfoData } from "./Data";
+import { Heart, X } from "../../../assets";
 import { useState, useCallback, useRef, useMemo } from "react";
 import { likeHandler } from "../../../apis/heart";
 import Banner from "../../Main/Banner";
+import { ImageBackground } from "react-native";
 import {
   BottomSheetModal,
   BottomSheetBackdrop
 } from '@gorhom/bottom-sheet';
-import OrderItem from "./OrderItem";
 import { getDetail } from "../../../apis/shops";
 import { addCartItem } from "../../../apis/carts";
 import { BottomButtonsProps } from "../../../interface";
-import { NavigationProp, RouteProp, useNavigation, useRoute } from '@react-navigation/native';
+import { NavigationProp, RouteProp, useRoute } from '@react-navigation/native';
 import { useQuery } from "@tanstack/react-query";
-import { TouchableOpacity } from "react-native";
 import { FrameShapeMap } from "../../Data";
+import { QuantitySelector } from "../../../components/Shopping";
+import Detail from "../../../assets/Detail.png"
+import ImageViewer from "./Description";
 
 type RootStackParamList = {
   ShoppingDetail: { shopId: number };
@@ -30,10 +31,11 @@ const ShoppingDetail = () => {
   const route = useRoute<RouteProp<RootStackParamList, 'ShoppingDetail'>>();
   const { shopId } = route.params;
 
-  const navigation = useNavigation<NavigationProp<any>>();
-
   const [selectedTab, setSelectedTab] = useState<number>(1);
   const [selectedHeart, setSelectedHeart] = useState<boolean>(false);
+
+  const [lensPower, setLensPower] = useState<number>(0);
+  const [optionCount, setOptionCount] = useState<number>(1);
 
   const { data: detail } = useQuery({
     queryKey: ["productDetail", shopId],
@@ -82,7 +84,7 @@ const ShoppingDetail = () => {
   const handelAddCart = () => {
     try {
       addCartItem(shopId, lensPower, optionCount);
-      handlePresentModalPress();
+      bottomSheetModalRef.current?.dismiss();
     } catch (err) {
       console.error("장바구니 담기 오류");
     }
@@ -93,7 +95,8 @@ const ShoppingDetail = () => {
       <Header />
       <Container showsVerticalScrollIndicator={false}>
 
-        <Banner data={detail?.image_urls} />
+        {/* <Banner data={detail?.image_urls} /> */}
+        <BannerWrapper source={{ uri: detail?.image_urls[0] }} />
 
         <DetailContentWrapper>
 
@@ -120,32 +123,13 @@ const ShoppingDetail = () => {
             </ProductPriceWrapper>
           </ProductDetail>
 
-          <AnotherColorWrapper>
-            <Font text="다른 컬러 둘러보기" kind="semi24" />
-            <ColorProductList>
-              {detail?.related_shops.map((shop: any) =>
-                <TouchableOpacity
-                  key={shop.shop_id}
-                  onPress={() => navigation.navigate("ShoppingDetail", { shopId: shop.shop_id })}
-                >
-                  <ColorProductItem source={{ uri: shop.image_urls[0] }} />
-                </TouchableOpacity>
-              )}
-            </ColorProductList>
-          </AnotherColorWrapper>
+          <ImageViewer />
 
-          <>
-            <Tab
-              selectedTab={selectedTab}
-              setSelectedTab={setSelectedTab}
-              tabData={TabInfoData}
-            />
-            <ProductImageBox>
-              {detail?.image_urls.map((image: string) => (
-                <ProductImage source={{ uri: image }} />
-              ))}
-            </ProductImageBox>
-          </>
+          <ProductImageBox>
+            {detail?.image_urls.map((image: string, index: number) => (
+              <ProductImage key={index} source={{ uri: image }} />
+            ))}
+          </ProductImageBox>
         </DetailContentWrapper>
         <Footer />
       </Container >
@@ -159,11 +143,25 @@ const ShoppingDetail = () => {
         <OptionWrapper>
           <Font text="옵션 선택" kind="medium16" color="gray600" />
           <ProductItemWrapper>
-            <OrderItem
-              id={shopId}
-              productName={detail?.glasses_name}
-              price={detail?.price}
-            />
+
+            <OrderItemContainer>
+              <ProductInfoWrapper>
+                <ProductNameBox>
+                  <Font
+                    text={detail?.glasses_name}
+                    kind="bold16"
+                    numberOfLines={2}
+                    ellipsizeMode="tail"
+                  />
+                </ProductNameBox>
+                <X size={30} />
+              </ProductInfoWrapper>
+              <QuantityAndPriceWrapper>
+                <QuantitySelector count={optionCount} onChange={setOptionCount} />
+                <Font text={`${(detail?.price * optionCount).toLocaleString()}원`} kind="bold18" />
+              </QuantityAndPriceWrapper>
+            </OrderItemContainer>
+
             <PriceWrapper>
               <Font text="결제 예상 금액" kind="semi18" />
               <Font
@@ -238,24 +236,9 @@ const ProductImage = styled.Image`
   width: 100%;
 `
 
-const AnotherColorWrapper = styled.View`
-  flex-direction: column;
-  padding: 20px;
-  gap: 20px;
-  background-color: ${color.white};
-`
-
-const ColorProductList = styled.ScrollView`
-  flex-direction: row;
-  gap: 12px;
-`
-
-const ColorProductItem = styled.ImageBackground`
-  width: 100px;
-  height: 100px;
-  border-radius: 4px;
-  border-width: 1.5px;
-  background-color: ${color.gray100};
+const BannerWrapper = styled.Image`
+  width: 100%;
+  height: 430px;
 `
 
 const DetailContentWrapper = styled.View`
@@ -329,6 +312,31 @@ const PriceWrapper = styled.View`
   padding: 24px 0 12px;
   border-top-width: 1px;
   border-color: ${color.gray300};
+`
+
+const OrderItemContainer = styled.View`
+  width: 100%;
+  flex-direction: column;
+  padding: 20px;
+  gap: 22px;
+  border-radius: 8px;
+  background-color: ${color.gray50};
+`
+
+const ProductInfoWrapper = styled.View`
+  flex-direction: row;
+  justify-content: space-between;
+  gap: 7px;
+`
+
+const ProductNameBox = styled.View`
+  flex: 1;
+`
+
+const QuantityAndPriceWrapper = styled.View`
+  flex-direction: row;
+  justify-content: space-between;
+  align-items: center;
 `
 
 export default ShoppingDetail;

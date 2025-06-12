@@ -1,6 +1,8 @@
 import styled from "styled-components/native";
 import { color, Font } from "../../styles"
 import { ImageBackground } from "react-native";
+import { Image } from "react-native";
+import { ImageSourcePropType } from 'react-native';
 
 const FaceType = require("../../assets/FaceType.png");
 
@@ -9,10 +11,11 @@ interface PropsType {
   title: string,
   name: string,
   tag: Array<string>,
-  describe: string
+  describe: string,
+  image?: ImageSourcePropType
 }
 
-const MyFaceCard = ({ subTitle, title, name, tag, describe }: PropsType) => {
+const MyFaceCard = ({ subTitle, title, name, tag, describe, image }: PropsType) => {
   return (
     <CardContainer source={FaceType} resizeMode="cover">
       <CardHeader>
@@ -20,17 +23,17 @@ const MyFaceCard = ({ subTitle, title, name, tag, describe }: PropsType) => {
         <Font text={`${title}(${name}) 얼굴형`} kind="semi28" color="white" />
 
         <CardTagWrapper>
-          {tag.map((tagName) =>
-            <Tag>
-              <Font text={`#${tagName}`} kind="semi12" color="white" />
+          {tag.map((tagName, index) =>
+            <Tag key={index}>
+              <Font key={tagName} text={`#${tagName}`} kind="semi12" color="white" />
             </Tag>
           )}
         </CardTagWrapper>
       </CardHeader>
 
-      <FaceTypeImageWrapper>
-
-      </FaceTypeImageWrapper>
+      <ImageWrap>
+        {image && <FaceImage source={image} />}
+      </ImageWrap>
 
       <CardDescription>
         <FeatureTitle>
@@ -77,15 +80,6 @@ const Tag = styled.Text`
   background-color: ${color.pink400};
 `
 
-const FaceTypeImageWrapper = styled.View`
-  width: 190px;
-  height: 190px;
-  border-radius: 1000px;
-  border-width: 4px;
-  border-color: ${color.pink300};
-  background-color: ${color.white};
-`
-
 const CardDescription = styled.View`
   flex-direction: column;
   gap: 12px;
@@ -96,6 +90,17 @@ const FeatureTitle = styled.Text`
   border-radius: 20px;
   align-self: flex-start;
   background-color: ${color.white};
+`
+
+const FaceImage = styled(Image) <{ source: ImageSourcePropType }>`
+  width: 220px;
+  height: 220px;
+`
+
+const ImageWrap = styled.View`
+ flex: 1;
+ justify-content: center;
+ align-items: center;
 `
 
 export default MyFaceCard

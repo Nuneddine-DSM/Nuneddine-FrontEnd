@@ -1,33 +1,44 @@
 import styled from "styled-components/native";
 import { Font, color } from "../../styles"
 import { AddressResponse } from "../../interface";
+import { TouchableOpacity } from "react-native";
 
-const Delivery = ({ item, isSelected }: { item: AddressResponse, isSelected: number }) => {
+interface DeliveryListProps {
+  item: AddressResponse;
+  isSelected: number;
+  onPress: (id: number) => void;
+}
+
+const Delivery = ({ item, isSelected, onPress }: DeliveryListProps) => {
+  const isChecked = item.id === isSelected;
+
   return (
-    <Wrapper selected={isSelected === item.id}>
-      <HeaderSection>
-        <UserDetails>
-          <InfoWrapper>
-            <Font text={item.address} kind="semi20" />
+    <TouchableOpacity onPress={() => onPress(item.id)}>
+      <Wrapper selected={isChecked}>
+        <HeaderSection>
+          <UserDetails>
+            <InfoWrapper>
+              <Font text={item.address} kind="semi20" />
 
-            <UserInfoWrapper>
-              <Font text={item.receiver} kind="medium18" />
-              <Font text="･" kind="medium18" />
-              <Font text={item.phone_number} kind="medium18" />
-            </UserInfoWrapper>
-          </InfoWrapper>
-          <Tag>
-            <Font text="삭제" kind="medium16" color="red" />
-          </Tag>
-        </UserDetails>
+              <UserInfoWrapper>
+                <Font text={item.receiver} kind="medium18" />
+                <Font text="･" kind="medium18" />
+                <Font text={item.phone_number} kind="medium18" />
+              </UserInfoWrapper>
+            </InfoWrapper>
+            <Tag>
+              <Font text="삭제" kind="medium16" color="red" />
+            </Tag>
+          </UserDetails>
 
-        <Font
-          text={item.detail_address}
-          kind="regular16"
-          color="gray600"
-        />
-      </HeaderSection>
-    </Wrapper>
+          <Font
+            text={item.detail_address}
+            kind="regular16"
+            color="gray600"
+          />
+        </HeaderSection>
+      </Wrapper>
+    </TouchableOpacity>
   );
 };
 

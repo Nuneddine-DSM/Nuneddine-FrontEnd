@@ -29,6 +29,12 @@ const SearchProduct = () => {
   const [searchText, setSearchText] = useState("");
   const [products, setProducts] = useState<ShopType[]>([]);
 
+  useEffect(() => {
+    if (keyword && keyword.trim() !== "") {
+      resetFilters();
+    }
+  }, [searchText]);
+
   const {
     keyword,
     frame_shape,
@@ -39,6 +45,7 @@ const SearchProduct = () => {
     setProductCount,
     toggleFilterValue,
     setKeyword,
+    resetFilters
   } = useSearchStore();
 
   const allSelectedFilters = [
@@ -73,7 +80,21 @@ const SearchProduct = () => {
     <>
       <TopBar
         leftIcon={
-          <TouchableOpacity onPress={() => navigation.goBack()}>
+          <TouchableOpacity
+            onPress={() => {
+              navigation.reset({
+                index: 0,
+                routes: [
+                  {
+                    name: 'MainTabs',
+                    state: {
+                      index: 0,
+                      routes: [{ name: 'Main' }]
+                    }
+                  }
+                ]
+              });
+            }}>
             <Arrow size={34} />
           </TouchableOpacity>
         }
@@ -99,6 +120,7 @@ const SearchProduct = () => {
               describe={item.glasses_name}
               tag={item.shop_type}
               price={item.price}
+              isLiked={item.is_liked}
             />
           )}
           numColumns={2}

@@ -5,6 +5,7 @@ import styled, { ThemeProvider, DefaultTheme } from "styled-components/native";
 import { ShoppingContentType } from "../../app/Main/interface";
 import Tag from "./Tag"
 import { NavigationProp, useNavigation } from "@react-navigation/native";
+import { likeHandler } from "../../apis/heart";
 
 /**
  * 상품 카드 큰 버전
@@ -31,24 +32,35 @@ const ProductCardLarge = ({
   describe,
   tag,
   price,
+  isLiked,
   isDarkMode = false,
 }: CardPropsType) => {
   const navigation = useNavigation<NavigationProp<any>>();
 
   const theme = isDarkMode ? darkTheme : lightTheme;
-  const [selected, setSelected] = useState(false);
+
+  const [selected, setSelected] = useState(isLiked);
+
+  const clickHeart = async () => {
+    try {
+      await likeHandler(shopId);
+      setSelected(prev => !prev);
+    } catch (error) {
+      console.error("좋아요 요청 실패:", error);
+    }
+  }
 
   return (
     <ThemeProvider theme={theme}>
       <CardContainer key={shopId} background={theme.background} onPress={() => navigation.navigate("ShoppingDetail", { shopId })}>
         <ImageWrapper>
-          <ProductImage source={{ uri: image }} />
+          <ProductImage source={{ uri: image }} resizeMode="cover" />
           <IconWrapper>
             <Heart
               size={30}
-              color={color.gray500}
+              color={selected ? color.pink300 : color.gray500}
               fill={selected ? color.pink300 : "none"}
-              onPress={() => setSelected(prev => !prev)}
+              onPress={clickHeart}
             />
           </IconWrapper>
         </ImageWrapper>
@@ -72,7 +84,7 @@ const ProductCardLarge = ({
           <Tag text={tag} isDark={isDarkMode} />
 
           <Font
-            text={`${price ? Number(price).toLocaleString() : "0"}원`}
+            text={`${price.toLocaleString()}원`}
             kind="bold18"
             color={theme.text}
           />

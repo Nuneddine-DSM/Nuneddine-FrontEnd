@@ -145,7 +145,7 @@ const QuestionContent = styled.View`
   background-color: ${color.white};
 `;
 
-const QuestionWrap = styled.TouchableOpacity`
+const QuestionWrap = styled.View`
   width: 100%;
   flex-direction: row;
   justify-content: space-between;
