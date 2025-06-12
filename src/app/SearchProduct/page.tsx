@@ -29,6 +29,12 @@ const SearchProduct = () => {
   const [searchText, setSearchText] = useState("");
   const [products, setProducts] = useState<ShopType[]>([]);
 
+  useEffect(() => {
+    if (keyword && keyword.trim() !== "") {
+      resetFilters();
+    }
+  }, [searchText]);
+
   const {
     keyword,
     frame_shape,
@@ -41,10 +47,6 @@ const SearchProduct = () => {
     setKeyword,
     resetFilters
   } = useSearchStore();
-
-  useEffect(() => {
-    resetFilters();
-  }, []);
 
   const allSelectedFilters = [
     ...frame_shape,
@@ -78,7 +80,21 @@ const SearchProduct = () => {
     <>
       <TopBar
         leftIcon={
-          <TouchableOpacity onPress={() => navigation.goBack()}>
+          <TouchableOpacity
+            onPress={() => {
+              navigation.reset({
+                index: 0,
+                routes: [
+                  {
+                    name: 'MainTabs',
+                    state: {
+                      index: 0,
+                      routes: [{ name: 'Main' }]
+                    }
+                  }
+                ]
+              });
+            }}>
             <Arrow size={34} />
           </TouchableOpacity>
         }
