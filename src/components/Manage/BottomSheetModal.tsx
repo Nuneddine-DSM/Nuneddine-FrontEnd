@@ -3,6 +3,7 @@ import { color, Font } from '../../styles';
 import { Input, Button } from '../';
 import {
   BottomSheetBackdrop,
+  BottomSheetBackdropProps,
   BottomSheetModal,
   BottomSheetTextInput
 } from '@gorhom/bottom-sheet';
@@ -42,7 +43,7 @@ export const AddLensBottomSheet = memo(
     }, [lensName, lensCycle, onAddLens, bottomSheetModalRef]);
 
     const renderBackdrop = useCallback(
-      (props: any) => (
+      (props: BottomSheetBackdropProps) => (
         <BottomSheetBackdrop
           {...props}
           pressBehavior="close"
