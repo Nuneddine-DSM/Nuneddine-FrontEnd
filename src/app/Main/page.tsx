@@ -1,4 +1,4 @@
-import { useState, useMemo, useEffect } from "react";
+import { useState, useMemo, useEffect, use } from "react";
 import { color, Font } from "../../styles";
 import styled from "styled-components/native";
 import Banner from "./Banner";
@@ -15,7 +15,6 @@ import { useQuery } from "@tanstack/react-query";
 import { NavigationListData, CategoryData, BannerData } from "./Data";
 import { FrameShapeMap, FrameShapeType, mapFrameShape, LensColorMap, LensColorType } from "../Data";
 import { useSearchStore } from "../../stores/useSearchStore";
-import { getDetail } from "../../apis/shops";
 
 const Main = () => {
   const navigation = useNavigation<StackNavigationProp<any>>();
@@ -32,6 +31,10 @@ const Main = () => {
     queryKey: ["lensProduct"],
     queryFn: lensProduct
   });
+
+  useEffect(() => {
+    console.log(glassesData)
+  }, [])
 
   const sectionData = useMemo(() => {
     const dataSource = selectedTab === 1 ? glassesData : lensData;
@@ -151,7 +154,7 @@ const Main = () => {
                   describe={item.glasses_name}
                   tag={mapFrameShape(item.frame_shape)}
                   price={item.price}
-                  isLiked={item.isLiked}
+                  isLiked={item.is_liked}
                 />
               )}
               ItemSeparatorComponent={() => <View style={{ width: 10 }} />}
@@ -174,7 +177,7 @@ const Main = () => {
               describe={item.glasses_name}
               tag={mapFrameShape(item.frame_shape)}
               price={item.price}
-              isLiked={item.isLiked}
+              isLiked={item.is_liked}
             />
           )}
           ItemSeparatorComponent={() => <View style={{ width: 10 }} />}
