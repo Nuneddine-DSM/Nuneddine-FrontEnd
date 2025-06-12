@@ -5,10 +5,10 @@ import { Header, Footer } from "../../../components/Main";
 import { Tab, Tag } from "../../../components/Shopping";
 import { Button } from "../../../components";
 import { Heart, X } from "../../../assets";
-import { TabInfoData } from "./Data";
 import { useState, useCallback, useRef, useMemo } from "react";
 import { likeHandler } from "../../../apis/heart";
 import Banner from "../../Main/Banner";
+import { ImageBackground } from "react-native";
 import {
   BottomSheetModal,
   BottomSheetBackdrop
@@ -16,11 +16,11 @@ import {
 import { getDetail } from "../../../apis/shops";
 import { addCartItem } from "../../../apis/carts";
 import { BottomButtonsProps } from "../../../interface";
-import { NavigationProp, RouteProp, useNavigation, useRoute } from '@react-navigation/native';
+import { NavigationProp, RouteProp, useRoute } from '@react-navigation/native';
 import { useQuery } from "@tanstack/react-query";
-import { TouchableOpacity } from "react-native";
 import { FrameShapeMap } from "../../Data";
 import { QuantitySelector } from "../../../components/Shopping";
+import Detail from "../../../assets/Detail.png"
 
 type RootStackParamList = {
   ShoppingDetail: { shopId: number };
@@ -30,13 +30,11 @@ const ShoppingDetail = () => {
   const route = useRoute<RouteProp<RootStackParamList, 'ShoppingDetail'>>();
   const { shopId } = route.params;
 
-  const navigation = useNavigation<NavigationProp<any>>();
-
   const [selectedTab, setSelectedTab] = useState<number>(1);
   const [selectedHeart, setSelectedHeart] = useState<boolean>(false);
 
   const [lensPower, setLensPower] = useState<number>(0);
-  const [optionCount, setOptionCount] = useState<number>(0);
+  const [optionCount, setOptionCount] = useState<number>(1);
 
   const { data: detail } = useQuery({
     queryKey: ["productDetail", shopId],
@@ -85,7 +83,7 @@ const ShoppingDetail = () => {
   const handelAddCart = () => {
     try {
       addCartItem(shopId, lensPower, optionCount);
-      handlePresentModalPress();
+      bottomSheetModalRef.current?.dismiss();
     } catch (err) {
       console.error("장바구니 담기 오류");
     }
@@ -96,7 +94,8 @@ const ShoppingDetail = () => {
       <Header />
       <Container showsVerticalScrollIndicator={false}>
 
-        <Banner data={detail?.image_urls} />
+        {/* <Banner data={detail?.image_urls} /> */}
+        <BannerWrapper source={{ uri: detail?.image_urls[0] }} />
 
         <DetailContentWrapper>
 
@@ -123,32 +122,17 @@ const ShoppingDetail = () => {
             </ProductPriceWrapper>
           </ProductDetail>
 
-          <AnotherColorWrapper>
-            <Font text="다른 컬러 둘러보기" kind="semi24" />
-            <ColorProductList>
-              {detail?.related_shops.map((shop: any) =>
-                <TouchableOpacity
-                  key={shop.shop_id}
-                  onPress={() => navigation.navigate("ShoppingDetail", { shopId: shop.shop_id })}
-                >
-                  <ColorProductItem source={{ uri: shop.image_urls[0] }} />
-                </TouchableOpacity>
-              )}
-            </ColorProductList>
-          </AnotherColorWrapper>
+          <ImageBackground
+            source={Detail}
+            style={{ width: "100%", height: 3200 }}
+            resizeMode="cover"
+          />
 
-          <>
-            <Tab
-              selectedTab={selectedTab}
-              setSelectedTab={setSelectedTab}
-              tabData={TabInfoData}
-            />
-            <ProductImageBox>
-              {detail?.image_urls.map((image: string, index: number) => (
-                <ProductImage key={index} source={{ uri: image }} />
-              ))}
-            </ProductImageBox>
-          </>
+          <ProductImageBox>
+            {detail?.image_urls.map((image: string, index: number) => (
+              <ProductImage key={index} source={{ uri: image }} />
+            ))}
+          </ProductImageBox>
         </DetailContentWrapper>
         <Footer />
       </Container >
@@ -255,24 +239,9 @@ const ProductImage = styled.Image`
   width: 100%;
 `
 
-const AnotherColorWrapper = styled.View`
-  flex-direction: column;
-  padding: 20px;
-  gap: 20px;
-  background-color: ${color.white};
-`
-
-const ColorProductList = styled.ScrollView`
-  flex-direction: row;
-  gap: 12px;
-`
-
-const ColorProductItem = styled.ImageBackground`
-  width: 100px;
-  height: 100px;
-  border-radius: 4px;
-  border-width: 1.5px;
-  background-color: ${color.gray100};
+const BannerWrapper = styled.Image`
+  width: 100%;
+  height: 430px;
 `
 
 const DetailContentWrapper = styled.View`
