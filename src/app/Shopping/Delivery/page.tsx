@@ -66,7 +66,7 @@ const Delivery = () => {
           )
         })}
 
-        <AddButton onPress={() => navigation.navigate("DeliverAdd")}>
+        <AddButton onPress={() => navigation.navigate("DeliveryAdd")}>
           <Font text="배송지 추가하러 가기" kind="medium16" color="gray500" />
           <Arrow size={20} color={color.gray500} rotate="right" />
         </AddButton>
