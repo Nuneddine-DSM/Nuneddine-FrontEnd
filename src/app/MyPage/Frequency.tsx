@@ -146,7 +146,7 @@ const Frequency = () => {
                     leftSelectedIndex === 0 ||
                     !lensFrequencyList[leftSelectedIndex]
                       ? '-0.00'
-                      : lensFrequencyList[leftSelectedIndex].toFixed()
+                      : lensFrequencyList[leftSelectedIndex].toFixed(2)
                   }`}
                   kind="medium18"
                 />
