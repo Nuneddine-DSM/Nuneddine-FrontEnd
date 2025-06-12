@@ -5,7 +5,6 @@ import { CartItemType } from "../../interface";
 import { QuantitySelector } from ".";
 
 const OrderDetails = ({ item }: { item: CartItemType }) => {
-  const [count, setCount] = useState(item.count);
 
   return (
     <Container>
@@ -24,10 +23,8 @@ const OrderDetails = ({ item }: { item: CartItemType }) => {
             />
           </Section>
 
-          <QuantitySelector count={count} onChange={setCount} />
-
           <Section>
-            <Font text={`${item.price.toLocaleString()}원`} kind="bold16" />
+            <Font text={`${item.price.toLocaleString()}원`} kind="bold18" />
           </Section>
         </Details>
       </TopSection>
