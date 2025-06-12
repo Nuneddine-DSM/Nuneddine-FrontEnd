@@ -24,7 +24,7 @@ const Payment = () => {
   const handlePurchase = async () => {
     try {
       await productPurchase();
-      navigation.navigate("OrderComplete");
+      navigation.navigate("MainTabs");
     } catch (err) {
       console.error(err);
     }
