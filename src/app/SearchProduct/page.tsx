@@ -39,7 +39,12 @@ const SearchProduct = () => {
     setProductCount,
     toggleFilterValue,
     setKeyword,
+    resetFilters
   } = useSearchStore();
+
+  useEffect(() => {
+    resetFilters();
+  }, []);
 
   const allSelectedFilters = [
     ...frame_shape,
@@ -99,6 +104,7 @@ const SearchProduct = () => {
               describe={item.glasses_name}
               tag={item.shop_type}
               price={item.price}
+              isLiked={item.is_liked}
             />
           )}
           numColumns={2}
