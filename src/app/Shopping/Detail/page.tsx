@@ -21,6 +21,7 @@ import { useQuery } from "@tanstack/react-query";
 import { FrameShapeMap } from "../../Data";
 import { QuantitySelector } from "../../../components/Shopping";
 import Detail from "../../../assets/Detail.png"
+import ImageViewer from "./Description";
 
 type RootStackParamList = {
   ShoppingDetail: { shopId: number };
@@ -122,11 +123,7 @@ const ShoppingDetail = () => {
             </ProductPriceWrapper>
           </ProductDetail>
 
-          <ImageBackground
-            source={Detail}
-            style={{ width: "100%", height: 3200 }}
-            resizeMode="cover"
-          />
+          <ImageViewer />
 
           <ProductImageBox>
             {detail?.image_urls.map((image: string, index: number) => (
