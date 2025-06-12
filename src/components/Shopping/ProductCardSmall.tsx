@@ -1,7 +1,7 @@
 import styled from "styled-components/native";
 import Tag from "./Tag";
 import { Heart } from "../../assets";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { ShoppingContentType } from "../../app/Main/interface";
 import { Font, color } from "../../styles";
 import { likeHandler } from "../../apis/heart";
@@ -14,21 +14,19 @@ import { TouchableOpacity } from "react-native";
 
 const ProductCardSmall = ({ shopId, image, title, describe, tag, price, isLiked }: ShoppingContentType) => {
   const navigation = useNavigation<NavigationProp<any>>();
+  const [selected, setSelected] = useState(isLiked);
 
-  const [selected, setSelected] = useState<boolean>(isLiked);
-  const [loading, setLoading] = useState(false);
+  useEffect(() => {
+    setSelected(isLiked);
+    console.log("isLiked:", isLiked);
+  }, [isLiked]);
 
   const heartHandler = async () => {
-    if (loading) return;
-    setLoading(true);
-
     try {
       await likeHandler(shopId);
       setSelected(prev => !prev);
     } catch (error) {
       console.log('좋아요 실패', error);
-    } finally {
-      setLoading(false);
     }
   }
 
@@ -37,13 +35,12 @@ const ProductCardSmall = ({ shopId, image, title, describe, tag, price, isLiked 
       <ImageWrapper>
         <ProductImage source={{ uri: image }} resizeMode="cover" />
         <IconWrapper>
-          <TouchableOpacity onPress={heartHandler} hitSlop={{ top: 10, bottom: 10, left: 10, right: 10 }}>
-            <Heart
-              size={20}
-              color={selected ? color.pink300 : color.gray500}
-              fill={selected ? color.pink300 : 'none'}
-            />
-          </TouchableOpacity>
+          <Heart
+            size={20}
+            color={selected ? color.pink300 : color.gray500}
+            fill={selected ? color.pink300 : 'none'}
+            onPress={heartHandler}
+          />
         </IconWrapper>
       </ImageWrapper>
 

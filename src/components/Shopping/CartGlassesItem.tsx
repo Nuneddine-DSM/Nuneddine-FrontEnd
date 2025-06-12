@@ -29,7 +29,7 @@ const CartGlassesItem = ({
 
       <ItemContent>
         <ProductInfoSection>
-          <ProductImage src={item.image_urls[1]} />
+          <ProductImage src={item.image_urls[0]} />
 
           <ProductDetails>
             <TitleAndCounter>
