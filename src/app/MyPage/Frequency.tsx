@@ -46,8 +46,6 @@ const Frequency = () => {
             ? response.data.right_lens_power * -4
             : 0
         );
-        console.log(leftSelectedIndex, lensFrequencyList[leftSelectedIndex]);
-        console.log(rightSelectedIndex, lensFrequencyList[rightSelectedIndex]);
       } catch (err) {
         console.error(err);
       } finally {
