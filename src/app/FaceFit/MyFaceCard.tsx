@@ -1,6 +1,7 @@
 import styled from "styled-components/native";
 import { color, Font } from "../../styles"
 import { ImageBackground } from "react-native";
+import { Image, ImageProps } from "react-native-svg";
 
 const FaceType = require("../../assets/FaceType.png");
 
@@ -9,10 +10,11 @@ interface PropsType {
   title: string,
   name: string,
   tag: Array<string>,
-  describe: string
+  describe: string,
+  image: ImageProps
 }
 
-const MyFaceCard = ({ subTitle, title, name, tag, describe }: PropsType) => {
+const MyFaceCard = ({ subTitle, title, name, tag, describe, image }: PropsType) => {
   return (
     <CardContainer source={FaceType} resizeMode="cover">
       <CardHeader>
@@ -28,9 +30,7 @@ const MyFaceCard = ({ subTitle, title, name, tag, describe }: PropsType) => {
         </CardTagWrapper>
       </CardHeader>
 
-      <FaceTypeImageWrapper>
-
-      </FaceTypeImageWrapper>
+      <FaceImage source={image} />
 
       <CardDescription>
         <FeatureTitle>
@@ -77,15 +77,6 @@ const Tag = styled.Text`
   background-color: ${color.pink400};
 `
 
-const FaceTypeImageWrapper = styled.View`
-  width: 190px;
-  height: 190px;
-  border-radius: 1000px;
-  border-width: 4px;
-  border-color: ${color.pink300};
-  background-color: ${color.white};
-`
-
 const CardDescription = styled.View`
   flex-direction: column;
   gap: 12px;
@@ -96,6 +87,11 @@ const FeatureTitle = styled.Text`
   border-radius: 20px;
   align-self: flex-start;
   background-color: ${color.white};
+`
+
+const FaceImage = styled(Image)<{ source: ImageProps }>`
+  width: 220px;
+  height: 220px;
 `
 
 export default MyFaceCard

@@ -66,11 +66,12 @@ const FaceFit = () => {
         </IntroTextGroup>
 
         <FaceOptionsContainer>
-          {FaceData.map(({ id }) => (
+          {FaceData.map(({ id, image }) => (
             <SelectedFaceBox
               key={id}
               onPress={() => setSelectFaceFit(id)}
               selected={id === selectFaceFit}>
+              <FaceImage source={image} />
               {id === selectFaceFit && (
                 <CheckBox>
                   <Check size={20} color={color.white} />
@@ -145,11 +146,13 @@ const SelectedFaceBox = styled.TouchableOpacity<{ selected: boolean }>`
   position: relative;
   width: 140px;
   height: 140px;
+  justify-content: center;
+  align-items: center;
   border-radius: 16px;
   border-width: ${({ selected }) => (selected ? 2 : 0)}px;
   border-color: ${color.pink300};
   background-color: ${({ selected }) =>
-    selected ? color.pink100 : color.gray100};
+    selected ? color.pink100 : color.gray50};
   margin-bottom: 25px;
 `;
 
@@ -198,5 +201,10 @@ const CheckBox = styled.View`
   border-radius: 100px;
   background-color: ${color.pink300};
 `;
+
+const FaceImage = styled.Image`
+  width: 100px;
+  height: 100px;
+`
 
 export default FaceFit;

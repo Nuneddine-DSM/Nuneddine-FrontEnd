@@ -36,7 +36,8 @@ const Recommend = () => {
     describe,
     recommend,
     alert,
-    style
+    style,
+    image
   } = matchedData ?? {};
 
   const selectedStyle = style?.[1];
@@ -49,7 +50,7 @@ const Recommend = () => {
     frame_shape: shapeKey ? [shapeKey as FrameShapeType] : undefined
   }
 
-  const { data: shapeData, error, isLoading } = useQuery({
+  const { data: shapeData } = useQuery({
     enabled: !!shapeKey,
     queryKey: ["search", filters],
     queryFn: () => searchHandler(filters),
@@ -98,6 +99,7 @@ const Recommend = () => {
               subTitle={subTitle || ""}
               tag={tag || []}
               describe={describe || ""}
+              image={image}
             />
             <SideCardImage source={FaceType} />
           </MyFaceCardWrapper>
@@ -173,6 +175,7 @@ const Recommend = () => {
                 describe={item.glasses_name}
                 tag={FrameShapeMap[item.frame_shape as keyof typeof FrameShapeMap]}
                 price={item.price}
+                isLiked={item.isLiked}
               />
             )}
             numColumns={2}
