@@ -34,9 +34,9 @@ export const AddLensBottomSheet = memo(
 
     const addLens = useCallback(() => {
       if (lensName) {
+        onAddLens(lensName, lensCycle);
         setLensName('');
         setLensCycle('DATE');
-        onAddLens(lensName, lensCycle);
         bottomSheetModalRef.current?.dismiss();
       }
     }, [lensName, lensCycle, onAddLens, bottomSheetModalRef]);
