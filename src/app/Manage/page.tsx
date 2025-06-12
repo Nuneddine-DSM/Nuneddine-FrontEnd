@@ -17,28 +17,30 @@ import { useFocusEffect, useNavigation } from '@react-navigation/native';
 import { StackNavigationProp } from '@react-navigation/stack';
 import MyLensListItem from '../../components/Manage/MyLensListItem';
 import { SquarePlus } from '../../assets/SquarePlus';
-import { useCallback, useMemo, useRef, useState } from 'react';
-import { BottomSheetBackdrop, BottomSheetModal } from '@gorhom/bottom-sheet';
-import { Button, Input } from '../../components';
-import { LensDateType, LensDateTypeMap } from '../Data';
+import { useCallback, useEffect, useRef, useState } from 'react';
+import { BottomSheetModal } from '@gorhom/bottom-sheet';
+import { LensDateType } from '../Data';
 import {
   calculateEndTime,
   calculateProgress,
   calculateStartTime,
+  getLensIconImageSource,
   getLensMention
 } from '../../utils/lens';
-import { setItem } from '../../utils/asyncStorage';
+import { AddLensBottomSheet } from '../../components/Manage/BottomSheetModal';
+import LensFine from '../../assets/LensFine.png';
 
 const Manage = () => {
   const navigation = useNavigation<StackNavigationProp<any>>();
 
   const [lensList, setLensList] = useState<MyLensItemData[]>([]);
-  const [lensName, setLensName] = useState('');
   const [lateLensPercent, setLateLensPercent] = useState(0);
 
-  const [loading, setLoading] = useState(false);
+  const [manageImageSource, setManageImageSource] = useState(LensFine);
+  const [mentionTitle, setMentionTitle] = useState('');
+  const [mentionContent, setMentionContent] = useState('');
 
-  const { title, content } = getLensMention(lateLensPercent);
+  const [loading, setLoading] = useState(false);
 
   const useLensCount = lensList.filter(
     lens => lens.start_time && lens.end_time
@@ -52,25 +54,10 @@ const Manage = () => {
   };
 
   const bottomSheetModalRef = useRef<BottomSheetModal>(null);
-  const snapPoints = useMemo(() => ['50%'], []);
-  const [selectedDuration, setSelectedDuration] =
-    useState<LensDateType>('DATE');
 
   const modalPress = useCallback(() => {
     bottomSheetModalRef.current?.present();
   }, []);
-
-  const renderBackdrop = useCallback(
-    (props: any) => (
-      <BottomSheetBackdrop
-        {...props}
-        pressBehavior="close"
-        disappearsOnIndex={-1}
-        appearsOnIndex={0}
-      />
-    ),
-    []
-  );
 
   const getLens = async () => {
     try {
@@ -106,18 +93,32 @@ const Manage = () => {
     }, [])
   );
 
-  const addLens = async () => {
+  useEffect(() => {
+    const { title, content } = getLensMention(lateLensPercent);
+    if (title !== mentionTitle) {
+      setMentionTitle(title);
+    }
+    if (content !== mentionContent) {
+      setMentionContent(content);
+    }
+
+    const nextImage = getLensIconImageSource(lateLensPercent);
+    if (nextImage !== manageImageSource) {
+      setManageImageSource(nextImage);
+    }
+  }, [lateLensPercent]);
+
+  const addLens = async (lensName: string, lensCycle: LensDateType) => {
     try {
       setLoading(true);
       const requestData: AddLensRequest = {
         name: lensName,
-        date_type: selectedDuration
+        date_type: lensCycle
       };
       const response = await addMyLens(requestData);
       if (response.status === 200) {
         bottomSheetModalRef.current?.dismiss();
         getLens();
-        setLensName('');
 
         const updatedList = [...isExpendedList];
         updatedList.push(false);
@@ -190,8 +191,8 @@ const Manage = () => {
           <ExpiratedWrapper>
             <ExpiratedDetailWrapper>
               <View>
-                <Font text={title} kind="semi22" />
-                <Font text={content} kind="medium22" />
+                <Font text={mentionTitle} kind="semi22" />
+                <Font text={mentionContent} kind="medium22" />
               </View>
               <GoToGuide
                 onPress={() => {
@@ -205,7 +206,7 @@ const Manage = () => {
                 <SquareArrow size={20} color={color.gray500} />
               </GoToGuide>
             </ExpiratedDetailWrapper>
-            <ExpiratedImage src="" />
+            <ExpiratedImage source={manageImageSource} />
           </ExpiratedWrapper>
           <LensCountWrapper>
             <LensCountTextWrapper>
@@ -253,58 +254,11 @@ const Manage = () => {
         </PostLensBox>
       </Container>
 
-      <BottomSheetModal
-        ref={bottomSheetModalRef}
-        index={0}
-        snapPoints={snapPoints}
-        backdropComponent={renderBackdrop}
-        enableContentPanningGesture={false}
-        keyboardBehavior="extend"
-        keyboardBlurBehavior="restore">
-        <BottomSheetWrapper>
-          <Font text="렌즈 항목" kind="medium16" color="gray600" />
-          <Input
-            label="제품명"
-            placeholder="상품명을 입력하세요."
-            value={lensName}
-            multiline={true}
-            onChangeText={setLensName}
-          />
-          <View style={{ gap: 8 }}>
-            <Font text="주기" kind="semi16" color="gray600" />
-            <SwitchButtonBox>
-              {Object.entries(LensDateTypeMap).map(([key, value]) => (
-                <SwitchButton
-                  key={key}
-                  isSelected={selectedDuration === key}
-                  onPress={() => {
-                    setSelectedDuration(key as LensDateType);
-                  }}>
-                  <Font
-                    text={value}
-                    kind="medium16"
-                    color={selectedDuration === key ? 'white' : 'black'}
-                  />
-                </SwitchButton>
-              ))}
-            </SwitchButtonBox>
-          </View>
-        </BottomSheetWrapper>
-        <AddButtonBox>
-          <Button
-            onPress={() => {
-              if (!lensName.trim()) {
-                Alert.alert('렌즈 이름을 입력해주세요');
-              } else {
-                addLens();
-              }
-            }}
-            buttonColor="black"
-            text="렌즈 추가하기"
-            loading={loading}
-          />
-        </AddButtonBox>
-      </BottomSheetModal>
+      <AddLensBottomSheet
+        loading={loading}
+        bottomSheetModalRef={bottomSheetModalRef}
+        onAddLens={addLens}
+      />
     </SafeAreaView>
   );
 };
@@ -349,7 +303,6 @@ const GoToGuide = styled.TouchableOpacity`
 const ExpiratedImage = styled.Image`
   width: 130px;
   height: 130px;
-  background-color: ${color.gray50};
 `;
 
 const LensCountWrapper = styled.View`

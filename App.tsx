@@ -5,7 +5,7 @@
  * @format
  */
 
-import React from 'react';
+import React, { useEffect } from 'react';
 import { NavigationContainer } from '@react-navigation/native';
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
 import NavBar from './src/components/NavBar';
@@ -36,11 +36,44 @@ import OrderComplete from './src/app/Shopping/Payment/OrderComplete'
 import { GestureHandlerRootView } from 'react-native-gesture-handler';
 import { BottomSheetModalProvider } from '@gorhom/bottom-sheet';
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
+import messaging from '@react-native-firebase/messaging';
+import notifee from '@notifee/react-native';
+import { getItem, setItem } from './src/utils/asyncStorage';
+import {
+  pushAlarm,
+  requestNotificationPermissionAndCreateChannel
+} from './src/utils/fcm';
 
 const queryClient = new QueryClient();
 
 function App(): React.JSX.Element {
   const Stack = createNativeStackNavigator();
+
+  useEffect(() => {
+    const initApp = async () => {
+      try {
+        const hasLaunched = await getItem('hasLaunched');
+        if (!hasLaunched) {
+          requestNotificationPermissionAndCreateChannel();
+
+          await setItem('hasLaunched', 'true');
+        }
+
+        const unsubscribe = messaging().onMessage(async remoteMessage => {
+          console.log('Foreground Message', JSON.stringify(remoteMessage));
+
+          pushAlarm(remoteMessage);
+        });
+
+        return unsubscribe;
+      } catch (err) {
+        console.error(err);
+      }
+    };
+
+    initApp();
+  }, []);
+
   return (
     <GestureHandlerRootView style={{ flex: 1 }}>
       <QueryClientProvider client={queryClient}>

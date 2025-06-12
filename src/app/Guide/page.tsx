@@ -11,8 +11,8 @@ import { getGuides } from '../../apis/guids';
 import { useQuery } from '@tanstack/react-query';
 import { GuideItemType, TipItemType } from '../../interface';
 
-const QuestionIcon = require("../../assets/Question.png")
-const AnswerIcon = require("../../assets/AnswerImage.png")
+const QuestionIcon = require('../../assets/Question.png');
+const AnswerIcon = require('../../assets/AnswerImage.png');
 
 const Guide = () => {
   const navigation = useNavigation<StackNavigationProp<any>>();
@@ -20,10 +20,8 @@ const Guide = () => {
   const [openIndexes, setOpenIndexes] = useState<number[]>([]);
 
   const toggleOpen = (index: number) => {
-    setOpenIndexes((prev) =>
-      prev.includes(index)
-        ? prev.filter((i) => i !== index)
-        : [...prev, index]
+    setOpenIndexes(prev =>
+      prev.includes(index) ? prev.filter(i => i !== index) : [...prev, index]
     );
   };
 
@@ -45,7 +43,13 @@ const Guide = () => {
       <ScrollView>
         <GuideListWrapper>
           {GuideListData?.guide_list.map((item: GuideItemType) => (
-            <GuideItem key={item.guide_id} onPress={() => navigation.navigate("GuideDetail", { selectedId: item.guide_id })}>
+            <GuideItem
+              key={item.guide_id}
+              onPress={() =>
+                navigation.navigate('GuideDetail', {
+                  selectedId: item.guide_id
+                })
+              }>
               <GuideImage source={{ uri: item.image_url }} />
               <InfoWrapper>
                 <Font text="렌즈 기초 TIP" kind="medium16" color="gray400" />
@@ -71,15 +75,27 @@ const Guide = () => {
                   <QuestionWrap>
                     <TitleWrapper>
                       <Image source={QuestionIcon} />
-                      <Font text={item.question} kind="medium16" color="gray600" />
+                      <Font
+                        text={item.question}
+                        kind="medium16"
+                        color="gray600"
+                      />
                     </TitleWrapper>
-                    <Arrow size={20} color={color.gray600} rotate={isOpen ? "top" : "bottom"} />
+                    <Arrow
+                      size={20}
+                      color={color.gray600}
+                      rotate={isOpen ? 'top' : 'bottom'}
+                    />
                   </QuestionWrap>
 
                   {isOpen && (
                     <AnswerWrap>
                       <Image source={AnswerIcon} />
-                      <Font text={item.answer} kind="medium16" color="gray600" />
+                      <Font
+                        text={item.answer}
+                        kind="medium16"
+                        color="gray600"
+                      />
                     </AnswerWrap>
                   )}
                 </QuestionItem>
@@ -134,7 +150,7 @@ const QuestionWrap = styled.View`
   flex-direction: row;
   justify-content: space-between;
   align-items: center;
-`
+`;
 
 const QuestionListWrapper = styled.View`
   flex-direction: column;
@@ -168,6 +184,6 @@ const AnswerWrap = styled.View`
   flex-direction: row;
   gap: 6px;
   padding: 0 18px;
-`
+`;
 
-export default Guide
+export default Guide;
