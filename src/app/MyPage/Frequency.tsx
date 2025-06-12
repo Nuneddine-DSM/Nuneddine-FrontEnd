@@ -37,10 +37,12 @@ const Frequency = () => {
         setLoading(true);
         const response = await getLensFrequency();
         setLeftSelectedIndex(
-          response.data.left_lens_power ? response.data.left_lens_power * -4 : 0
+          response.data.left_lens_power || response.data.left_lens_power !== 1
+            ? response.data.left_lens_power * -4
+            : 0
         );
         setRightSelectedIndex(
-          response.data.right_lens_power
+          response.data.right_lens_power || response.data.right_lens_power !== 1
             ? response.data.right_lens_power * -4
             : 0
         );
@@ -141,7 +143,8 @@ const Frequency = () => {
                 <Font text={'왼쪽 (L)'} kind="medium18" color="gray600" />
                 <Font
                   text={`SPH: ${
-                    leftSelectedIndex === 0
+                    leftSelectedIndex === 0 ||
+                    !lensFrequencyList[leftSelectedIndex]
                       ? '-0.00'
                       : lensFrequencyList[leftSelectedIndex].toFixed(2)
                   }`}
@@ -152,7 +155,8 @@ const Frequency = () => {
                 <Font text={'오른쪽 (R)'} kind="medium18" color="gray600" />
                 <Font
                   text={`SPH: ${
-                    rightSelectedIndex === 0
+                    rightSelectedIndex === 0 ||
+                    !lensFrequencyList[rightSelectedIndex]
                       ? '-0.00'
                       : lensFrequencyList[rightSelectedIndex].toFixed(2)
                   }`}

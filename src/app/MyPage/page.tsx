@@ -7,6 +7,7 @@ import { NavigationData } from './Data';
 import { useNavigation, NavigationProp } from '@react-navigation/native';
 import { useEffect, useState } from 'react';
 import { myPage } from '../../apis/user';
+import DefaultProfile from '../../assets/DefaultProfile.png';
 
 const MyPage = () => {
   const navigation = useNavigation<NavigationProp<any>>();
@@ -62,7 +63,9 @@ const MyPage = () => {
               <Font text={nickname} kind="semi28" />
               <Font text={accountId} kind="regular16" color="gray500" />
             </UserDetails>
-            <ProfileImage />
+            <ProfileImageContainer>
+              <ProfileImage source={DefaultProfile} />
+            </ProfileImageContainer>
           </UserSection>
 
           <MenuList>
@@ -105,11 +108,20 @@ const UserDetails = styled.View`
   flex-direction: column;
 `;
 
-const ProfileImage = styled.Image`
-  width: 80px;
-  height: 80px;
-  border-radius: 100px;
+const ProfileImageContainer = styled.View`
+  width: 100px;
+  height: 100px;
+  padding: 10px;
   background-color: ${color.gray100};
+  border-radius: 100px;
+`;
+
+const ProfileImage = styled.Image.attrs({
+  resizeMode: 'cover'
+})`
+  width: 100%;
+  height: 100%;
+  border-radius: 100px;
 `;
 
 const MenuList = styled.View`

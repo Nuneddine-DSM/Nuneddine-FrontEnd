@@ -1,4 +1,8 @@
 import { LensDateType } from '../app/Data';
+import LensFine from '../assets/LensFine.png';
+import LensSave from '../assets/LensSave.png';
+import LensWarning from '../assets/LensWarning.png';
+import LensDangger from '../assets/LensDanger.png';
 
 export const getLensFrequencyList = (): number[] => {
   const frequency: number[] = [];
@@ -73,6 +77,18 @@ export const getLensMention = (percent: number) => {
       title: '렌즈, 이제 한계!',
       content: '교체는 지금!'
     };
+  }
+};
+
+export const getLensIconImageSource = (percent: number) => {
+  if (percent <= 30) {
+    return LensFine;
+  } else if (percent <= 60) {
+    return LensSave;
+  } else if (percent <= 90) {
+    return LensWarning;
+  } else {
+    return LensDangger;
   }
 };
 
