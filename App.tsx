@@ -51,7 +51,7 @@ function App(): React.JSX.Element {
               <Stack.Screen name="Onboarding" component={Onboarding} />
               <Stack.Screen name="Login" component={Login} />
               <Stack.Screen name="SignUp" component={SignUp} />
-              <Stack.Screen name="MainTabs" component={MainTabs} />
+              <Stack.Screen name="MainTabs" component={NavBar} options={{ headerShown: false }} />
               <Stack.Screen name="Cart" component={Cart} />
               <Stack.Screen name="Payment" component={Payment} />
               <Stack.Screen name="Delivery" component={Delivery} />
