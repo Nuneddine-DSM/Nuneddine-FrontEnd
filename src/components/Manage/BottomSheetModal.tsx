@@ -11,7 +11,7 @@ import {
   useState
 } from 'react';
 import { LensDateType, LensDateTypeMap } from '../../app/Data';
-import { TextInput, View } from 'react-native';
+import { BackHandler, TextInput, View } from 'react-native';
 import { Alert } from 'react-native';
 
 interface AddLensBottomSheetProps {
@@ -26,6 +26,7 @@ export const AddLensBottomSheet = memo(
     const [lensCycle, setLensCycle] = useState<LensDateType>('DATE');
 
     const snapPoints = useMemo(() => ['50%'], []);
+    const [isOpen, setIsOpen] = useState(false);
 
     const addLens = useCallback(() => {
       if (lensName) {
@@ -55,6 +56,21 @@ export const AddLensBottomSheet = memo(
       return () => clearTimeout(timeout);
     }, []);
 
+    useEffect(() => {
+      const backHandler = BackHandler.addEventListener(
+        'hardwareBackPress',
+        () => {
+          if (isOpen) {
+            bottomSheetModalRef.current?.dismiss();
+            return true;
+          }
+          return false;
+        }
+      );
+
+      return () => backHandler.remove();
+    }, [isOpen]);
+
     return (
       <BottomSheetModal
         ref={bottomSheetModalRef}
@@ -63,7 +79,10 @@ export const AddLensBottomSheet = memo(
         backdropComponent={renderBackdrop}
         enableContentPanningGesture={false}
         keyboardBehavior="interactive"
-        keyboardBlurBehavior="restore">
+        keyboardBlurBehavior="restore"
+        onChange={index => {
+          setIsOpen(index >= 0);
+        }}>
         {isContentVisible && (
           <BottomSheetWrapper>
             <Font text="렌즈 항목" kind="medium16" color="gray600" />
