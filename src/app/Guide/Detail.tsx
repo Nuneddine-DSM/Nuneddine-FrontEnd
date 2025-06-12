@@ -13,7 +13,6 @@ import RenderHTML from 'react-native-render-html';
 import { Dimensions } from 'react-native';
 import { useState, useEffect } from 'react';
 
-const QuestionIcon = require("../../assets/Question.png")
 const contentWidth = Dimensions.get('window').width;
 
 const GuideDetail = () => {
@@ -30,9 +29,6 @@ const GuideDetail = () => {
     queryFn: () => getGuidesDetail(selectedId),
   });
 
-  if (isLoading) return <><Font text="로딩중" /></>
-  if (isError || !guideData) return <></>
-
   const [html, setHtml] = useState('');
 
   useEffect(() => {
@@ -41,7 +37,10 @@ const GuideDetail = () => {
       setHtml(result);
     };
     convertMarkdown();
-  }, [guideData.content]);
+  }, [guideData?.content]);
+
+  if (isLoading) return <><Font text="로딩중" /></>
+  if (isError || !guideData) return <></>
 
   return (
     <Container>
