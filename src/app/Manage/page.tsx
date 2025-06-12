@@ -95,11 +95,17 @@ const Manage = () => {
 
   useEffect(() => {
     const { title, content } = getLensMention(lateLensPercent);
-    setMentionTitle(title);
-    setMentionContent(content);
+    if (title !== mentionTitle) {
+      setMentionTitle(title);
+    }
+    if (content !== mentionContent) {
+      setMentionContent(content);
+    }
 
-    const imageSource = getLensIconImageSource(lateLensPercent);
-    setManageImageSource(imageSource);
+    const nextImage = getLensIconImageSource(lateLensPercent);
+    if (nextImage !== manageImageSource) {
+      setManageImageSource(nextImage);
+    }
   }, [lateLensPercent]);
 
   const addLens = async (lensName: string, lensCycle: LensDateType) => {
