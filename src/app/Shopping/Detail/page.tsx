@@ -18,7 +18,7 @@ import { addCartItem } from "../../../apis/carts";
 import { BottomButtonsProps } from "../../../interface";
 import { NavigationProp, RouteProp, useRoute } from '@react-navigation/native';
 import { useQuery } from "@tanstack/react-query";
-import { FrameShapeMap } from "../../Data";
+import { FrameShapeMap, LensDateTypeMap } from "../../Data";
 import { QuantitySelector } from "../../../components/Shopping";
 import Detail from "../../../assets/Detail.png"
 import ImageViewer from "./Description";
@@ -113,6 +113,9 @@ const ShoppingDetail = () => {
               <TagWrapper>
                 {detail?.frame_shape && (
                   <Tag text={FrameShapeMap[detail.frame_shape as keyof typeof FrameShapeMap]} />
+                )}
+                {detail?.date_type && (
+                  <Tag text={LensDateTypeMap[detail.date_type as keyof typeof LensDateTypeMap]} />
                 )}
               </TagWrapper>
             </ProductInfoSection>
