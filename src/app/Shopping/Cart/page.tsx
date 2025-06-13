@@ -174,18 +174,7 @@ const Cart = () => {
     if (selectedTab == 1) {
       navigation.navigate('Payment');
     } else {
-      navigation.reset({
-        index: 0,
-        routes: [
-          {
-            name: 'MainTabs',
-            state: {
-              index: 0,
-              routes: [{ name: 'Main' }]
-            }
-          }
-        ]
-      });
+      navigation.navigate('OrderComplete');
     }
   };
 
