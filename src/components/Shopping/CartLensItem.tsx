@@ -29,16 +29,16 @@ const CartLensItem = ({
 
       <ItemContent>
         <ProductInfoSection>
-          <ProductImage />
+          <ProductImage src={item.image_urls[0]} />
           <CartItemDetail>
             <TitleBlock>
               <Font text={item.brand_name} kind="bold16" />
               <Font
                 text={item.glass_name}
                 kind="medium16"
-                style={{ flexWrap: "wrap" }}
-                numberOfLines={2}
+                numberOfLines={1}
                 ellipsizeMode="tail"
+                style={{ flexWrap: "wrap" }}
               />
             </TitleBlock>
 
@@ -47,12 +47,15 @@ const CartLensItem = ({
               <Font text={`${formattedAmount}원`} kind="bold16" />
             </CategoryPriceBlock>
           </CartItemDetail>
-          <X />
+          
+          <TouchableOpacity onPress={onDelete}>
+            <X size={30} />
+          </TouchableOpacity>
         </ProductInfoSection>
 
         <OptionWrapper>
           <Font
-            text={`옵션 : ${item.count}개 / ${item.lens_power}`}
+            text={`옵션 : ${item.count}개`}
             color="gray600"
             kind="regular14"
           />
