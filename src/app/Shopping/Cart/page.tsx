@@ -168,7 +168,22 @@ const Cart = () => {
   };
 
   const handleBuyProduct = () => {
-    navigation.navigate('Payment');
+    if (selectedTab == 1) {
+      navigation.navigate('Payment');
+    } else {
+      navigation.reset({
+        index: 0,
+        routes: [
+          {
+            name: 'MainTabs',
+            state: {
+              index: 0,
+              routes: [{ name: 'Main' }]
+            }
+          }
+        ]
+      });
+    }
   };
 
   const onCountChange = (newCount: number) => {
@@ -276,7 +291,7 @@ const Cart = () => {
                     bottomSheetModalRef.current?.dismiss();
                   }}
                 >
-                    <Font text="적용하기" kind="bold16" color="white" />
+                  <Font text="적용하기" kind="bold16" color="white" />
                 </ClickButton>
               </OptionWrapper>
             )}
