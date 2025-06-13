@@ -7,7 +7,7 @@ import { NavigationData } from './Data';
 import { useNavigation, NavigationProp } from '@react-navigation/native';
 import { useEffect, useState } from 'react';
 import { myPage } from '../../apis/user';
-import DefaultProfile from '../../assets/DefaultProfile.png';
+import DefaultProfile from '../../assets/LensFine.png';
 
 const MyPage = () => {
   const navigation = useNavigation<NavigationProp<any>>();

@@ -6,16 +6,21 @@ import messaging, {
 
 export const requestNotificationPermissionAndCreateChannel = async () => {
   try {
-    if (Platform.OS === 'android' && Platform.Version >= 33) {
-      await notifee.requestPermission();
-    }
-    await messaging().requestPermission();
-
     await notifee.createChannel({
       id: 'default',
       name: '기본 채널',
-      importance: AndroidImportance.DEFAULT
+      importance: AndroidImportance.HIGH
     });
+
+    if (Platform.OS === 'android' && Platform.Version >= 33) {
+      const settings = await notifee.requestPermission();
+      if (settings.authorizationStatus === 0) {
+        console.log('알림 권한 거부');
+      } else {
+        console.log('알림 권한 수락');
+      }
+    }
+    await messaging().requestPermission();
   } catch (err) {
     console.error(err);
   }
@@ -25,7 +30,15 @@ export const pushAlarm = async (
   remoteMessage: FirebaseMessagingTypes.RemoteMessage
 ) => {
   try {
-    const { title, body } = remoteMessage.data as {
+    // const title =
+    //   (remoteMessage.data?.title as string) ||
+    //   (remoteMessage.notification?.title as string) ||
+    //   '';
+    // const body =
+    //   (remoteMessage.data?.body as string) ||
+    //   (remoteMessage.notification?.body as string) ||
+    //   '';
+    const { title, body } = remoteMessage.notification as {
       title: string;
       body: string;
     };
