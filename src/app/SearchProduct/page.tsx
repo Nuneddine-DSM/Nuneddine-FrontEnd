@@ -29,12 +29,6 @@ const SearchProduct = () => {
   const [searchText, setSearchText] = useState("");
   const [products, setProducts] = useState<ShopType[]>([]);
 
-  useEffect(() => {
-    if (keyword && keyword.trim() !== "") {
-      resetFilters();
-    }
-  }, [searchText]);
-
   const {
     keyword,
     frame_shape,
