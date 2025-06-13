@@ -50,7 +50,6 @@ export const useSearchStore = create<FilterState>((set) => ({
 
   resetFilters: () =>
     set({
-      keyword: '',
       frame_shape: [],
       frame_material: [],
       lens_color: [],
