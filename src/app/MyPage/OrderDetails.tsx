@@ -27,7 +27,8 @@ const OrderDetails = () => {
       try {
         setLoading(true);
         const response = await getMyOrderHistory();
-        setMyOrderList(response.data.purchaseHistories);
+
+        setMyOrderList(response.data.purchase_history_by_date);
       } catch (err) {
         Alert.alert('주문 내역을 불러오는 데 실패하였습니다');
         console.error(err);
@@ -54,16 +55,20 @@ const OrderDetails = () => {
         <ActivityIndicator />
       ) : (
         <OrderWrapper>
-          {myOrderList ? (
+          {myOrderList && myOrderList.length > 0 ? (
             myOrderList.map((order, index) => (
               <OrderSection key={`${order.date}-${index}`}>
                 <DateWrapper>
                   <Font text={order.date} kind="bold24" />
                 </DateWrapper>
                 <OrderList>
-                  {order.histories.map(item => (
-                    <MyHistoryItem item={item} />
-                  ))}
+                  {Array.isArray(order.histories) &&
+                    order.histories.map(item => (
+                      <MyHistoryItem
+                        key={`${item.shop_id}-${index}`}
+                        item={item}
+                      />
+                    ))}
                 </OrderList>
               </OrderSection>
             ))
