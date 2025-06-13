@@ -9,7 +9,7 @@ import React, { useEffect } from 'react';
 import { NavigationContainer } from '@react-navigation/native';
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
 import NavBar from './src/components/NavBar';
-import MainTabs from './src/navigation/MainTabs'
+import MainTabs from './src/navigation/MainTabs';
 import Onboarding from './src/app/Onboarding/page';
 import Login from './src/app/Login/page';
 import SignUp from './src/app/SignUp/page';
@@ -30,9 +30,9 @@ import Search from './src/app/Search/page';
 import SearchProduct from './src/app/SearchProduct/page';
 import Filter from './src/app/SearchProduct/Filter';
 import AddressWebview from './src/app/MyPage/Delivery/Address';
-import GlassesData from './src/app/Find/Glasses'
-import LensData from './src/app/Find/Lens'
-import OrderComplete from './src/app/Shopping/Payment/OrderComplete'
+import GlassesData from './src/app/Find/Glasses';
+import LensData from './src/app/Find/Lens';
+import OrderComplete from './src/app/Shopping/Payment/OrderComplete';
 import { GestureHandlerRootView } from 'react-native-gesture-handler';
 import { BottomSheetModalProvider } from '@gorhom/bottom-sheet';
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
@@ -81,12 +81,16 @@ function App(): React.JSX.Element {
           <NavigationContainer>
             <Stack.Navigator
               screenOptions={{ headerShown: false }}
-              initialRouteName="MainTabs">
+              initialRouteName="Onboarding">
               <Stack.Screen name="NavBar" component={NavBar} />
               <Stack.Screen name="Onboarding" component={Onboarding} />
               <Stack.Screen name="Login" component={Login} />
               <Stack.Screen name="SignUp" component={SignUp} />
-              <Stack.Screen name="MainTabs" component={NavBar} options={{ headerShown: false }} />
+              <Stack.Screen
+                name="MainTabs"
+                component={NavBar}
+                options={{ headerShown: false }}
+              />
               <Stack.Screen name="Cart" component={Cart} />
               <Stack.Screen name="Payment" component={Payment} />
               <Stack.Screen name="Delivery" component={Delivery} />
