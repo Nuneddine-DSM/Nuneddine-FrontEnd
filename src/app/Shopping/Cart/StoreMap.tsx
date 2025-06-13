@@ -129,21 +129,6 @@ const StoreMap = () => {
             }}
           />
         </MapWrapper>
-
-        <SearchWrapper>
-          <Search
-            value={searchQuery}
-            onChangeText={setSearchQuery}
-          />
-          <Button
-            text="선택"
-            width="80px"
-            onPress={() => {
-              if (webViewRef.current) {
-                webViewRef.current.postMessage(searchQuery);
-              }
-            }} />
-        </SearchWrapper>
       </ReservationMap>
     </ReservationStoreFinderSection>
   );

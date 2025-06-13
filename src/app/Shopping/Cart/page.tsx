@@ -32,8 +32,6 @@ const Cart = () => {
   const [selectedDeleteIds, setSelectedDeleteIds] = useState<number[]>([]);
 
   const [glassesCounts, setGlassesCounts] = useState<Record<number, number>>({});
-  const [lensPower, setLensPower] = useState<string>('0.00');
-  const [count, setCount] = useState<number>(1);
   const [cartId, setCartId] = useState<number | null>(null);
 
   const { data: glassesData } = useQuery<AxiosResponse<CartResponseType>>({
@@ -98,6 +96,11 @@ const Cart = () => {
 
   const bottomSheetModalRef = useRef<BottomSheetModal>(null);
   const snapPoints = useMemo(() => ['60%'], []);
+
+  const [selectedOptionItem, setSelectedOptionItem] = useState<number>(1);
+  const [selectedItem, setSelectedItem] = useState<CartItemType | null>(null);
+  const [count, setCount] = useState<number>(1);
+  const [lensPower, setLensPower] = useState<string>('0.00');
 
   const handlePresentModalPress = useCallback(
     (id: number, selectedCount: number) => {
@@ -237,6 +240,12 @@ const Cart = () => {
                 onDelete={() => handleSingleDelete(item.cart_id)}
                 count={glassesCounts[item.cart_id] ?? item.count}
                 onCountChange={newCount => updateCount(item.cart_id, newCount)}
+                onOptionClick={(clickedItem) => {
+                  setSelectedItem(clickedItem);
+                  setLensPower(String(clickedItem.lens_power ?? '0.00'));
+                  setCount(clickedItem.count);
+                  bottomSheetModalRef.current?.present();
+                }}
               />
             ))}
 
@@ -245,25 +254,32 @@ const Cart = () => {
             index={0}
             snapPoints={snapPoints}
             backdropComponent={renderBackdrop}
-            onChange={handleSheetChanges}>
-            <OptionWrapper>
-              <Font
-                text={`옵션 / ${selectedData?.cart_list || ''}`}
-                kind="medium16"
-                color="gray600"
-              />
-              <InputWrapper>
-                <CountInputWrapper>
-                  <Font text="수량" kind="medium16" />
-                  <QuantitySelector count={count} onChange={onCountChange} />
-                </CountInputWrapper>
-                <Dropdown
-                  value={lensPower}
-                  setValue={setLensPower}
-                  items={['0.00', '-2.25', '-5.00', '-7.25', '-10.00']}
-                />
-              </InputWrapper>
-            </OptionWrapper>
+            onChange={handleSheetChanges}
+          >
+            {selectedItem && (
+              <OptionWrapper>
+                <Font text={`옵션`} kind="medium16" color="gray600" />
+                <InputWrapper>
+                  <CountInputWrapper>
+                    <Font text="수량" kind="medium16" />
+                    <QuantitySelector count={count} onChange={setCount} />
+                  </CountInputWrapper>
+                  <Dropdown
+                    value={lensPower}
+                    setValue={setLensPower}
+                    items={['0.00', '-2.25', '-5.00', '-7.25', '-10.00']}
+                  />
+                </InputWrapper>
+                <ClickButton
+                  onPress={() => {
+                    updateCount(selectedItem.cart_id, count);
+                    bottomSheetModalRef.current?.dismiss();
+                  }}
+                >
+                    <Font text="적용하기" kind="bold16" color="white" />
+                </ClickButton>
+              </OptionWrapper>
+            )}
           </BottomSheetModal>
 
           {selectedTab === 2 && <Lens />}
@@ -343,5 +359,17 @@ const CountInputWrapper = styled.View`
   border-color: ${color.gray300};
   background-color: ${color.white};
 `;
+
+const ClickButton = styled.TouchableOpacity`
+  width: 100%;
+  position: absolute;
+  top: 400;
+  left: 32;
+  padding: 16px;
+  justify-content: center;
+  align-items: center;
+  border-radius: 8px;
+  background-color: ${color.pink300};
+`
 
 export default Cart;

@@ -12,7 +12,8 @@ const CartLensItem = ({
   count,
   onToggleSelect,
   onDelete,
-  onCountChange
+  onCountChange,
+  onOptionClick
 }: {
   item: CartItemType;
   isSelected: boolean;
@@ -20,6 +21,7 @@ const CartLensItem = ({
   onToggleSelect: () => void;
   onDelete: () => void;
   onCountChange: (newCount: number) => void;
+  onOptionClick: (item: CartItemType) => void;
 }) => {
   const formattedAmount = item.price.toLocaleString();
 
@@ -59,7 +61,7 @@ const CartLensItem = ({
             color="gray600"
             kind="regular14"
           />
-          <TouchableOpacity onPress={() => { }}>
+          <TouchableOpacity onPress={() => onOptionClick(item)}>
             <Font
               text="옵션변경"
               color="gray600"

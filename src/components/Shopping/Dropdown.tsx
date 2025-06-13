@@ -42,6 +42,7 @@ export const Dropdown = ({
           <DropdownList>
             {items.map((item, index) =>
               <ItemWrapper
+                key={index}
                 isOdd={index % 2 == 0}
                 onPress={() => clickItem(item)}
               >
