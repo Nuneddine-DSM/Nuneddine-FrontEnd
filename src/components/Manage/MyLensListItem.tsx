@@ -33,7 +33,7 @@ const MyLensListItem = ({
 
   useEffect(() => {
     Animated.timing(aniValue, {
-      toValue: isOn ? 0 : 1,
+      toValue: isOn ? 1 : 0,
       duration: 200,
       easing: Easing.linear,
       useNativeDriver: true
@@ -205,7 +205,7 @@ const ToggleContainer = styled.TouchableOpacity<{ isOn: boolean }>`
   height: 20px;
   border-radius: 10px;
   justify-content: center;
-  background-color: ${({ isOn }) => (isOn ? color.gray300 : color.black)};
+  background-color: ${({ isOn }) => (isOn ? color.black : color.gray300)};
   padding: 1px;
 `;
 
