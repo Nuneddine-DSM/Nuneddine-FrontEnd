@@ -23,11 +23,12 @@ const Search = () => {
 
   const [searchText, setSearchText] = useState('');
 
-  const { setKeyword } = useSearchStore();
+  const { setKeyword, resetFilters } = useSearchStore();
 
   const handleSearch = () => {
     if (!searchText.trim()) return;
     setKeyword(searchText.trim());
+    resetFilters();
     navigation.navigate('SearchProduct');
   }
 
