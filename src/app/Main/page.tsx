@@ -20,7 +20,13 @@ const Main = () => {
   const navigation = useNavigation<StackNavigationProp<any>>();
   const [selectedTab, setSelectedTab] = useState<number>(1);
 
-  const { frame_shape, lens_color, setSingleFilterValue } = useSearchStore();
+  const {
+    frame_shape,
+    lens_color,
+    setSingleFilterValue,
+    resetFilters,
+    setKeyword
+  } = useSearchStore();
 
   const { data: glassesData } = useQuery({
     queryKey: ["glassesProduct"],
@@ -98,6 +104,12 @@ const Main = () => {
       setSingleFilterValue('lens_color', firstKey);
     }
   }, [selectedTab]);
+
+  const moreProduct = () => {
+    setKeyword('')
+    resetFilters();
+    navigation.navigate("SearchProduct");
+  }
 
   const renderSection = (item: typeof sectionData[0]) => (
     <RecommendedSection key={item.name}>
@@ -185,7 +197,7 @@ const Main = () => {
         />
       </ProductIntroWrapper>
 
-      <MoreProductsButton onPress={() => navigation.navigate("SearchProduct")}>
+      <MoreProductsButton onPress={moreProduct}>
         <Font text="더 많은 상품 구경하기" kind="medium16" color="gray500" />
         <Arrow size={24} color={color.gray500} rotate="right" />
       </MoreProductsButton>
