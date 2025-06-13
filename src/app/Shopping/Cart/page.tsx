@@ -60,9 +60,12 @@ const Cart = () => {
       [cartId]: newCount
     }));
 
-    const lensPowerNumber = parseFloat(lensPower);
-
-    mutateUpdateOption({ cartId, lensPower: lensPowerNumber, count: newCount });
+    if (selectedTab === 1) {
+      mutateUpdateOption({ cartId, lensPower: 0, count: newCount });
+    } else {
+      const lensPowerNumber = parseFloat(lensPower);
+      mutateUpdateOption({ cartId, lensPower: lensPowerNumber, count: newCount });
+    }
   };
 
   const { mutate: mutateUpdateOption } = useMutation({
@@ -279,6 +282,7 @@ const Cart = () => {
                     <Font text="수량" kind="medium16" />
                     <QuantitySelector count={count} onChange={setCount} />
                   </CountInputWrapper>
+
                   <Dropdown
                     value={lensPower}
                     setValue={setLensPower}

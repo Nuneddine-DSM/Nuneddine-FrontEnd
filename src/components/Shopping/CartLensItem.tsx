@@ -57,7 +57,7 @@ const CartLensItem = ({
 
         <OptionWrapper>
           <Font
-            text={`옵션 : ${item.count}개`}
+            text={`옵션 : ${item.count}개 |  ${item.lens_power}`}
             color="gray600"
             kind="regular14"
           />

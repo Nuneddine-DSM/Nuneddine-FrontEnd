@@ -62,8 +62,7 @@ export const Dropdown = ({
 
 const DropDownContainer = styled.View`
   width: 100%;
-  position: absolute;
-  top: 70px;
+  margin-top: 8px;
 `
 
 const DropdownBoxWrapper = styled.View<{ isFocused: boolean }>`
@@ -85,7 +84,11 @@ const DropWrapper = styled.View<{ isFocused: boolean }>`
   border-color: ${({ isFocused }) => isFocused ? color.white : color.gray300};
 `
 
-const DropdownList = styled.ScrollView`
+const DropdownList = styled.ScrollView.attrs({
+  nestedScrollEnabled: true,
+  keyboardShouldPersistTaps: 'handled',
+  showsVerticalScrollIndicator: false,
+})`
   max-height: 162px;
   flex-direction: column;
   padding: 16px;
