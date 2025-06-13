@@ -34,7 +34,11 @@ export const Dropdown = ({
         onTouchEnd={toggleOpen}
       >
         <DropWrapper isFocused={isFocused}>
-          <Font text="근시 도수 (SPH)" kind="medium16" color="gray400" />
+          <Font
+            text={value ? `도수: ${value}` : "근시 도수 (SPH)"}
+            kind="medium16"
+            color={value ? "black" : "gray400"}
+          />
           <Arrow size={20} color="gray600" rotate={isOpen ? "bottom" : "top"} />
         </DropWrapper>
 
