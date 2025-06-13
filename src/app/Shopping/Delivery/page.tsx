@@ -8,14 +8,22 @@ import { useQuery } from '@tanstack/react-query';
 import { getAddress } from '../../../apis/address';
 import { AddressResponse } from '../../../interface';
 import { useAddressStore } from '../../../stores/addressStore';
+import { useFocusEffect } from '@react-navigation/native';
+import { useCallback } from 'react';
 
 const Delivery = () => {
   const navigation = useNavigation<NavigationProp<any>>();
 
-  const { data: AddressData } = useQuery({
+  const { data: AddressData, refetch } = useQuery({
     queryKey: ["Delivery"],
     queryFn: getAddress
-  })
+  });
+
+  useFocusEffect(
+    useCallback(() => {
+      refetch();
+    }, [refetch])
+  );
 
   const selectedAddressId = useAddressStore((state) => state.selectedAddressId);
   const setSelectedAddressId = useAddressStore((state) => state.setSelectedAddressId);
@@ -43,7 +51,7 @@ const Delivery = () => {
               <HeaderSection>
                 <UserDetails>
                   <InfoWrapper>
-                    <Font text={item.address} kind="semi20" />
+                    <Font text={item.delivery_address_name} kind="semi20" />
 
                     <UserInfoWrapper>
                       <Font text={item.receiver} kind="medium18" />
@@ -57,7 +65,7 @@ const Delivery = () => {
                 </UserDetails>
 
                 <Font
-                  text={item.detail_address}
+                  text={item.address}
                   kind="regular16"
                   color="gray600"
                 />
@@ -128,6 +136,7 @@ const UserDetails = styled.View`
 
 const UserInfoWrapper = styled.View`
   flex-direction: row;
+  justify-content: center;
   align-items: center;
 `;
 

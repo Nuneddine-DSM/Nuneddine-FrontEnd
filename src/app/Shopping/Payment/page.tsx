@@ -85,12 +85,12 @@ const Payment = () => {
             <DeliverySection>
               <Font text={address.delivery_address_name} kind="bold20" />
               <NamePhoneNumber>
-                <Font text={`${address.address} ${address.detail_address}`} kind="medium18" />
+                <Font text={`${address.receiver}`} kind="medium18" />
                 <Font text="･" kind="medium18" />
                 <Font text={address.phone_number} kind="medium18" />
               </NamePhoneNumber>
               <Font
-                text={address.detail_address}
+                text={address.address}
                 kind="regular16"
                 color="gray600"
               />
