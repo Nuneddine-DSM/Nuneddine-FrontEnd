@@ -6,6 +6,7 @@ import Search from '../../../components/Search';
 import { KAKAOMAP_KEY as KAKAO_REST_API_KEY } from '@env';
 import { StyleSheet } from 'react-native';
 import { WebView } from 'react-native-webview';
+import { StoreLocation } from '../../../components/Shopping';
 
 const StoreMap = () => {
   const [searchQuery, setSearchQuery] = useState('');
@@ -129,6 +130,10 @@ const StoreMap = () => {
             }}
           />
         </MapWrapper>
+        <StoreLocation
+          name='이미지안경콘택트 신성점'
+          address='대전 유성구 신성로72번길 61'
+        />
       </ReservationMap>
     </ReservationStoreFinderSection>
   );
