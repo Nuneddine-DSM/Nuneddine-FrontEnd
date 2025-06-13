@@ -57,7 +57,12 @@ export const calculateProgress = (startDateStr: string, endDateStr: string) => {
 };
 
 export const getLensMention = (percent: number) => {
-  if (percent <= 30) {
+  if (percent < 0) {
+    return {
+      title: '사용 중인',
+      content: '렌즈가 없어요'
+    };
+  } else if (percent <= 30) {
     return {
       title: '렌즈 수명 넉넉!',
       content: '아직 여유 있어요'

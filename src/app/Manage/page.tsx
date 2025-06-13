@@ -85,6 +85,8 @@ const Manage = () => {
         setLateLensPercent(
           calculateProgress(list[0].start_time, list[0].end_time)
         );
+      } else {
+        setLateLensPercent(-1);
       }
     } catch (err) {
       console.error(err);
