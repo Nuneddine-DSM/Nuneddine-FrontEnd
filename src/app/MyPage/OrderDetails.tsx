@@ -10,12 +10,17 @@ import {
   MyOrderHistoryData
 } from '../../apis/purchaseHistories';
 import MyHistoryItem from '../../components/MyPage/OrderGlassItem';
+import { StackNavigationProp } from '@react-navigation/stack';
 
 const OrderDetails = () => {
-  const navigation = useNavigation();
+  const navigation = useNavigation<StackNavigationProp<any>>();
 
   const [myOrderList, setMyOrderList] = useState<MyOrderHistoryData[]>([]);
   const [loading, setLoading] = useState(false);
+
+  const prevPage = () => {
+    navigation.goBack();
+  };
 
   useEffect(() => {
     const getMyOrder = async () => {
@@ -39,7 +44,7 @@ const OrderDetails = () => {
       <TopBar
         text="주문내역"
         leftIcon={
-          <TouchableOpacity onPress={() => navigation.goBack()}>
+          <TouchableOpacity onPress={prevPage}>
             <Arrow size={34} />
           </TouchableOpacity>
         }
@@ -49,7 +54,7 @@ const OrderDetails = () => {
         <ActivityIndicator />
       ) : (
         <OrderWrapper>
-          {myOrderList &&
+          {myOrderList ? (
             myOrderList.map((order, index) => (
               <OrderSection key={`${order.date}-${index}`}>
                 <DateWrapper>
@@ -61,7 +66,18 @@ const OrderDetails = () => {
                   ))}
                 </OrderList>
               </OrderSection>
-            ))}
+            ))
+          ) : (
+            <Font
+              style={{
+                marginTop: 40,
+                marginStart: 20
+              }}
+              text="주문내역이 존재하지 않습니다"
+              kind="semi16"
+              color="gray400"
+            />
+          )}
         </OrderWrapper>
       )}
     </Container>
