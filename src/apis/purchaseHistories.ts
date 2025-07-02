@@ -5,16 +5,16 @@ import { instance } from './axios';
 const purchaseHistories = '/purchase_histories';
 
 export interface MyOrderHistoryItemData {
-  shopId: number;
-  brandName: string;
-  glassName: string;
-  imageUrls: string[];
+  shop_id: number;
+  brand_name: string;
+  glass_name: string;
+  image_urls: string[];
   price: number;
   count: number;
-  lensPower: number;
+  lens_power: number;
   type: 'GLASSES' | 'LENS';
-  frameShape: string;
-  lensDateType: LensDateType;
+  frame_shape: string;
+  lens_date_type: LensDateType;
 }
 
 export interface MyOrderHistoryData {

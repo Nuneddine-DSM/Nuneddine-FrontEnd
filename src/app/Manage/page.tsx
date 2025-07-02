@@ -64,11 +64,19 @@ const Manage = () => {
       setLoading(true);
       const response = await getMyLens();
       const list = [...response.data.alarm_list].sort((a, b) => {
-        if (a.end_time === null && b.end_time === null) return 0;
-        if (a.end_time === null) return 1;
-        if (b.end_time === null) return -1;
+        const aHasEnd = a.end_time !== undefined && a.end_time !== null;
+        const bHasEnd = b.end_time !== undefined && b.end_time !== null;
 
-        return new Date(a.end_time).getTime() - new Date(b.end_time).getTime();
+        if (aHasEnd && bHasEnd) {
+          return (
+            new Date(a.end_time).getTime() - new Date(b.end_time).getTime()
+          );
+        }
+
+        if (aHasEnd) return -1;
+        if (bHasEnd) return 1;
+
+        return a.alarm_id - b.alarm_id;
       });
 
       setLensList(list);
@@ -77,6 +85,8 @@ const Manage = () => {
         setLateLensPercent(
           calculateProgress(list[0].start_time, list[0].end_time)
         );
+      } else {
+        setLateLensPercent(-1);
       }
     } catch (err) {
       console.error(err);

@@ -2,25 +2,28 @@ import styled from 'styled-components/native';
 import { color, Font } from '../../styles';
 import { MyOrderHistoryItemData } from '../../apis/purchaseHistories';
 import { Tag } from '../Shopping';
+import { LensDateTypeMap } from '../../app/Data';
 
 const MyHistoryItem = ({ item }: { item: MyOrderHistoryItemData }) => {
   return (
     <Container>
       <ProductInfoSection>
-        <ProductImage src={item.imageUrls[0]} />
+        <ProductImage src={item.image_urls[0]} />
         <ProductDetails>
           <TitleBlock>
-            <Font text={item.brandName} kind="bold16" />
+            <Font text={item.brand_name} kind="bold16" />
             <Font
-              text={item.glassName}
+              text={item.glass_name}
               kind="medium16"
               style={{ flexWrap: 'wrap' }}
-              numberOfLines={2}
-              ellipsizeMode="tail"
+              // numberOfLines={2}
+              // ellipsizeMode="tail"
             />
           </TitleBlock>
           <CategoryPriceBlock>
-            {item.type === 'LENS' && <Tag text={item.lensDateType} />}
+            {/* {item.type === 'LENS' && (
+              <Tag text={LensDateTypeMap[item.lens_date_type]} />
+            )} */}
             <Font text={`${item.price.toLocaleString()}원`} kind="bold16" />
           </CategoryPriceBlock>
         </ProductDetails>
@@ -28,7 +31,7 @@ const MyHistoryItem = ({ item }: { item: MyOrderHistoryItemData }) => {
       <CountWrapper>
         <Font
           text={`옵션 : ${item.count}개 ${
-            item.type === 'LENS' ? ' / ' + item.lensPower : ''
+            item.type === 'LENS' ? ' / ' + item.lens_power : ''
           }`}
           kind="regular14"
           color="gray600"
@@ -44,8 +47,8 @@ const Container = styled.View`
   gap: 10px;
   padding: 30px 20px;
   border-bottom-width: 2px;
-  border-color: ${color.gray200}
-  background-color: ${color.white}
+  border-color: ${color.gray200};
+  background-color: ${color.white};
 `;
 
 const ProductInfoSection = styled.View`
@@ -64,12 +67,14 @@ const ProductImage = styled.Image`
 const ProductDetails = styled.View`
   display: flex;
   flex-direction: column;
+  flex: 1;
   justify-content: space-between;
 `;
 
 const TitleBlock = styled.View`
   display: flex;
   flex-direction: column;
+  flex-shrink: 1;
   gap: 4px;
 `;
 
