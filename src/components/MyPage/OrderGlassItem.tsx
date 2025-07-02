@@ -2,6 +2,7 @@ import styled from 'styled-components/native';
 import { color, Font } from '../../styles';
 import { MyOrderHistoryItemData } from '../../apis/purchaseHistories';
 import { Tag } from '../Shopping';
+import { LensDateTypeMap } from '../../app/Data';
 
 const MyHistoryItem = ({ item }: { item: MyOrderHistoryItemData }) => {
   return (
@@ -20,7 +21,9 @@ const MyHistoryItem = ({ item }: { item: MyOrderHistoryItemData }) => {
             />
           </TitleBlock>
           <CategoryPriceBlock>
-            {/* {item.type === 'LENS' && <Tag text={item.lens_date_type} />} */}
+            {/* {item.type === 'LENS' && (
+              <Tag text={LensDateTypeMap[item.lens_date_type]} />
+            )} */}
             <Font text={`${item.price.toLocaleString()}원`} kind="bold16" />
           </CategoryPriceBlock>
         </ProductDetails>
